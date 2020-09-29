@@ -1,0 +1,49 @@
+<div class="mainform">
+  <br>
+  <app-profil [profil]="profil" [showAction]="false" width="90vw" style="display: inline-block">
+
+    <table>
+      <tr *ngIf="config.hasPerm('r_address r_cp')">
+        <td>
+          Adresse postale:
+        </td>
+        <td>{{profil?.address}} {{profil?.cp}}</td>
+      </tr>
+      <tr *ngIf="config.hasPerm('r_mobile') && profil?.mobile?.length>4">
+        <td>Mobile: </td>
+        <td>{{profil?.mobile}}</td>
+      </tr>
+    </table>
+
+
+  <br>
+  <mat-form-field appearance="fill"
+                  *ngIf="config.hasPerm('write_email')"
+                  style="width:100%;">
+    <mat-label>Votre message pour {{profil?.firstname}}</mat-label>
+    <textarea matInput
+              [rows]="10"
+              [(ngModel)]="text">
+    </textarea>
+  </mat-form-field>
+  <br>
+
+  <button mat-button mat-raised-button
+            class="app-button"
+            *ngIf="config.hasPerm('write_email')"
+            (click)="send()">
+      Envoyer
+   </button>
+
+</app-profil>
+<div class="bottom-bar">
+  <hr>
+  <button mat-button mat-raised-button
+            class="app-button"
+            (click)="_location.back()">
+      Retour
+   </button>
+</div>
+
+
+</div>

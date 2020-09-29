@@ -1,0 +1,62 @@
+#Listes des profils
+version: 1.0
+profils:
+  - id: anonyme
+    description: Profil par défaut affecté au personne non connecté
+    perm: r_promo r_lastname r_firstname share r_department
+    price: 0
+    subscription: offline
+
+  - id: standard
+    presentation: Consultation non anonyme standard
+    description: Profil destiné aux employeur
+    perm: r_photo r_lastname r_firstname r_linkedin prof r_works r_promo write_email r_address r_department
+    price: 0
+    subscription: online
+
+  - id: employeur
+    presentation: Vous chercher des profils pour un projet
+    description: Profil destiné aux employeur
+    perm: r_photo r_address r_lastname r_firstname r_linkedin prof r_works write_email r_promo
+    price: 0
+    subscription: online
+
+  - id: femis_cdi
+    presentation: Vous avez la charge d'entretenir le catalogue des films
+    description: Profil destiné aux personnes en charge du catalogue des films
+    perm: r_photo r_address r_lastname r_firstname r_promo add_movies
+    price: 0
+    subscription: online
+
+  - id: admin
+    description: Profil destiné aux administrateurs
+    perm:
+        r_photo r_cpr_firstname r_works r_linkedin w_cp w_firstname
+        w_production w_email w_linkedin admin write_email r_mobile r_address
+        r_department stats
+    price: 0
+    subscription: offline
+
+  - id: statistique
+    presentation: vous souhaitez produire des statistiques sur le cinéma
+    description: profil destiné aux organisme en charge de statistique
+    perm: r_cp r_firstname r_works stats r_promo r_department share
+    price: 10
+    subscription: online
+
+  - id: school
+    presentation: Vous faites partie de la FEMIS
+    description: profil destiné aux organisme en charge de statistique
+    perm:
+      stats r_cp r_firstname r_promo r_lastname r_works
+      r_photo r_linkedin w_cp w_firstname w_production w_email w_linkedin
+      write_email r_mobile r_address r_department share
+    price: 0
+    subscription: online
+
+  - id: student
+    presentation: vous êtes un ancien élève et souhaitez retrouver des anciens de votre école
+    description: Profil destiné aux anciens élève
+    perm: r_promo r_photo r_cp r_address r_lastname r_firstname r_linkedin prof r_works write_email r_department
+    price: 0
+    subscription: online

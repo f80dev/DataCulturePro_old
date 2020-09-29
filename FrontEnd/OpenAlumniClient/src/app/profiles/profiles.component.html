@@ -1,0 +1,46 @@
+<div class="mainform" style="font-weight: lighter;">
+  <br>
+  <h2>Vous souhaitez accéder à plus d'information sur les élèves</h2>
+  <br>
+  <table style="width: 94%;margin-left:2%;text-align: left;">
+    <tr *ngFor="let profil of config.profils">
+      <td *ngIf="profil.subscription=='online'">
+        {{profil.presentation}}<br>
+        <small *ngIf="profil.price>0">{{profil.price}}€/mois</small>
+        <br><br>
+      </td>
+      <td *ngIf="profil.subscription=='online'">
+        <button mat-button mat-raised-button mat-icon-button
+          class="icon-button"
+          (click)="sel_profil(profil)">
+          <mat-icon>forward</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <div *ngIf="showPerm">
+    <br>
+    Actuellement vous avez les permissions :
+    <br><small>{{config.user.perm}}</small>
+    <br><br>
+  </div>
+
+
+  <div class="bottom-bar">
+    <hr>
+     <button mat-button mat-raised-button
+          class="app-button"
+          (click)="showPerm=true">
+          Vos permissions
+    </button>
+
+    <button mat-button mat-raised-button
+          class="app-button"
+          (click)="_location.back()">
+          Retour
+        </button>
+  </div>
+</div>
+

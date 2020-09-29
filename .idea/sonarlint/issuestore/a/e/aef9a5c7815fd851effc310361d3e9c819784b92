@@ -1,0 +1,10 @@
+
+spython:S3776J"TRefactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.(«·„§8∆Í·Á∆.
+xpython:S1542⁄"XRename function "dateToTimestamp" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(á∏ﬂÿ8∆Í·Á∆.
+spython:S1542"TRename function "stringToUrl" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(§øÙÇ8∆Í·Á∆.
+[python:S5754X"<Specify an exception class to catch or reraise the exception(à …∑8∆Í·Á∆.
+lpython:S1192ù"GDefine a constant instead of duplicating this literal "{{faq:" 3 times.(ÿ¸¶Ó˙ˇˇˇˇ8∆Í·Á∆.
+gpython:S1192Q"HDefine a constant instead of duplicating this literal "{{link:" 3 times.(€ö‹’8∆Í·Á∆.
+Hpython:S1481ô"(Remove the unused local variable "inst".(êÀﬁ¸8∆Í·Á∆.
+>python:S125¶"Remove this commented out code.(ŒÑ€˝8∆Í·Á∆.
+tpython:S3776⁄"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(á∏ﬂÿ8∆Í·Á∆.

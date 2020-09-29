@@ -1,0 +1,210 @@
+<div class="mainform"
+     *ngIf="profil && dataSource"
+     style="text-align: center;">
+
+  <div *ngIf="showAddWork==0">
+
+
+    <div class="h-zone">Civilité</div>
+
+    <img [src]="profil.photo" class="image-photo" (click)="change_photo()"><br>
+
+    <mat-form-field appearance="fill" class="app-field" style="max-width: 200px;">
+      <mat-label>Prénom</mat-label>
+      <input matInput type="text" max="50" [(ngModel)]="profil.firstname">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="app-field" style="max-width: 300px;">
+      <mat-label>Nom</mat-label>
+      <input matInput type="text" max="50" [(ngModel)]="profil.lastname">
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field appearance="fill" class="app-field">
+      <mat-label>Mobile</mat-label>
+      <input matInput type="text" max="50" [(ngModel)]="profil.mobile">
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field appearance="fill" class="app-field">
+      <mat-label>Code postal</mat-label>
+      <input matInput type="text" max="5" [(ngModel)]="profil.cp">
+    </mat-form-field>
+
+    <br>
+    <hr style="width: 50%">
+    <div class="h-zone">Tutorat</div>
+    <mat-checkbox *ngIf="config.user?.user"
+                  [(ngModel)]="config.user.user.acceptSponsor">Accepte d'être tuteur</mat-checkbox>
+    <br>
+    <br>
+  </div>
+
+
+  <div class="h-zone" *ngIf="works.length>0">
+    <hr style="width: 50%">
+    Expériences
+  </div>
+
+  <div *ngIf="showAddWork==0" style="width:95%;text-align: center;">
+
+    <table style="width: 100%">
+      <tr *ngFor="let work of works">
+        <td style="text-align: right;width:5%;">
+          <mat-icon style="cursor: pointer;font-size: medium" (click)="del_work(work)">
+            cancel
+          </mat-icon>
+        </td>
+        <td style="text-align: left;width:60%;">
+          {{work.job}} sur "{{work.pow?.title}}" du {{work.dtStart | date:'dd/MM'}} au {{work.dtEnd | date:'dd/MM/yy'}}
+        </td>
+
+      </tr>
+    </table>
+
+    <button class="app-button" mat-button mat-raised-button (click)="add_pow()">
+      Ajouter une expérience
+    </button>
+
+  </div>
+<!--  -->
+<!--  <div *ngIf="showAddWork==1" style="text-align: left;">-->
+<!--    <hr>-->
+<!--    <h3>Sélectionner le film à ajouter</h3>-->
+<!--    <div  style="width: 92%;margin-left: 4%;">-->
+<!--      <mat-form-field>-->
+<!--        <mat-label>Filter</mat-label>-->
+<!--        <input matInput (keyup)="applyFilter($event)" -->
+<!--               placeholder="titre" #input>-->
+<!--      </mat-form-field>-->
+
+<!--      <table mat-table-->
+<!--             [dataSource]="dataSource"-->
+<!--             class="mat-elevation-z2"-->
+<!--             style="width: 100%;text-align: left;">-->
+
+<!--        &lt;!&ndash; Position Column &ndash;&gt;-->
+<!--        <ng-container matColumnDef="title">-->
+<!--          <th mat-header-cell *matHeaderCellDef>Titre</th>-->
+<!--          <td mat-cell *matCellDef="let element"> {{element?.title}} </td>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container matColumnDef="dtStart">-->
+<!--          <th mat-header-cell *matHeaderCellDef>Réalisé le</th>-->
+<!--          <td mat-cell *matCellDef="let element"> {{element?.dtStart | date:"YYYY"}} </td>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container matColumnDef="sel">-->
+<!--          <th mat-header-cell *matHeaderCellDef>Sélectionner</th>-->
+<!--          <td mat-cell *matCellDef="let element">-->
+<!--            <button class="icon-button"-->
+<!--                    mat-button mat-raised-button mat-icon-button-->
+<!--                    (click)="select(element)">-->
+<!--              <mat-icon>checkmark</mat-icon>-->
+<!--            </button>-->
+<!--          </td>-->
+<!--        </ng-container>-->
+
+<!--        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+
+<!--        &lt;!&ndash; Row shown when there is no matching data. &ndash;&gt;-->
+<!--        <tr class="mat-row" *matNoDataRow>-->
+<!--          <td class="mat-cell" colspan="4">Aucune donnée ne répond au filtre "{{input.value}}"</td>-->
+<!--        </tr>-->
+<!--      </table>-->
+
+<!--      <br>-->
+<!--      <button class="app-button" mat-button mat-raised-button-->
+<!--              (click)="add_pow()">-->
+<!--        Nouveau film-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <div *ngIf="showAddWork==2" style="width:100%;text-align: center;">
+    <hr>
+    <h3>Ajouter le Projet "{{add_work.movie}}"</h3>
+    <br>
+    <br>
+
+    <mat-form-field class="app-field">
+      <mat-label>Fonction</mat-label>
+      <mat-select  [(ngModel)]="job">
+        <mat-option *ngFor="let job of config.jobs" [value]="job.value">{{job.label}}</mat-option>
+      </mat-select>
+      <mat-hint>Sélectionner le poste que vous aviez sur le projet</mat-hint>
+    </mat-form-field>
+    <br>
+
+    <br>
+
+    <mat-form-field appearance="fill" class="app-field" style="max-width: 200px">
+      <mat-label>Date de début</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="dtStart">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-hint>Premier jour de travail</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="app-field" style="max-width: 200px">
+      <mat-label>Date de fin</mat-label>
+      <input matInput [matDatepicker]="picker2" [(ngModel)]="dtEnd">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <mat-hint>Dernier jour de travail</mat-hint>
+    </mat-form-field>
+    <br><br>
+
+    <mat-form-field appearance="fill" class="app-field" style="max-width: 200px">
+      <mat-label>Heures travaillées</mat-label>
+      <input matInput type="number" value="8" [(value)]="duration">
+      <span matSuffix>Hrs</span>
+      <mat-hint>Nombre d'heures de travail réalisé sur le projet <mat-icon>help</mat-icon></mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="app-field" style="max-width: 200px">
+      <mat-label>Revenu total</mat-label>
+      <input matInput type="number" value="" [(value)]="earning">
+      <span matSuffix>€</span>
+      <mat-hint>
+        Revenu brut pour toute la durée
+        <mat-icon title="Donnée anonymisée uniquement utilisée sous forme de moyenne pour les statistiques">help</mat-icon>
+      </mat-hint>
+    </mat-form-field>
+    <br><br>
+
+
+    <mat-form-field appearance="fill" class="app-field" style="width:100%;">
+      <mat-label>Commentaires</mat-label>
+      <input matInput max="200" type="text"
+             title="Détailler l'expérience, difficultés rencontrées, bénéfices"
+             value="Décrire l'expérience" [(ngModel)]="comment">
+    </mat-form-field>
+    <br>
+
+    <button class="app-button"
+            mat-button mat-raised-button
+            title="Ajouter ce projet à votre expérience"
+            (click)="save_newwork()">
+      Ajouter ce projet
+    </button>
+
+  </div>
+
+  <div class="bottom-bar">
+    <br><hr>
+
+    <button class="app-button" mat-button mat-raised-button (click)="quit(true)">
+      Enregistrer la fiche
+    </button>
+
+    <button class="app-button" mat-button mat-raised-button (click)="quit(false)">
+      Retour
+    </button>
+
+  </div>
+
+</div>

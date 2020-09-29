@@ -1,0 +1,109 @@
+<div *ngIf="!config.user?.user?.email || config.user?.user?.email?.length==0">
+  Identifiez vous pour accèder<br>
+  aux fonctionalités avancées
+</div>
+
+<div *ngIf="config.user?.user?.email.length>0">
+  <div style="color:lightgray;font-size: x-small">Bonjour,</div>
+  {{config.user?.user?.email}}
+  <br><br>
+</div>
+
+<hr>
+<br>
+
+<mat-nav-list>
+
+  <a title="Consultation de l'annuaire"
+     routerLink="search"
+     mat-list-item
+     id="cmdSearch">
+    <mat-icon>search</mat-icon>
+    &nbsp;&nbsp;Consulter l'annuaire
+  </a>
+
+  <a title="Editer votre profil"
+     *ngIf="config.user?.user?.profil"
+     routerLink="edit"
+     [queryParams]="{id:this.user.profil}"
+     mat-list-item
+     id="cmdEditProfil">
+    <mat-icon>build</mat-icon>
+    &nbsp;&nbsp;Editer votre profil
+  </a>
+
+ <a title="Ajouter des films dans le catalogue"
+     *ngIf="config.hasPerm('add_movies')"
+     routerLink="addpow"
+     [queryParams]="{owner:'public'}"
+     mat-list-item
+     id="cmdAddMovie">
+    <mat-icon>videocam</mat-icon>
+    &nbsp;&nbsp;Ajouter des films
+  </a>
+
+  <a title="Changer vos permissions"
+     *ngIf="config.user?.user?.email?.length>0"
+     mat-list-item
+     routerLink="profils"
+     id="cmdEditPerms">
+    <mat-icon>lock</mat-icon>
+    &nbsp;&nbsp;Permissions
+  </a>
+
+  <a title="Effacer votre compte"
+     *ngIf="config.user?.user?.email?.length>0"
+     mat-list-item (click)="del_user()"
+     id="cmdDeleteUser">
+    <mat-icon>delete</mat-icon>
+    &nbsp;&nbsp;Détruire votre compte
+  </a>
+
+  <br>
+  <a title="Se déconnecter"
+     *ngIf="config.user?.user?.email?.length>0"
+     mat-list-item (click)="logout()"
+     id="cmdLogout">
+    <mat-icon>logout</mat-icon>
+    &nbsp;&nbsp;Se déconnecter
+  </a>
+
+
+
+  <a title="Se connecter"
+     *ngIf="!config.user?.user || config.user?.user?.email?.length==0"
+     mat-list-item
+     (click)="router.navigate(['login'])"
+     id="cmdLogin">
+    <mat-icon>login</mat-icon>
+    &nbsp;&nbsp;Se Connecter
+  </a>
+  <br>
+  <br>
+
+  <a title="Aide" routerLink="faqs"
+     mat-list-item
+     id="cmdHelp">
+    <mat-icon>help</mat-icon>
+    &nbsp;&nbsp;Aide
+  </a>
+
+  <a title="A propos" routerLink="about"
+     mat-list-item
+     id="cmdAbout">
+    <mat-icon>article</mat-icon>
+    &nbsp;&nbsp;A propos
+  </a>
+
+  <br>
+  <br>
+  <a title="Administration"
+     *ngIf="config.user?.user?.email?.length>0"
+     mat-list-item routerLink="admin"
+     id="cmdAdmin">
+    <mat-icon>settings</mat-icon>
+    &nbsp;&nbsp;Console d'administration
+  </a>
+
+</mat-nav-list>
+

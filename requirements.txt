@@ -1,0 +1,10 @@
+Django~=3.0.8
+markdown
+django-oauth-toolkit
+oauthlib
+requests~=2.23.0
+selenium~=3.141.0
+djangorestframework~=3.11.0
+pandas~=1.0.3
+elasticsearch_dsl
+graphene-django

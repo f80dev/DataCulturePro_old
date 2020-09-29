@@ -1,0 +1,73 @@
+<div class="mainform">
+  <div class="h-zone" *ngIf="!showDetail">Insérer un nouveau film</div>
+  <div style="min-width:350px;max-width: 500px;text-align: left;display: inline-block;">
+    <mat-form-field appearance="fill" class="app-field" *ngIf="!showDetail">
+      <mat-label>Titre du film</mat-label>
+      <input matInput placeholder="mon titre"
+             (ngModelChange)="changeTitle($event)"
+             type="text" max="300" [(ngModel)]="pow.title"
+             required autofocus>
+    </mat-form-field>
+
+    <div *ngIf="showDetail" class="h-zone" style="margin: 10px;">
+      {{pow.title}}
+    </div>
+
+    <div style="display: inline-block" *ngIf="!showDetail">
+      <span *ngIf="pows.length>0">Sélectionner dans la liste ou </span>
+
+      <button class="app-button login-button"
+              *ngIf="pow.title?.length>2"
+              mat-button mat-raised-button
+              (click)="add_title()">
+        Ajouter ce titre
+      </button>
+    </div>
+
+
+    <mat-selection-list #items *ngIf="!showDetail"
+                        (selectionChange)="select_title(items.selectedOptions.selected[0].value)"
+                        [multiple]="false">
+      <mat-list-option *ngFor="let item of pows" [value]="item">
+        <mat-icon mat-list-icon>videocam</mat-icon>
+        <div mat-line>{{item.title}}</div>
+      </mat-list-option>
+    </mat-selection-list>
+
+
+
+
+
+    <div *ngIf="showDetail">
+      <mat-form-field  appearance="fill" class="app-field">
+        <mat-label>Lien internet principal</mat-label>
+        <input matInput placeholder="https://" type="text" max="300" [(ngModel)]="pow.url">
+        <mat-hint>Adresse internet permettant d'avoir plus d'information sur l'oeuvre</mat-hint>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="fill" class="app-field">
+        <mat-label>Texte du lien</mat-label>
+        <input matInput type="text" max="300" [(ngModel)]="pow.text_url">
+        <mat-hint>Adresse internet permettant d'avoir plus d'information sur l'oeuvre</mat-hint>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <br><hr>
+    <button class="app-button login-button"
+            *ngIf="pow.title.length>0"
+            mat-button mat-raised-button
+            (click)="quit()">
+      Enregistrer
+    </button>
+    <button class="app-button login-button"
+            mat-button mat-raised-button
+            (click)="quit()">
+      Retour
+    </button>
+  </div>
+
+</div>

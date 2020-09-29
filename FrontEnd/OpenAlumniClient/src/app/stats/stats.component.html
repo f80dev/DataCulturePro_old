@@ -1,0 +1,24 @@
+
+<div class="mainform">
+  <h2>
+    Bienvenue dans la console statistiques
+  </h2>
+
+  <app-tuto label="Grâce aux langages GraphQL vous pouvez interroger la base des anciens éleves"></app-tuto>
+
+  <textarea
+            [rows]="10"
+            style="margin:2%;width: 95%;background-color: lightgray;"
+            placeholder="Votre requête ici"  [(ngModel)]="query">
+  </textarea>
+
+  <div class="bottom-bar">
+    <hr>
+    <button mat-button mat-raised-button
+            class="app-button"
+            (click)="_location.back()">
+      Retour
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,22 @@
+<div class="mainform">
+
+  <div class="h-zone">Réalisations</div>
+  <div class="wrap-list">
+    <div *ngFor="let wrk of works" style="max-width: 400px;margin:1%;">
+      <app-work [work]="wrk" backgroundColor="#265480" [showAction]="true">
+        <small>{{wrk.comment}}</small>
+      </app-work>
+    </div>
+  </div>
+
+
+<br>
+<div class="bottom-bar">
+  <hr>
+<button mat-raised-button mat-button (click)="_location.back()">
+  Retour
+</button>
+</div>
+
+
+</div>

@@ -1,0 +1,44 @@
+<div style="margin:1%;text-align: center;min-width: 300px;">
+  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
+    <mat-label>Filtrer</mat-label>
+      <input matInput matNativeControl placeholder="Votre recherche" [(ngModel)]="query.value">
+  <!--    <mat-bicon matSuffix (click)="refresh()">search</mat-icon>-->
+<!--      <mat-hint *ngIf="query.value.length==0"-->
+<!--                style="font-size: small;">Saisissez votre filtre pour limiter le nombre de résultat</mat-hint>-->
+      <mat-icon *ngIf="query.value?.length>0" matSuffix style="cursor: pointer" (click)="query.value=''">cancel</mat-icon>
+    </mat-form-field>
+
+    <div *ngIf="config.hasPerm('stats')">
+      <br>
+      <button mat-button mat-raised-button
+              class="app-button"
+              (click)="export_result()">
+        Exporter
+      </button>
+      <button mat-button mat-raised-button
+              class="app-button"
+              (click)="openStats()">
+        Console statistiques
+      </button>
+    </div>
+
+</div>
+
+
+<div class="div-center">
+  <app-hourglass [message]="message"></app-hourglass>
+</div>
+
+<div class="wrap-list" *ngIf="message.length==0 && config.ready">
+  <app-profil
+              *ngFor="let profil of profils | filter:['filter_tag',query.value.toLowerCase()]"
+              [writeAccess]="config.user && config.user.profil==profil?.id"
+              class="app-card" [profil]="profil">
+
+    <div *ngIf="config.hasPerm('r_department')"
+         style="margin-top:20px;margin-bottom:20px;width: 100%;text-align: center;font-size: large">
+      {{profil?.department}}
+    </div>
+
+  </app-profil>
+</div>

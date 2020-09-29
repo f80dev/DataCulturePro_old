@@ -1,0 +1,21 @@
+<div class="mainform">
+<app-profil [profil]="profil" level="0" class="large-card">
+  {{profil?.job}}<br>
+  <div class="wrap-list">
+    <div *ngFor="let wrk of works" style="max-width: 400px;margin:1%;">
+      <app-work [work]="wrk" backgroundColor="#265480">
+      </app-work>
+    </div>
+  </div>
+
+</app-profil>
+
+<div class="bottom-bar">
+  <hr>
+  <button mat-button mat-raised-button
+            class="app-button"
+            (click)="router.navigate(['search'],{queryParams:{filter:profil.lastname}})">
+      Annuaire
+   </button>
+</div>
+</div>
