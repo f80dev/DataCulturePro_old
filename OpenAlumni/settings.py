@@ -32,7 +32,8 @@ ALLOWED_HOSTS = [
     "server.f80.fr",
     "localhost",
     "127.0.0.1",
-    "openalumni.f80.fr"
+    "openalumni.f80.fr",
+    "dcp.f80.fr"
 ]
 
 
