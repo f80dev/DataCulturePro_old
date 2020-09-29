@@ -55,6 +55,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatListModule} from "@angular/material/list";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -113,7 +114,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         MatSidenavModule,
         MatToolbarModule,
         MatListModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatExpansionModule
     ],
   providers: [
     ApiService,TransPipe,

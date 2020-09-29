@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1601313157294,
+  "timestamp": 1601388647112,
   "index": "https://openalumni.f80.fr/index.html",
   "assetGroups": [
     {
@@ -79,11 +79,11 @@
     "https://openalumni.f80.fr/assets/spip_fictif.csv": "b47411b799f94ba3b2fb47359a5da194401bd762",
     "https://openalumni.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://openalumni.f80.fr/index.html": "c86e1fb4f5809b0a7cd3688084628ef8fc41f78c",
-    "https://openalumni.f80.fr/main.js": "98ca07a07569ec2ae6ac3c4251abb3f89c3f1fce",
+    "https://openalumni.f80.fr/main.js": "4c68b17f148051846bfd3e73b03503738265a44e",
     "https://openalumni.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
     "https://openalumni.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "https://openalumni.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",
-    "https://openalumni.f80.fr/styles.css": "5579c6ce74f7648637622ccb3300748ef0dceefd"
+    "https://openalumni.f80.fr/styles.css": "7d9992747a2d1adcd79ca0ec7475ad0f9794f2d3"
   },
   "navigationUrls": [
     {
