@@ -32,7 +32,6 @@ ALLOWED_HOSTS = [
     "server.f80.fr",
     "localhost",
     "127.0.0.1",
-    "openalumni.f80.fr",
     "dcp.f80.fr"
 ]
 
@@ -230,7 +229,7 @@ APPNAME="Data Culture Pro"
 
 #DOMAIN_APPLI="http://localhost:4200"
 #DOMAIN_SERVER="http://localhost:8000"
-DOMAIN_APPLI="https://openalumni.f80.fr"
+DOMAIN_APPLI="https://dcp.f80.fr"
 DOMAIN_SERVER="https://server.f80.fr:8000"
 
 

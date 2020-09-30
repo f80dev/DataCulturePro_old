@@ -52,7 +52,7 @@ et l'intégration avec le rest framework : https://django-elasticsearch-dsl-drf.
 
 #Tests
 ##tester en production
-Ouverture via https://openalumni.f80.fr/search
+Ouverture via https://dcp.f80.fr/search
 
 ##tester en local
 Ouverture via http://localhost:4200/admin
