@@ -727,7 +727,7 @@ export function checkConfig(vm:any) {
 }
 
 export function checkLogin(vm,params: any = null,router: Router=null, ) {
-  if (!localStorage.getItem('email') || (vm.config.user!=null && vm.config.user.user!=null && vm.config.user.user.email=="")) {
+  if (vm.config.user==null || vm.config.user.user==null || vm.config.user.user.email=="") {
     if(router==null)router=vm.router;
     router.navigate(['search'], {queryParams: params});
     return false;

@@ -75,8 +75,10 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-checkbox *ngIf="config.user?.user"
-                      (ngModelChange)="save_user({acceptSponsor:$event})"
-                      [(ngModel)]="config.user.user.acceptSponsor">Accepte d'être tuteur</mat-checkbox>
+                      (change)="save_user({acceptSponsor:$event})"
+                      [checked]="config.user?.acceptSponsor">
+          Accepte d'être tuteur
+        </mat-checkbox>
       </mat-expansion-panel>
 
 <!--      Expérience -->

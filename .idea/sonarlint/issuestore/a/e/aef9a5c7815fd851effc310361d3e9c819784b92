@@ -1,10 +1,10 @@
 
-spython:S3776J"TRefactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.(Çáã¤8ÆêáçÆ.
-xpython:S1542Ú"XRename function "dateToTimestamp" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(‡¸ßØ8ÆêáçÆ.
+gpython:S1192R"HDefine a constant instead of duplicating this literal "{{link:" 3 times.(ÛšÜÕ8ÆêáçÆ.
+>python:S125§"Remove this commented out code.(Î„Ûı8ÆêáçÆ.
+Hpython:S1481š"(Remove the unused local variable "inst".(ËŞü8ÆêáçÆ.
+xpython:S1542Û"XRename function "dateToTimestamp" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(‡¸ßØ8ÆêáçÆ.
+[python:S5754Y"<Specify an exception class to catch or reraise the exception(ˆÊÉ·8ÆêáçÆ.
 spython:S1542"TRename function "stringToUrl" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(¤¿ô‚8ÆêáçÆ.
-[python:S5754X"<Specify an exception class to catch or reraise the exception(ˆÊÉ·8ÆêáçÆ.
-lpython:S1192"GDefine a constant instead of duplicating this literal "{{faq:" 3 times.(Øü¦îúÿÿÿÿ8ÆêáçÆ.
-gpython:S1192Q"HDefine a constant instead of duplicating this literal "{{link:" 3 times.(ÛšÜÕ8ÆêáçÆ.
-Hpython:S1481™"(Remove the unused local variable "inst".(ËŞü8ÆêáçÆ.
->python:S125¦"Remove this commented out code.(Î„Ûı8ÆêáçÆ.
-tpython:S3776Ú"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(‡¸ßØ8ÆêáçÆ.
+spython:S3776K"TRefactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.(Çáã¤8ÆêáçÆ.
+lpython:S1192"GDefine a constant instead of duplicating this literal "{{faq:" 3 times.(Øü¦îúÿÿÿÿ8ÆêáçÆ.
+tpython:S3776Û"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(‡¸ßØ8ÆêáçÆ.

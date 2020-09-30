@@ -18,7 +18,7 @@ export class AddpowComponent implements OnInit {
 
   pows: any[]=[];
   showDetail=false;
-  pow: any={title:"",url:"http://",text_url:"plus d'info"};
+  pow: any;
 
   constructor(public _location:Location,
               public routes:ActivatedRoute,
@@ -28,6 +28,11 @@ export class AddpowComponent implements OnInit {
               public toast:MatSnackBar) { }
 
   ngOnInit(): void {
+    this.initPow();
+  }
+
+  initPow(){
+    this.pow={title:"",url:"http://",text_url:"plus d'info"};
     this.pow.owner=this.routes.snapshot.queryParamMap.get("owner");
   }
 
@@ -46,7 +51,6 @@ export class AddpowComponent implements OnInit {
                 title: this.pow.title
               }
           });
-          debugger
         }
       } else {
         $$("Le titre n'est pas dans la base, on l'enregistre")
@@ -61,6 +65,9 @@ export class AddpowComponent implements OnInit {
                 },
               replaceUrl:true
             });
+          } else {
+            this.initPow();
+            this.showDetail=false;
           }
         });
       }

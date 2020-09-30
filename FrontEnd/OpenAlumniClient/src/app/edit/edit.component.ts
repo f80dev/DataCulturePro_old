@@ -45,6 +45,7 @@ export class EditComponent implements OnInit  {
   comment="";
   pow:any;
   earning: any;
+  acceptSponsor:boolean;
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -198,7 +199,7 @@ export class EditComponent implements OnInit  {
   save_user(evt=null) {
     if(evt!=null){
       let prop=Object.keys(evt)[0];
-      this.config.user.user[prop]=evt[prop];
+      this.config.user.user[prop]=evt[prop].checked;
     }
     this.api.setuser(this.config.user.user).subscribe(()=>{});
   }

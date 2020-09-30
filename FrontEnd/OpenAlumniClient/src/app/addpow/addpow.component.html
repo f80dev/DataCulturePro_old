@@ -60,12 +60,12 @@
     <button class="app-button login-button"
             *ngIf="pow.title.length>0"
             mat-button mat-raised-button
-            (click)="quit()">
+            (click)="quit(true)">
       Enregistrer
     </button>
     <button class="app-button login-button"
             mat-button mat-raised-button
-            (click)="quit()">
+            (click)="quit(false)">
       Retour
     </button>
   </div>
