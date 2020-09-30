@@ -16,14 +16,15 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <img [src]="profil.photo" class="image-photo" (click)="change_photo()"><br>
+        <img [src]="profil.photo" mat-card-avatar
+             class="image-photo" style="width:100px;height: 100px;" (click)="change_photo()"><br>
 
-        <mat-form-field appearance="fill" class="app-field" style="max-width: 200px;">
+        <mat-form-field appearance="fill" class="app-field" style="max-width: 150px;">
           <mat-label>Prénom</mat-label>
           <input matInput type="text" max="50" [(ngModel)]="profil.firstname">
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="app-field" style="max-width: 300px;">
+        <mat-form-field appearance="fill" class="app-field" style="max-width: 150px;">
           <mat-label>Nom</mat-label>
           <input matInput type="text" max="50" [(ngModel)]="profil.lastname">
         </mat-form-field>
@@ -44,12 +45,12 @@
         </mat-form-field>
         <br>
 
-        <mat-form-field appearance="fill" class="app-field" style="max-width: 100px">
+        <mat-form-field appearance="fill" class="app-field" style="max-width: 80px">
           <mat-label>Code postal</mat-label>
           <input matInput type="text" max="5" [(ngModel)]="profil.cp">
         </mat-form-field>
         &nbsp;
-        <mat-form-field appearance="fill" class="app-field">
+        <mat-form-field appearance="fill" class="app-field" style="max-width: 220px">
           <mat-label>Ville</mat-label>
           <input matInput type="text" [(ngModel)]="profil.town">
         </mat-form-field>
@@ -74,6 +75,7 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-checkbox *ngIf="config.user?.user"
+                      (ngModelChange)="save_user({acceptSponsor:$event})"
                       [(ngModel)]="config.user.user.acceptSponsor">Accepte d'être tuteur</mat-checkbox>
       </mat-expansion-panel>
 

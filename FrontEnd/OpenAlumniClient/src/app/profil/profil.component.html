@@ -1,7 +1,7 @@
 <mat-card [ngStyle]="{width:width,backgroundColor:backgroundColor,textAlign:'left'}" [class.mat-elevation-z8]="true">
   <mat-card-header>
     <div mat-card-avatar *ngIf="config.hasPerm('r_photo')">
-      <img [src]="profil?.photo" class="icon-profil">
+      <img mat-card-avatar [src]="profil?.photo" class="icon-profil">
     </div>
     <mat-card-title>
       <span *ngIf="config.hasPerm('r_firstname')">{{profil?.firstname}}</span>

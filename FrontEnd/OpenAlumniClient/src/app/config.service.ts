@@ -98,7 +98,7 @@ export class ConfigService {
     let email=localStorage.getItem("email");
     this.api.getuser(email).subscribe((r:any)=>{
         if(r.count>0){
-          $$("Chargement de l'utilisateur ",r.results[0])
+          $$("Chargement de l'utilisateur ",r.results[0]);
           this.user=r.results[0];
           if(func_success)func_success();
         } else {

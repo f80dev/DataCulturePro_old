@@ -97,7 +97,7 @@ export class EditComponent implements OnInit  {
     let rc=[];
     this.api.getPOW().subscribe((r:any)=>{
       for(let i of r.results){
-        if(i.owner=="public" || this.config.user.user==null || i.owner==this.config.user.user.id){
+        if(i.owner=="public" || this.config.user==null || this.config.user.user==null || i.owner==this.config.user.user.id){
           i["sel"]="";
           rc.push(i);
         }
@@ -139,7 +139,7 @@ export class EditComponent implements OnInit  {
   quit(bSave=true) {
     if(bSave){
       this.api.setprofil(this.profil).subscribe(()=>{});
-      this.api.setuser(this.config.user.user).subscribe(()=>{});
+      this.save_user();
     }
     this._location.back();
   }
@@ -193,6 +193,14 @@ export class EditComponent implements OnInit  {
       })
     }
 
+  }
+
+  save_user(evt=null) {
+    if(evt!=null){
+      let prop=Object.keys(evt)[0];
+      this.config.user.user[prop]=evt[prop];
+    }
+    this.api.setuser(this.config.user.user).subscribe(()=>{});
   }
 }
 

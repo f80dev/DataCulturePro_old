@@ -41,6 +41,7 @@ def reset_password(email,username):
     welcome_file=settings.STATIC_ROOT+"/welcome.html"
     body = open_html_file(welcome_file, {
         "email": email,
+        "url_appli":settings.DOMAIN_APPLI+"/?email="+email,
         "username": username,
         "code": password,
         "appname": APPNAME
