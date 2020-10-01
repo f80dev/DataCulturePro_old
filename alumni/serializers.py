@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 
 import yaml
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
@@ -9,6 +10,7 @@ from rest_framework.validators import UniqueValidator
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import reset_password, log
+from alumni.documents import ProfilDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 
 
@@ -102,3 +104,10 @@ class ExtraPOWSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Work
         fields = ['profil']
+
+
+#ProfilDocument utilisé par elasticsearch
+class ProfilDocumentSerializer(DocumentSerializer):
+    class Meta:
+        document=ProfilDocument
+        fields=("firstname","lastname")

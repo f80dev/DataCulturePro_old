@@ -180,13 +180,18 @@ GRAPHENE = {
     'SCHEMA': 'alumni.profil.schema'
 }
 
-
+#Installation d'
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': '207.180.198.227:9200'
     },
 }
 
+#https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/quick_start.html#installation
+#chemin du répertoire document
+ELASTICSEARCH_INDEX_NAMES = {
+    'search_indexes.documents.profil': 'profil',
+}
 
 
 
@@ -243,6 +248,3 @@ LINKEDIN_RETURN_URL="http://localhost:8000/api/oauth_callback"
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-ELASTICSEARCH_INDEX_NAMES = {
-    'search_indexes.documents.profil': 'profil',
-}

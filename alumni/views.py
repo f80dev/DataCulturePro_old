@@ -7,6 +7,12 @@ from urllib.request import urlopen
 import yaml
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
+    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
+    OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
+from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.filters import SearchFilter
@@ -25,10 +31,11 @@ from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log
-from OpenAlumni.settings import APPNAME
+from OpenAlumni.settings import APPNAME, DOMAIN_APPLI
+from alumni.documents import ProfilDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
-    WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer
+    WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -154,8 +161,6 @@ def test(request):
 @permission_classes([AllowAny])
 def initdb(request):
     profils=yaml.load(DOMAIN_APPLI+"/assets/profils.yaml")
-
-
 
 
 @api_view(["GET"])
@@ -304,35 +309,35 @@ def oauth(request):
 
 
 
-# class ProfilDocumentView(BaseDocumentViewSet):
-#     document=ProfilDocument
-#     serializer_class = ProfilDocumentSerializer
-#     pagination_class = PageNumberPagination
-#     lookup_field = "id"
-#     filter_backends = [
-#         FilteringFilterBackend,
-#         IdsFilterBackend,
-#         OrderingFilterBackend,
-#         DefaultOrderingFilterBackend,
-#         SearchFilterBackend,
-#     ]
-#     serch_fields = ('name')
-#     filter_fields = {
-#         'id': {
-#             'field': 'id',
-#             'lookups': [
-#                 LOOKUP_FILTER_RANGE,
-#                 LOOKUP_QUERY_IN,
-#                 LOOKUP_QUERY_GT,
-#                 LOOKUP_QUERY_GTE,
-#                 LOOKUP_QUERY_LT,
-#                 LOOKUP_QUERY_LTE,
-#             ],
-#         },
-#         'name': 'name.raw',
-#     }
-#     ordering_fields = {
-#         'id': 'id',
-#         'name': 'name.raw'
-#     }
-#     ordering = ("name")
+class ProfilDocumentView(BaseDocumentViewSet):
+    document=ProfilDocument
+    serializer_class = ProfilDocumentSerializer
+    pagination_class = PageNumberPagination
+    lookup_field = "id"
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        DefaultOrderingFilterBackend,
+        SearchFilterBackend,
+    ]
+    serch_fields = ('name')
+    filter_fields = {
+        'id': {
+            'field': 'id',
+            'lookups': [
+                LOOKUP_FILTER_RANGE,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_GT,
+                LOOKUP_QUERY_GTE,
+                LOOKUP_QUERY_LT,
+                LOOKUP_QUERY_LTE,
+            ],
+        },
+        'name': 'name.raw',
+    }
+    ordering_fields = {
+        'id': 'id',
+        'name': 'name.raw'
+    }
+    ordering = ("name")

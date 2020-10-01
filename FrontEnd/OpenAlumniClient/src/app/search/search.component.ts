@@ -43,6 +43,10 @@ export class SearchComponent implements OnInit {
         this.profils=[];
         for(let item of r.results){
           item.filter_tag=normaliser("nom:"+item.lastname+" pre:"+item.firstname+" dep:"+item.department+" promo:"+item.degree_year+" cp:"+item.cp);
+          for(let work of item.works){
+            let _work:any=JSON.parse(work.replaceAll("'","\""));
+            item.filter_tag=normaliser(item.filter_tag+"titre:"+_work.pow.title+" ");
+          }
           this.profils.push(item);
         }
         if(this.profils.length==0){

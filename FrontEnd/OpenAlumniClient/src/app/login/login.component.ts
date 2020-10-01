@@ -135,6 +135,10 @@ export class LoginComponent implements OnInit {
               if (res != null) {
                 this.messageCode="Afin de vérifier que vous êtes bien le propriétaire de " + email + ", veuillez indiquer le code à 6 chiffres que vous avez reçu";
               }
+            },(err)=>{
+              showError(this,err);
+              this.wait_message="";
+              this._location.back();
             });
           }
         }, (err:any) => {
@@ -194,7 +198,7 @@ export class LoginComponent implements OnInit {
       if (r != null) {
           this.api.token=r.token;
           localStorage.setItem("token",r.token);
-          localStorage.setItem("email",this.email);
+          if(this.email)localStorage.setItem("email",this.email);
           showMessage(this, "Connexion à votre compte");
           this.messageCode="";
           this.config.init_user(()=>{this.quit();});

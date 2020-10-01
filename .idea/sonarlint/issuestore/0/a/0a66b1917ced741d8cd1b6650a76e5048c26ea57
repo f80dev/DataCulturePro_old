@@ -1,10 +1,10 @@
 
-Lpython:S1481¼",Remove the unused local variable "sections".(±ı«Š8ìµı‰É.
->python:S125³"Remove this commented out code.(ü·Œ8ìµı‰É.
-Ppython:S1481œ"+Remove the unused local variable "profils".(Œõ¤ıÿÿÿÿ8ìµı‰É.
-Bpython:S125|"Remove this commented out code.(¾ÕÌƒüÿÿÿÿ8ìµı‰É.
 Opython:S1481©"*Remove the unused local variable "profil".(åñ•…ıÿÿÿÿ8ìµı‰É.
+Bpython:S125|"Remove this commented out code.(¾ÕÌƒüÿÿÿÿ8ìµı‰É.
 Tpython:S1066ï"/Merge this if statement with the enclosing one.(¼ˆ¤ÿÿÿÿÿ8ìµı‰É.
-tpython:S3776ç"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(àşë 8ìµı‰É.
+Lpython:S1481¼",Remove the unused local variable "sections".(±ı«Š8ìµı‰É.
 npython:S3827œ"IDOMAIN_APPLI is not defined. Change its name or define it before using it(Œõ¤ıÿÿÿÿ8¾¢ßªË.
+Ppython:S1481œ"+Remove the unused local variable "profils".(Œõ¤ıÿÿÿÿ8ìµı‰É.
 Fpython:S1481‹"&Remove the unused local variable "rc".(Ï¹²8ìµı‰É.
+>python:S125³"Remove this commented out code.(ü·Œ8ìµı‰É.
+tpython:S3776ç"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(àşë 8ìµı‰É.
