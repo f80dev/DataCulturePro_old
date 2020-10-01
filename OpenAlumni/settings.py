@@ -189,9 +189,6 @@ ELASTICSEARCH_DSL = {
 
 #https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/quick_start.html#installation
 #chemin du répertoire document
-ELASTICSEARCH_INDEX_NAMES = {
-    'search_indexes.documents.profil': 'profil',
-}
 
 
 

@@ -8,12 +8,11 @@ import yaml
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
-    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE
+    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
-from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
 from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -32,10 +31,10 @@ from rest_framework import viewsets, generics
 from OpenAlumni import settings
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI
-from alumni.documents import ProfilDocument
+from alumni.documents import ProfilDocument, WorkDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
-    WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer
+    WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, WorkDocumentSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -196,7 +195,6 @@ def scrap_linkedin(request):
 
 
 
-
 #http://localhost:8000/api/raz/
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -308,8 +306,8 @@ def oauth(request):
     return redirect("http://localhost:4200")
 
 
-
-class ProfilDocumentView(BaseDocumentViewSet):
+@permission_classes([AllowAny])
+class ProfilDocumentView(DocumentViewSet):
     document=ProfilDocument
     serializer_class = ProfilDocumentSerializer
     pagination_class = PageNumberPagination
@@ -321,7 +319,7 @@ class ProfilDocumentView(BaseDocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    serch_fields = ('name')
+    search_fields = ('title','lastname','email','job','firstname','department','degree_year')
     filter_fields = {
         'id': {
             'field': 'id',
@@ -334,10 +332,62 @@ class ProfilDocumentView(BaseDocumentViewSet):
                 LOOKUP_QUERY_LTE,
             ],
         },
-        'name': 'name.raw',
+        'name': 'name',
     }
     ordering_fields = {
         'id': 'id',
-        'name': 'name.raw'
+        'name': 'name'
+    }
+    suggester_fields = {
+        'name_suggest': {
+            'field': 'name.suggest',
+            'suggesters': [SUGGESTER_COMPLETION,],
+        },
     }
     ordering = ("name")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@permission_classes([AllowAny])
+class WorkDocumentView(DocumentViewSet):
+    document=WorkDocument
+    serializer_class = WorkDocumentSerializer
+    pagination_class = PageNumberPagination
+    lookup_field = "id"
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        DefaultOrderingFilterBackend,
+        SearchFilterBackend,
+    ]
+    search_fields = ('job')
+    filter_fields = {
+        'id': {
+            'field': 'id',
+            'lookups': [
+                LOOKUP_FILTER_RANGE,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_GT,
+                LOOKUP_QUERY_GTE,
+                LOOKUP_QUERY_LT,
+                LOOKUP_QUERY_LTE,
+            ],
+        },
+    }
+
+    ordering_fields = {
+        'id': 'id'
+    }
+    ordering = ("id")

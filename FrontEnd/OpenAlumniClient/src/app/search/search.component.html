@@ -1,7 +1,9 @@
 <div style="margin:1%;text-align: center;min-width: 300px;">
   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
     <mat-label>Filtrer</mat-label>
-      <input matInput matNativeControl placeholder="Votre recherche" [(ngModel)]="query.value">
+      <input matInput matNativeControl
+             (keypress)="onQuery($event)"
+             placeholder="Votre recherche" [(ngModel)]="query.value">
   <!--    <mat-bicon matSuffix (click)="refresh()">search</mat-icon>-->
 <!--      <mat-hint *ngIf="query.value.length==0"-->
 <!--                style="font-size: small;">Saisissez votre filtre pour limiter le nombre de résultat</mat-hint>-->
@@ -30,8 +32,9 @@
 </div>
 
 <div class="wrap-list" *ngIf="message.length==0 && config.ready">
+<!--  *ngFor="let profil of profils | filter:['filter_tag',query.value.toLowerCase()]"-->
   <app-profil
-              *ngFor="let profil of profils | filter:['filter_tag',query.value.toLowerCase()]"
+              *ngFor="let profil of profils"
               [writeAccess]="config.user && config.user.profil==profil?.id"
               class="app-card" [profil]="profil">
 

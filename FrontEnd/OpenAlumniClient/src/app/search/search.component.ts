@@ -34,18 +34,18 @@ export class SearchComponent implements OnInit {
 
   refresh(event:KeyboardEvent=null) {
     if(this.api.token)this.perm="mail";else this.perm="";
-    if(event==null || event.keyCode==13){
-      let param=""
+    if(event==null || (event.keyCode==13 && this.query.value.length>3)){
+      let param="/";
+      if(this.query.value.length>0)param="search="+this.query.value;
       this.message="Chargement des profils";
 
-      this.api._get("profils/",param).subscribe((r:any) =>{
+      this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";
         this.profils=[];
         for(let item of r.results){
           item.filter_tag=normaliser("nom:"+item.lastname+" pre:"+item.firstname+" dep:"+item.department+" promo:"+item.degree_year+" cp:"+item.cp);
-          for(let work of item.works){
-            let _work:any=JSON.parse(work.replaceAll("'","\""));
-            item.filter_tag=normaliser(item.filter_tag+"titre:"+_work.pow.title+" ");
+          for(let _work of item.works){
+            item.filter_tag=normaliser(item.filter_tag+"titre:"+_work.title+" ");
           }
           this.profils.push(item);
         }
@@ -71,5 +71,9 @@ export class SearchComponent implements OnInit {
   openStats() {
     //router.navigate(['stats'])
     open(environment.domain_server+"/graphql","stats");
+  }
+
+  onQuery($event: KeyboardEvent) {
+    this.refresh($event);
   }
 }

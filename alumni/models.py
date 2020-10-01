@@ -27,6 +27,7 @@ class Profil(models.Model):
     photo=models.TextField(blank=True)
     gender=models.CharField(max_length=1,blank=False,default="M",choices=(('M','Male'),('F','Female')))
     linkedin=models.URLField(blank=True)
+    address=models.TextField(null=True)
     cp=models.IntegerField(null=True)
     website=models.URLField(null=True)
 
@@ -92,6 +93,10 @@ class Work(models.Model):
     duration=models.IntegerField(default=0,null=False)
     comment=models.TextField(max_length=400,null=False,default="",blank=True)
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
+
+    @property
+    def title(self):
+        return self.pow.title
 
     def __str__(self):
         d:dict=dict({
