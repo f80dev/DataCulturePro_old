@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api.service";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-faqs',
@@ -17,17 +18,17 @@ export class FaqsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.api.getfaqs().subscribe((rc:any[])=>{
+    this.api.getfaqs().subscribe((rc:any)=>{
       var params= this.route.snapshot.queryParamMap;
 
       this.faqs=[];
 
-      rc.forEach((faq)=> {
+      for(let faq of rc.content) {
         if (!params.has("open") || faq["index"].indexOf(params.get("open")) > -1) {
           faq.visible = params.has("open");
           this.faqs.push(faq)
         }
-      });
+      }
     });
   }
 

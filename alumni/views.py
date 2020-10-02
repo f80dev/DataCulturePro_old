@@ -120,7 +120,8 @@ class ExtraPOWViewSet(viewsets.ModelViewSet):
 def getyaml(request):
     url=request.GET.get("url","")
     if len(url)==0:
-        f=open(settings.STATIC_ROOT+"/profils.yaml", "r",encoding="utf8")
+        name=request.GET.get("name","profil")
+        f=open(settings.STATIC_ROOT+"/"+name+".yaml", "r",encoding="utf8")
     else:
         f=urlopen(url)
     result=yaml.safe_load(f.read())
@@ -154,12 +155,6 @@ def test(request):
     u=User.objects.get(username="hhoareau")
     return JsonResponse(u)
 
-#http://localhost:8000/api/test
-@api_view(["GET"])
-@permission_classes([AllowAny])
-def faqs(request):
-    faqs=yaml.load(DOMAIN_APPLI + "/assets/faqs.yaml")
-    return JsonResponse(faqs)
 
 
 

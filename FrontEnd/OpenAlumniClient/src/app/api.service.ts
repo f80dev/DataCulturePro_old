@@ -179,6 +179,6 @@ export class ApiService {
   }
 
    getfaqs() {
-    return this.http.get(api('faqs'));
+    return this.http.get(api('getyaml',"name=faqs"));
   }
 }

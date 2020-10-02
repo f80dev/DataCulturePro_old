@@ -22,3 +22,14 @@ content:
 
         </p>
         "
+
+  - index: data_culture_pro
+    title: Qu'est ce que "data culture pro" ?
+    order: 0
+    format: html
+    content:
+      "
+        <p>
+          Data Culture Pro est l'annuaire intéractif des anciens de la FEMIS
+        </p>
+        "
