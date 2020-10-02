@@ -16,8 +16,11 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <img [src]="profil.photo" mat-card-avatar
-             class="image-photo" style="width:100px;height: 100px;" (click)="change_photo()"><br>
+        <img [src]="profil.photo"
+             mat-card-avatar
+             class="image-photo"
+             style="width:100px;height: 100px;margin:15px;"
+             (click)="change_photo()"><br>
 
         <mat-form-field appearance="fill" class="app-field" style="max-width: 150px;">
           <mat-label>Prénom</mat-label>
@@ -116,11 +119,10 @@
 
 
       </mat-expansion-panel>
-
-
-
-
     </mat-accordion>
+
+    <br>
+    Dernière mise a jour: {{profil.dtLastUpdate | date:"dd/mm/YY"}}
 
 
 

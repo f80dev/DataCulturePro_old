@@ -154,6 +154,13 @@ def test(request):
     u=User.objects.get(username="hhoareau")
     return JsonResponse(u)
 
+#http://localhost:8000/api/test
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def faqs(request):
+    faqs=yaml.load(DOMAIN_APPLI + "/assets/faqs.yaml")
+    return JsonResponse(faqs)
+
 
 
 @api_view(["GET"])
@@ -321,7 +328,7 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('title','lastname','email','job','firstname','department','degree_year')
+    search_fields = ('title','lastname','job','firstname','department')
     filter_fields = {
         'id': {
             'field': 'id',

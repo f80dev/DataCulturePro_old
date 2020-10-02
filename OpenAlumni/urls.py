@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/resend/', views.resend),
     path('api/send_to/', views.send_to),
     path('api/test/', views.test),
+    path('api/faqs/', views.faqs),
     path('api/getyaml/', views.getyaml),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),

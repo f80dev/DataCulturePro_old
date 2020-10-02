@@ -177,4 +177,8 @@ export class ApiService {
   searchPOW(query: string) {
     return this._get("pows","search="+query);
   }
+
+   getfaqs() {
+    return this.http.get(api('faqs'));
+  }
 }

@@ -28,8 +28,10 @@ class Profil(models.Model):
     gender=models.CharField(max_length=1,blank=False,default="M",choices=(('M','Male'),('F','Female')))
     linkedin=models.URLField(blank=True)
     address=models.TextField(null=True)
+    town = models.TextField(null=True)
     cp=models.IntegerField(null=True)
     website=models.URLField(null=True)
+    dtLastUpdate=models.DateField(null=False,auto_now=True)
 
     class Meta(object):
         ordering=["lastname"]

@@ -3,7 +3,7 @@ import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiService} from "../api.service";
 import {ConfigService} from "../config.service";
-import {$$, checkLogin, extract_id, showMessage, stringDistance} from "../tools";
+import {$$, checkLogin, extract_id, showError, showMessage, stringDistance} from "../tools";
 import {MatTableDataSource} from "@angular/material/table";
 import {environment} from "../../environments/environment";
 import {MatDialog} from "@angular/material/dialog";
@@ -78,6 +78,7 @@ export class EditComponent implements OnInit  {
       let id=this.routes.snapshot.queryParamMap.get("id")
       this.api._get("profils/"+id+"/","").subscribe((p:any)=>{
         if(p){
+          debugger
           this.profil=p;
           let d_min=1e9;
           for(let j of this.config.jobs){
@@ -139,7 +140,12 @@ export class EditComponent implements OnInit  {
 
   quit(bSave=true) {
     if(bSave){
-      this.api.setprofil(this.profil).subscribe(()=>{});
+      this.profil.dtLastUpdate=new Date().toISOString();
+      this.api.setprofil(this.profil).subscribe(()=>{
+        showMessage(this,"Profil enregistré");
+      },(err)=>{
+        showError(this,err);
+      });
       this.save_user();
     }
     this._location.back();

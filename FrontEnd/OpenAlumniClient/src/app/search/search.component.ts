@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from "../api.service";
-import {api, normaliser, showError, showMessage} from "../tools";
+import {$$, api, normaliser, showError, showMessage} from "../tools";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfigService} from "../config.service";
@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
 
   refresh(event:KeyboardEvent=null) {
     if(this.api.token)this.perm="mail";else this.perm="";
-    if(event==null || (event.keyCode==13 && this.query.value.length>3)){
+    if(event==null || event.keyCode==13 || this.query.value.length>3){
       let param="/";
       if(this.query.value.length>0)param="search="+this.query.value;
       this.message="Chargement des profils";
@@ -50,10 +50,11 @@ export class SearchComponent implements OnInit {
           this.profils.push(item);
         }
         if(this.profils.length==0){
-          if(this.query.value.length>0)
-            showMessage(this,"Aucun profil correspondant à cette recherche")
-          else
+          if(this.query.value.length==0){
+            $$("La base des profils est vide, on propose l'importation")
             this.router.navigate(["import"]);
+          }
+
         }
       },(err)=>{
         showError(this,err);
@@ -75,5 +76,10 @@ export class SearchComponent implements OnInit {
 
   onQuery($event: KeyboardEvent) {
     this.refresh($event);
+  }
+
+  clearQuery() {
+    this.query.value='';
+    this.refresh(null);
   }
 }

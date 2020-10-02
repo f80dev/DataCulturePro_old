@@ -2,12 +2,14 @@
   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
     <mat-label>Filtrer</mat-label>
       <input matInput matNativeControl
-             (keypress)="onQuery($event)"
+             (keyup)="onQuery($event)"
              placeholder="Votre recherche" [(ngModel)]="query.value">
   <!--    <mat-bicon matSuffix (click)="refresh()">search</mat-icon>-->
 <!--      <mat-hint *ngIf="query.value.length==0"-->
 <!--                style="font-size: small;">Saisissez votre filtre pour limiter le nombre de résultat</mat-hint>-->
-      <mat-icon *ngIf="query.value?.length>0" matSuffix style="cursor: pointer" (click)="query.value=''">cancel</mat-icon>
+      <mat-icon *ngIf="query.value?.length>0"
+                matSuffix style="cursor: pointer"
+                (click)="clearQuery()">cancel</mat-icon>
     </mat-form-field>
 
     <div *ngIf="config.hasPerm('stats')">
