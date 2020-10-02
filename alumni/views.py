@@ -323,7 +323,7 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('title','lastname','job','firstname','department')
+    search_fields = ('title','lastname','job','firstname','department','promo')
     filter_fields = {
         'id': {
             'field': 'id',
@@ -339,8 +339,7 @@ class ProfilDocumentView(DocumentViewSet):
         'name': 'name',
     }
     ordering_fields = {
-        'id': 'id',
-        'name': 'name'
+        'lastname': 'lastname'
     }
     suggester_fields = {
         'name_suggest': {

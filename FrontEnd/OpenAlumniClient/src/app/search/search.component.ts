@@ -17,6 +17,7 @@ export class SearchComponent implements OnInit {
   query:any={value:""};
   message: string="";
   perm: string="";
+  dtLastSearch: number=0;
 
   constructor(public api:ApiService,
               public toast:MatSnackBar,
@@ -32,9 +33,9 @@ export class SearchComponent implements OnInit {
 
 
 
-  refresh(event:KeyboardEvent=null) {
+  refresh() {
     if(this.api.token)this.perm="mail";else this.perm="";
-    if(event==null || event.keyCode==13 || this.query.value.length>3){
+    if(this.query.value.length>3 || this.query.value.length==0){
       let param="/";
       if(this.query.value.length>0)param="search="+this.query.value;
       this.message="Chargement des profils";
@@ -74,12 +75,17 @@ export class SearchComponent implements OnInit {
     open(environment.domain_server+"/graphql","stats");
   }
 
+  handle=null;
   onQuery($event: KeyboardEvent) {
-    this.refresh($event);
+    clearTimeout(this.handle);
+    this.handle=setTimeout(()=>{
+      this.refresh();
+    },1000);
+
   }
 
   clearQuery() {
     this.query.value='';
-    this.refresh(null);
+    this.refresh();
   }
 }

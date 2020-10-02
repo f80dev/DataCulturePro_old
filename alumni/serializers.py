@@ -82,7 +82,7 @@ class ProfilSerializer(serializers.ModelSerializer):
     works = serializers.StringRelatedField(many=True,read_only=True)
     class Meta:
         model=Profil
-        fields=["id","lastname","firstname","mobile","email","photo","gender","linkedin","degree_year","department","cp","public_url","fullname","works","address","town"]
+        fields=["id","lastname","firstname","mobile","email","photo","gender","linkedin","degree_year","department","cp","public_url","fullname","works","address","town","promo"]
 
 
 
@@ -110,7 +110,12 @@ class ExtraPOWSerializer(HyperlinkedModelSerializer):
 class ProfilDocumentSerializer(DocumentSerializer):
     class Meta:
         document=ProfilDocument
-        fields=("id","firstname","lastname","email","name","works","degree_year","public_url","photo","mobile","cp","address","town","dtLastUpdate")
+        fields=("id","firstname","lastname",
+                "email","name","works",
+                "degree_year","public_url",
+                "photo","mobile","cp",
+                "address","town","promo",
+                "dtLastUpdate")
 
 
 class WorkDocumentSerializer(DocumentSerializer):

@@ -20,16 +20,11 @@ html_strip = analyzer(
 @registry.register_document
 class ProfilDocument(Document):
     name = fields.TextField(fielddata=True,attr='lastname',fields={'suggest': fields.Completion(),})
-    works= fields.NestedField(properties={
-        "job":fields.TextField(),
-        "title":fields.TextField()
-    })
+    works= fields.NestedField(properties={"job":fields.TextField(),"title":fields.TextField()})
+    promo=fields.TextField(attr="promo")
     class Index:
         name='profils'
-        settings={
-            "number_of_shards":1,
-            "number_of_replicas":0
-        }
+        settings={"number_of_shards":1,"number_of_replicas":0}
 
     class Django(object):
         model=Profil

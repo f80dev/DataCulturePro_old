@@ -41,6 +41,10 @@ class Profil(models.Model):
         return DOMAIN_APPLI+"/public/?id="+str(self.id)
 
     @property
+    def promo(self):
+        return str(self.degree_year)
+
+    @property
     def fullname(self):
         return '%s %s' % (self.firstname, self.lastname)
 

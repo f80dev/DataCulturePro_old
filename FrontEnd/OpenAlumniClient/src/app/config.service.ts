@@ -71,7 +71,7 @@ export class ConfigService {
         for(let i of Object.values(r)){
           this.jobs.push({value:i,label:i});
         }
-        this.api.getyaml().subscribe((r:any)=>{
+        this.api.getyaml("","profils").subscribe((r:any)=>{
           this.profils=r.profils;
           this.raz_user();
 
