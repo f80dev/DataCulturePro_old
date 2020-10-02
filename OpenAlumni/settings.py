@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import datetime
 
+from OpenAlumni.passwords import DB_PASSWORD
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -138,7 +140,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "alumni_db",
         "USER": "hhoareau",
-        "PASSWORD": "hh4271",
+        "PASSWORD": DB_PASSWORD,
         'HOST': '161.97.75.165',
         'PORT': '5432',
         'OPTIONS': {
@@ -150,7 +152,7 @@ DATABASES = {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "NAME": "alumni_db",
             "USER": "hhoareau",
-            "PASSWORD": "hh4271",
+            "PASSWORD": DB_PASSWORD,
             'HOST': 'localhost',
             'PORT': '5432',
             'OPTIONS': {
@@ -183,7 +185,7 @@ GRAPHENE = {
 #Installation d'
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': '207.180.198.227:9200'
+        'hosts': '161.97.75.165:9200'
     },
 }
 

@@ -1,3 +1,4 @@
 /venv
 /AngularClient/openAlumni/node_modules
 /certs
+/OpenAlumni/passwords.py

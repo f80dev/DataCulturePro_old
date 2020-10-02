@@ -40,7 +40,12 @@ docker-compose up -d --build
 ##Elasticsearch
 démarrer le noeud elasticsearch
 <pre>
-docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" --name elastic_search_server -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+docker rm -f elastic_search_server
+docker run -p 9200:9200 -p 9300:9300 --restart=always -e "discovery.type=single-node" --name elastic_search_server -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+</pre>
+puis reconstruire l'index par 
+<pre>
+python manage.py search_index --rebuild
 </pre>
 
 

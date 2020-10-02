@@ -306,6 +306,8 @@ def oauth(request):
     return redirect("http://localhost:4200")
 
 
+
+
 @permission_classes([AllowAny])
 class ProfilDocumentView(DocumentViewSet):
     document=ProfilDocument
