@@ -31,13 +31,25 @@ export class SearchComponent implements OnInit {
     this.refresh();
   }
 
+  private translate(text:string):string {
+    let dict={"nom":"lastname","prenom":"firstname","promotion":"promo","titre":"works__title","job":"works__job"}
+    for(let k in dict){
+      text=text.replace(k+":",dict[k]+":");
+    }
+    return text;
+  }
 
 
   refresh() {
     if(this.api.token)this.perm="mail";else this.perm="";
     if(this.query.value.length>3 || this.query.value.length==0){
       let param="/";
-      if(this.query.value.length>0)param="search="+this.query.value;
+      let prefixe="";
+      let q=this.translate(this.query.value);
+      debugger
+      if(this.searchInTitle)prefixe="works__title:"
+
+      if(q.length>0)param="search="+prefixe+q;
       this.message="Chargement des profils";
 
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
@@ -51,7 +63,7 @@ export class SearchComponent implements OnInit {
           this.profils.push(item);
         }
         if(this.profils.length==0){
-          if(this.query.value.length==0){
+          if(q.length==0){
             $$("La base des profils est vide, on propose l'importation")
             this.router.navigate(["import"]);
           }
@@ -76,6 +88,7 @@ export class SearchComponent implements OnInit {
   }
 
   handle=null;
+  searchInTitle: boolean = false;
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);
     this.handle=setTimeout(()=>{

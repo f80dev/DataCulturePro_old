@@ -2,12 +2,15 @@
 version: 1.0
 profils:
   - id: anonyme
+    title: Anonyme
     description: Profil par défaut affecté au personne non connecté
     perm: r_promo r_lastname r_firstname share r_department
     price: 0
     subscription: offline
 
   - id: standard
+    title: Standard
+    level: 0
     presentation: Consultation non anonyme standard
     description: Profil destiné aux employeur
     perm: r_photo r_lastname r_firstname r_linkedin prof r_works r_promo write_email r_address r_department
@@ -15,48 +18,61 @@ profils:
     subscription: online
 
   - id: employeur
+    title: Employeur
+    level: 1
     presentation: Vous chercher des profils pour un projet
     description: Profil destiné aux employeur
-    perm: r_photo r_address r_lastname r_firstname r_linkedin prof r_works write_email r_promo
+    perm: r_photo r_address r_lastname r_firstname r_linkedin prof r_works write_email r_promo advanced_search
     price: 0
     subscription: online
 
   - id: femis_cdi
+    level: 1
+    title: Responsable catalogue
     presentation: Vous avez la charge d'entretenir le catalogue des films
     description: Profil destiné aux personnes en charge du catalogue des films
-    perm: r_photo r_address r_lastname r_firstname r_promo add_movies
+    perm: r_photo r_address r_lastname r_firstname r_promo add_movies advanced_search
     price: 0
     subscription: online
 
   - id: admin
+    title: Administrateur
+    level: 5
     description: Profil destiné aux administrateurs
     perm:
-        r_photo r_cpr_firstname r_works r_linkedin w_cp w_firstname
+        r_photo r_cpr_firstname r_works r_linkedin w_cp w_firstname advanced_search
         w_production w_email w_linkedin admin write_email r_mobile r_address
         r_department stats
     price: 0
     subscription: offline
 
   - id: statistique
-    presentation: vous souhaitez produire des statistiques sur le cinéma
+    title: Statisticien
+    level: 0
+    presentation: vous avez besoin de données anonymisée pour produire des analyses statistiques sur les élèves de l'école
     description: profil destiné aux organisme en charge de statistique
     perm: r_cp r_firstname r_works stats r_promo r_department share
     price: 10
     subscription: online
 
   - id: school
+    title: Personnel de l'école
+    level: 1
     presentation: Vous faites partie de la FEMIS
     description: profil destiné aux organisme en charge de statistique
     perm:
       stats r_cp r_firstname r_promo r_lastname r_works
       r_photo r_linkedin w_cp w_firstname w_production w_email w_linkedin
-      write_email r_mobile r_address r_department share
+      write_email r_mobile r_address r_department share advanced_search
     price: 0
     subscription: online
 
   - id: student
+    title: Eleve / ancien
+    level: 0
     presentation: vous êtes un ancien élève et souhaitez retrouver des anciens de votre école
     description: Profil destiné aux anciens élève
-    perm: r_promo r_photo r_cp r_address r_lastname r_firstname r_linkedin prof r_works write_email r_department
+    perm: r_promo r_photo r_cp r_address r_lastname r_firstname r_linkedin prof r_works write_email r_department advanced_search
     price: 0
     subscription: online
+

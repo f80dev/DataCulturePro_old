@@ -6,13 +6,8 @@ from django.db import models
 
 # Create your models here.
 #Mise a jour du model : python manage.py makemigrations
-from django.db.models import PROTECT
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils import timezone
 
 from OpenAlumni.settings import DOMAIN_APPLI
-
 
 class Profil(models.Model):
     id=models.AutoField(primary_key=True)
@@ -71,6 +66,7 @@ class ExtraUser(models.Model):
     profil=models.OneToOneField(Profil,on_delete=models.CASCADE,null=True)
     acceptSponsor=models.BooleanField(null=False,default=False)
     sponsorOf=models.ForeignKey('ExtraUser',null=True,on_delete=models.PROTECT)
+    level=models.IntegerField(default=0,help_text="Niveau de l'utilisateur")
 
 
 

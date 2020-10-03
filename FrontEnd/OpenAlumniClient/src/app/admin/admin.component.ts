@@ -22,13 +22,13 @@ export class AdminComponent implements OnInit {
 
   raz() {
     this.message="Effacement de la base de données";
-    this.api._get("raz/").subscribe(()=>{
+    this.api._get("raz/","",200).subscribe(()=>{
       showMessage(this,"Base de données effacée");
       this.message="";
       this.initdb();
       this.router.navigate(["import"]);
     },(err)=>{
-      showError(this,err);
+      showError(this,"Echec d'effacement de la base");
     })
   }
 

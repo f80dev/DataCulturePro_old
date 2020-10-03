@@ -12,6 +12,12 @@
                 (click)="clearQuery()">cancel</mat-icon>
     </mat-form-field>
 
+  <div *ngIf="config.hasPerm('advanced_search')">
+       <mat-checkbox [checked]="searchInTitle">
+          Chercher dans les titres
+        </mat-checkbox>
+    </div>
+
     <div *ngIf="config.hasPerm('stats')">
       <br>
       <button mat-button mat-raised-button

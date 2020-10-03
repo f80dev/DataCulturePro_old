@@ -13,6 +13,8 @@ import {Location} from "@angular/common";
 })
 export class ProfilesComponent implements OnInit {
   showPerm: boolean=false;
+  perms:any;
+
   constructor(public api:ApiService,
               public toast:MatSnackBar,
               public _location:Location,
@@ -20,8 +22,34 @@ export class ProfilesComponent implements OnInit {
               public router:Router) { }
 
   ngOnInit(): void {
-    checkLogin(this);
+    if(checkLogin(this)){
+      this.api.getyaml("","perms").subscribe((r:any)=>{
+        this.perms=r.perms;
+      })
+    }
   }
+
+  private readPerm(perm:string,sep:string=","):string {
+    for(let p of this.perms){
+      let rc="";
+      if(p.tag==perm)rc=p.description;
+      if(rc.length==0 && p.tag==perm.replace("r_",""))rc=p.description;
+      if(rc.length==0 && p.tag==perm.replace("w_",""))rc=p.description+" en modification";
+      if(rc.length>0)return rc+sep;
+    }
+    return "";
+  }
+
+
+  detailPerm(perm:string): string {
+    if(!perm)return "";
+    let rc="";
+    for(let it of perm.split(" ")){
+      rc=rc+this.readPerm(it)+" ";
+    }
+    return rc;
+  }
+
 
   sel_profil(p) {
     this.config.user.perm=p.perm;

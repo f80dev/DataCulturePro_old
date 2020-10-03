@@ -20,7 +20,7 @@ html_strip = analyzer(
 @registry.register_document
 class ProfilDocument(Document):
     name = fields.TextField(fielddata=True,attr='lastname',fields={'suggest': fields.Completion(),})
-    works= fields.NestedField(properties={"job":fields.TextField(),"title":fields.TextField()})
+    works= fields.ObjectField(properties={"job":fields.TextField(),"title":fields.TextField()})
     promo=fields.TextField(attr="promo")
     class Index:
         name='profils'

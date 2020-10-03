@@ -38,9 +38,9 @@ class UserSerializer(HyperlinkedModelSerializer):
 
         log("Création de l'extraUser")
         if len(lp)>0:
-            eu=ExtraUser.objects.create(user=user,perm=perm,profil=lp[0],black_list="")
+            eu=ExtraUser.objects.create(user=user,perm=perm,profil=lp[0],black_list="",level=profils["profils"][1]["level"])
         else:
-            eu = ExtraUser.objects.create(user=user, perm=perm,black_list="")
+            eu = ExtraUser.objects.create(user=user, perm=perm,black_list="",level=profils["profils"][1]["level"])
         eu.save()
 
         user.save()
@@ -82,7 +82,12 @@ class ProfilSerializer(serializers.ModelSerializer):
     works = serializers.StringRelatedField(many=True,read_only=True)
     class Meta:
         model=Profil
-        fields=["id","lastname","firstname","mobile","email","photo","gender","linkedin","degree_year","department","cp","public_url","fullname","works","address","town","promo"]
+        fields=["id","lastname","firstname",
+                "mobile","email","photo","gender",
+                "linkedin","degree_year","department",
+                "dtLastUpdate",
+                "cp","public_url","fullname","works",
+                "address","town","promo"]
 
 
 

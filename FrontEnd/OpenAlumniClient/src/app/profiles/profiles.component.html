@@ -2,28 +2,46 @@
   <br>
   <h2>Vous souhaitez accéder à plus d'information sur les élèves</h2>
   <br>
-  <table style="width: 94%;margin-left:2%;text-align: left;">
-    <tr *ngFor="let profil of config.profils">
-      <td *ngIf="profil.subscription=='online'">
-        {{profil.presentation}}<br>
-        <small *ngIf="profil.price>0">{{profil.price}}€/mois</small>
-        <br><br>
-      </td>
-      <td *ngIf="profil.subscription=='online'">
-        <button mat-button mat-raised-button mat-icon-button
-          class="icon-button"
+
+  <mat-accordion [multi]="false" style="text-align: left;">
+  <mat-expansion-panel *ngFor="let profil of config.profils | filter:['subscription','online']" class="app-panel" style="margin:10px;">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="app-mat-panel-title">{{profil.title}}</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>{{profil.presentation}}</p>
+
+    <div *ngIf="this.perms" style="font-size: small;text-align: left;">
+      Vous avez accès:
+      {{detailPerm(profil.perm)}}
+      <br>
+    </div>
+
+    <div *ngIf="profil.price>0">
+      <br><br>
+      Prix:{{profil.price}}€/mois
+    </div>
+
+
+    <mat-action-row>
+      <button mat-button mat-raised-button
+          class="app-button"
           (click)="sel_profil(profil)">
-          <mat-icon>forward</mat-icon>
+          Souscrire
         </button>
-      </td>
-    </tr>
-  </table>
+    </mat-action-row>
+
+  </mat-expansion-panel>
+
+  </mat-accordion>
+
+
   <br>
 
   <div *ngIf="showPerm">
     <br>
-    Actuellement vous avez les permissions :
-    <br><small>{{config.user.perm}}</small>
+    Actuellement vous avez accès :
+    <br><small>{{detailPerm(config.user.perm)}}</small>
     <br><br>
   </div>
 

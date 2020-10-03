@@ -121,15 +121,10 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-    <br>
-    Dernière mise a jour: {{profil.dtLastUpdate | date:"dd/mm/YY"}}
-
-
-
-
-
-
-
+    <br><br>
+    <p style="font-size: small">
+      Dernière mise a jour: {{profil.dtLastUpdate | date:"dd/MM/yy"}}
+    </p>
   </div>
 
 
@@ -259,10 +254,7 @@
   </div>
 
   <div class="bottom-bar">
-    <br><hr>
-
-
-
+    <hr>
     <button class="app-button" mat-button mat-raised-button (click)="quit(false)">
       Retour
     </button>
