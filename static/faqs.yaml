@@ -25,13 +25,13 @@ content:
               <th>Principe</th><th>Exemple</th>
             </tr>
             <tr>
-              <td>un champs particulier</td><td>lastname|dudule</td>
+              <td>un champs particulier</td><td>nom:dudule</td>
             </tr>
             <tr>
               <td>plusieurs mots obligatoires</td><td>chiens&chats</td>
             </tr>
             <tr>
-              <td>plusieurs mots possibles</td><td>chiens||chats</td>
+              <td>plusieurs mots possibles</td><td>chiens chats</td>
             </tr>
           </table>
         </p>

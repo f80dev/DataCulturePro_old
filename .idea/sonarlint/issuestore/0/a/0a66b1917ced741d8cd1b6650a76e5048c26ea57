@@ -1,8 +1,8 @@
 
-Fpython:S1481"&Remove the unused local variable "rc".(ΟΉ²8μµύ‰Ι.
-Lpython:S1481Β",Remove the unused local variable "sections".(±ύ«8μµύ‰Ι.
 Opython:S1481®"*Remove the unused local variable "profil".(ερ•…ύÿÿÿÿ8μµύ‰Ι.
-Ppython:S1481¤"+Remove the unused local variable "profils".(υ¤ύÿÿÿÿ8μµύ‰Ι.
-tpython:S3776μ"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(ΰώλ 8μµύ‰Ι.
+Fpython:S1481"&Remove the unused local variable "rc".(ΟΉ²8μµύ‰Ι.
 Cpython:S125ƒ"Remove this commented out code.(ΎΥΜƒόÿÿÿÿ8μµύ‰Ι.
+Lpython:S1481Β",Remove the unused local variable "sections".(±ύ«8μµύ‰Ι.
 Tpython:S1066τ"/Merge this if statement with the enclosing one.(Ό¤ÿÿÿÿÿ8μµύ‰Ι.
+tpython:S3776μ"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(ΰώλ 8μµύ‰Ι.
+Ppython:S1481¤"+Remove the unused local variable "profils".(υ¤ύÿÿÿÿ8μµύ‰Ι.

@@ -193,8 +193,6 @@ l
 <FrontEnd/OpenAlumniClient/src/app/works/works.component.html,0\0\0067c75e26cb769949d7bdda9618c1e99b909453
 e
 5FrontEnd/OpenAlumniClient/src/app/filter.pipe.spec.ts,1\1\110824b916859ca64ee2e4f411ec0077a55644c5
-_
-/FrontEnd/OpenAlumniClient/src/assets/perms.yaml,c\e\ceb84816dd8567e77cda3d92b917081b2396c319
 l
 <FrontEnd/OpenAlumniClient/src/app/splash/splash.component.ts,2\4\24dc29b52f817e37c9bc95c0f2f70e8869f5f25e
 n
@@ -241,3 +239,7 @@ h
 8FrontEnd/OpenAlumniClient/src/app/faqs/faqs.component.ts,e\6\e627f4e24d47051866523005d786f7ae4f37024c
 @
 static/faqs.yaml,2\a\2ab5006cccff3358874f5fdd468abb30c3a7cafb
+e
+5FrontEnd/OpenAlumniClient/src/app/api.service.spec.ts,e\d\ed47b6acc72330bef6516b768f3afe4cbc313896
+A
+static/perms.yaml,6\e\6ee69437794b2e9d9109818cc4596c94bf392328

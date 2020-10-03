@@ -118,7 +118,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
         fields=("id","firstname","lastname",
                 "email","name","works",
                 "degree_year","public_url",
-                "photo","mobile","cp",
+                "photo","mobile","cp","department",
                 "address","town","promo",
                 "dtLastUpdate")
 

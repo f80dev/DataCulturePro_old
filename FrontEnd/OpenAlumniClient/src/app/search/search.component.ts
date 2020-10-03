@@ -32,7 +32,17 @@ export class SearchComponent implements OnInit {
   }
 
   private translate(text:string):string {
-    let dict={"nom":"lastname","prenom":"firstname","promotion":"promo","titre":"works__title","job":"works__job"}
+    let dict={
+      "nom":"lastname",
+      "prenom":"firstname",
+      "prénom":"firstname",
+      "ville":"town",
+      "code postal":"cp",
+      "film":"works__title",
+      "promotion":"promo",
+      "titre":"works__title",
+      "job":"works__job"
+    }
     for(let k in dict){
       text=text.replace(k+":",dict[k]+":");
     }
