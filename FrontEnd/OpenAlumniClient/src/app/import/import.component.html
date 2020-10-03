@@ -1,6 +1,12 @@
 <app-hourglass [message]="message"></app-hourglass>
-<input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="import($event)" accept=".csv"/>
-<button mat-raised-button mat-button class="app-button" (click)="csvInput.click()">
+<input #csvInput hidden="true"
+       type="file" onclick="this.value=null"
+       (change)="import($event)"
+       accept=".csv"/>
+
+<button mat-raised-button
+        mat-button class="app-button"
+        (click)="csvInput.click()">
   Importer depuis OASIS
 </button>
 

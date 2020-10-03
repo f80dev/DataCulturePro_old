@@ -235,3 +235,9 @@ j
 :FrontEnd/OpenAlumniClient/src/app/faqs/faqs.component.html,5\b\5b954cf853be484dd29b5c7a950a7558f27a5993
 l
 <FrontEnd/OpenAlumniClient/src/app/about/about.component.html,b\9\b99561a4681f930fbfe76a8c6cda90bf23576fa0
+G
+OpenAlumni/passwords.py,9\9\995a424f5c8d3059d8ad9bd94976137c3e5db048
+h
+8FrontEnd/OpenAlumniClient/src/app/faqs/faqs.component.ts,e\6\e627f4e24d47051866523005d786f7ae4f37024c
+@
+static/faqs.yaml,2\a\2ab5006cccff3358874f5fdd468abb30c3a7cafb
