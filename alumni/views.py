@@ -31,10 +31,11 @@ from rest_framework import viewsets, generics
 from OpenAlumni import settings
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI
-from alumni.documents import ProfilDocument, WorkDocument
+from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
-    WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, WorkDocumentSerializer
+    WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
+    PowDocumentSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -229,13 +230,56 @@ def send_to(request,format=None):
     return Response("Message envoyé", status=200)
 
 
+#http://localhost:8000/api/movie_importer/
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def movie_importer(request,format=None):
+    log("Importation de films")
+    txt = str(base64.b64decode(str(request.body).split("base64,")[1]),encoding="utf-8")
+    d = csv.reader(StringIO(txt), delimiter=";")
+    i = 0
+    record = 0
+    for row in list(d):
+        if i>0:
+
+            #dtEnd=str(datetime.fromtimestamp(dateToTimestamp(row[3]))),
+
+            if row[6]=="":row[6]="0"
+            if row[11]=="":row[11]="1800"
+
+            pow:PieceOfWork=PieceOfWork(
+                title=row[0],
+                description=row[1],
+                visual=row[4],
+                nature=row[5],
+                dtStart=row[2],
+                budget=int(row[6]),
+                category=row[7],
+                links=[{"url":row[9],"text":row[8]}],
+                lang="US",
+                year=int(row[11]),
+                owner=row[10]
+            )
+
+            try:
+                pow.category=pow.category.replace("|"," ")
+                rc = pow.save()
+
+                record = record + 1
+            except Exception as inst:
+                log("Probléme d'enregistrement" + str(inst))
+        i=i+1
+
+    return Response(str(record) + " films importés", 200)
+
+
 
 #http://localhost:8000/api/importer/
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def importer(request,format=None):
     log("Importation de profil")
-    txt=str(base64.b64decode(str(request.body).split("base64,")[1]),"utf8")
+    txt=str(base64.b64decode(str(request.body).split("base64,")[1]),"utf-8")
     d =csv.reader(StringIO(txt), delimiter=";")
     i=0
     record=0
@@ -351,21 +395,10 @@ class ProfilDocumentView(DocumentViewSet):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 @permission_classes([AllowAny])
-class WorkDocumentView(DocumentViewSet):
-    document=WorkDocument
-    serializer_class = WorkDocumentSerializer
+class PowDocumentView(DocumentViewSet):
+    document=PowDocument
+    serializer_class = PowDocumentSerializer
     pagination_class = PageNumberPagination
     lookup_field = "id"
     filter_backends = [
@@ -375,7 +408,7 @@ class WorkDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('job')
+    search_fields = ('title','description','nature','category','year')
     filter_fields = {
         'id': {
             'field': 'id',
@@ -387,10 +420,9 @@ class WorkDocumentView(DocumentViewSet):
                 LOOKUP_QUERY_LT,
                 LOOKUP_QUERY_LTE,
             ],
-        },
+        }
+    }
+    ordering_fields = {
+        'title': 'title'
     }
 
-    ordering_fields = {
-        'id': 'id'
-    }
-    ordering = ("id")

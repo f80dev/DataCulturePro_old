@@ -10,12 +10,13 @@ from django.db import models
 
 from OpenAlumni.settings import DOMAIN_APPLI
 
+
 class Profil(models.Model):
     id=models.AutoField(primary_key=True)
     firstname=models.CharField(max_length=70, null=False, default='')
     lastname=models.CharField(max_length=70, null=False, default='')
     birthdate=models.DateField(null=True)
-    mobile = models.CharField(max_length=20,null=True,default="06")
+    mobile=models.CharField(max_length=20,null=True,default="06")
     nationality=models.CharField(max_length=30,null=False,default="Française")
     department=models.CharField(max_length=30,null=True)
     degree_year=models.IntegerField(null=True)
@@ -72,7 +73,6 @@ class ExtraUser(models.Model):
 
 
 
-
 # @receiver(post_save, sender=User)
 # def save_user_extra(sender, instance, **kwargs):
 #     instance.user.save()
@@ -126,9 +126,13 @@ class PieceOfWork(models.Model):
     visual = models.TextField(blank=True,help_text="Visuel de l'oeuvre")
     dtStart=models.DateField(auto_now=True,null=False,help_text="Date de début de la réalisation de l'oeuvre")
     dtEnd=models.DateField(auto_now=True,null=False,help_text="Date de fin de la réalisation de l'oeuvre")
-    title=models.TextField(null=False,unique=True,default="sans titre",help_text="Titre de l'oeuvre, même temporaire")
+    title=models.CharField(null=False,max_length=300,unique=True,default="sans titre",help_text="Titre de l'oeuvre, même temporaire")
+    year=models.IntegerField(null=True,help_text="Année de sortie")
     nature=models.CharField(choices=[
-        ('MOVIE','Film long métrage'),('COURT','Court métrage'),('PUB','Publicité'),('CORP',"Film d'entreprise"),
+        ('MOVIE','Film long métrage'),
+        ('COURT','Court métrage'),
+        ('PUB','Publicité'),
+        ('CORP',"Film d'entreprise"),
         ('SONG','Single/Album')
     ],default='MOVIE',max_length=20,help_text="Classification de l'oeuvre")
 
@@ -138,6 +142,8 @@ class PieceOfWork(models.Model):
     description=models.TextField(null=True,max_length=3000,help_text="Description/Resumer de l'oeuvre")
     # Structure : "url" du document, "type" de document (str), "title" du document
     files=JSONField(null=True,help_text="Liens vers des documents attaché")
+    category=models.TextField(null=True,max_length=200,help_text="Liste des categories auxquelles appartient le film")
+    lang=models.CharField(max_length=50,null=True)
 
     def __str__(self):
         return self.title

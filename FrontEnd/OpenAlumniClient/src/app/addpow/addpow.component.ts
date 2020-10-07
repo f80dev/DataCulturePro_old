@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, Validators} from "@angular/forms";
-import {$$, showMessage} from "../tools";
+import {$$, showError, showMessage} from "../tools";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfigService} from "../config.service";
 import {ApiService} from "../api.service";
@@ -22,6 +22,7 @@ export class AddpowComponent implements OnInit {
   showDetail=false;
   pow: any;
   link:any={url:"",text:""};
+  message: string="";
 
   constructor(public _location:Location,
               public dialog:MatDialog,
@@ -83,8 +84,8 @@ export class AddpowComponent implements OnInit {
   }
 
   changeTitle(evt: any) {
-    if(evt.length>3){
-      this.api.searchPOW(evt).subscribe((r:any)=>{
+    if(evt.length>2){
+      this.api._get("powsdoc","search="+evt).subscribe((r:any)=>{
         this.pows=r.results;
       })
     } else {
@@ -132,5 +133,22 @@ export class AddpowComponent implements OnInit {
         this.pow.visual= result;
       }
     });
+  }
+
+
+   import(fileInputEvent: any) {
+      var reader = new FileReader();
+      this.message="Chargement du fichier";
+      reader.onload = ()=>{
+        this.message="Importation du fichier de films";
+        this.api._post("movie_importer/","",reader.result,200).subscribe((r:any)=>{
+          this.message="";
+          showMessage(this,r);
+          this.router.navigate(["pows"])
+        },(err)=>{
+          showError(this,err);
+        })
+      };
+      reader.readAsDataURL(fileInputEvent.target.files[0]);
   }
 }

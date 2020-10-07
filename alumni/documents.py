@@ -4,7 +4,7 @@ from django.conf import settings
 from django_elasticsearch_dsl import Document, Index, fields
 from django_elasticsearch_dsl.registries import registry
 from elasticsearch_dsl import analyzer
-from alumni.models import Profil, Work
+from alumni.models import Profil, Work, PieceOfWork
 
 #
 # See Elasticsearch Indices API reference for available settings
@@ -37,19 +37,11 @@ class ProfilDocument(Document):
 
 
 @registry.register_document
-class WorkDocument(Document):
-    profil = fields.ObjectField(properties={
-        'lastname': fields.TextField(),
-        'email': fields.TextField(),
-    })
-    pow=fields.ObjectField(properties={
-        'title':fields.TextField(),
-    })
-
+class PowDocument(Document):
     class Index:
-        name='works'
+        name='pows'
         settings={"number_of_shards":1,"number_of_replicas":0}
 
     class Django(object):
-        model=Work
-        fields=["id","job"]
+        model=PieceOfWork
+        fields=["id","year","visual","title","nature","category","description"]

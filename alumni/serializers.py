@@ -10,7 +10,7 @@ from rest_framework.validators import UniqueValidator
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import reset_password, log
-from alumni.documents import ProfilDocument, WorkDocument
+from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 
 
@@ -72,7 +72,7 @@ class POWSerializer(serializers.ModelSerializer):
     works = serializers.StringRelatedField(many=True,read_only=True)
     class Meta:
         model=PieceOfWork
-        fields=["id","title","url","works","links","owner","visual"]
+        fields=["id","title","url","works","links","owner","visual","category"]
 
 
 
@@ -123,7 +123,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
                 "dtLastUpdate")
 
 
-class WorkDocumentSerializer(DocumentSerializer):
+class PowDocumentSerializer(DocumentSerializer):
     class Meta:
-        document=WorkDocument
-        fields=("id","profil","job","pow")
+        document=PowDocument
+        fields=("id","title","nature","description",'category','year')

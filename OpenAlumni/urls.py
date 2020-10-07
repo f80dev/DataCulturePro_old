@@ -32,7 +32,7 @@ router.register(r'extraworks', views.ExtraWorkViewSet)
 router.register(r'works', views.WorkViewSet)
 router.register(r'extrapows', views.ExtraPOWViewSet)
 router.register(r'profilsdoc', views.ProfilDocumentView,basename="profilsdoc")
-router.register(r'worksdoc', views.WorkDocumentView,basename="worksdoc")
+router.register(r'powsdoc', views.PowDocumentView,basename="powsdoc")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

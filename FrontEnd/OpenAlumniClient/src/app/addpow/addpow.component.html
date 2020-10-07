@@ -1,4 +1,5 @@
 <div class="mainform">
+  <app-hourglass [message]="message"></app-hourglass>
   <div class="h-zone" *ngIf="!showDetail">Insérer un nouveau film</div>
   <div style="min-width:350px;max-width: 500px;text-align: left;display: inline-block;">
     <mat-form-field appearance="fill" class="app-field" *ngIf="!showDetail">
@@ -30,7 +31,7 @@
                         [multiple]="false">
       <mat-list-option *ngFor="let item of pows" [value]="item">
         <mat-icon mat-list-icon>videocam</mat-icon>
-        <div mat-line>{{item.title}}</div>
+        <div mat-line>{{item.title}} ({{item.year}})</div>
       </mat-list-option>
     </mat-selection-list>
 
@@ -113,14 +114,23 @@
 
       </mat-expansion-panel>
 
-
-
     </div>
 
   </div>
 
   <div class="bottom-bar">
     <br><hr>
+
+    <input #csvInput hidden="true"
+       type="file" onclick="this.value=null"
+       (change)="import($event)"
+       accept=".csv"/>
+
+    <button class="app-button login-button"
+            mat-button mat-raised-button
+            (click)="csvInput.click()">
+      Importer
+    </button>
 
     <button class="app-button login-button"
             mat-button mat-raised-button

@@ -243,3 +243,7 @@ e
 5FrontEnd/OpenAlumniClient/src/app/api.service.spec.ts,e\d\ed47b6acc72330bef6516b768f3afe4cbc313896
 A
 static/perms.yaml,6\e\6ee69437794b2e9d9109818cc4596c94bf392328
+h
+8FrontEnd/OpenAlumniClient/src/app/pows/pows.component.ts,6\3\63d731a527a9d4e742efdde4becd373efc63c48a
+j
+:FrontEnd/OpenAlumniClient/src/app/pows/pows.component.html,2\b\2b6afd35692768ad3be9cd5f011a134a9f8ee5d2

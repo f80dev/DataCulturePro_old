@@ -13,15 +13,17 @@ export class PowsComponent implements OnInit {
   constructor(public api:ApiService,public router:Router) { }
 
   ngOnInit(): void {
-    this.api._get("pows/").subscribe((r:any)=>{
+    this.api._get("powsdoc/").subscribe((r:any)=>{
       this.pows=[];
       for(let i of r.results){
         let tmp=[];
+        if(i.hasOwnProperty("works")){
         for(let w of i.works){
           while(w.indexOf("'")>-1){
             w=w.replace("'","\"");
           }
           tmp.push(JSON.parse(w));
+        }
         }
         i.works=tmp;
         this.pows.push(i);
