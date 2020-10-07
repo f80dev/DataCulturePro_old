@@ -56,6 +56,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatListModule} from "@angular/material/list";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { PowsComponent } from './pows/pows.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     WorksComponent,
     SplashComponent,
     WriteComponent,
-    StatsComponent
+    StatsComponent,
+    PowsComponent
   ],
     imports: [
         BrowserModule,

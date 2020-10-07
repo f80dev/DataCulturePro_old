@@ -10,7 +10,7 @@
     </mat-form-field>
 
     <div *ngIf="showDetail" class="h-zone" style="margin: 10px;">
-      {{pow.title}}
+      "{{pow.title}}"
     </div>
 
     <div style="display: inline-block" *ngIf="!showDetail">
@@ -36,36 +36,95 @@
 
 
 
-
-
     <div *ngIf="showDetail">
+
+       <mat-expansion-panel class="app-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Informations générales
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+         <div style="width: 100%;text-align: center">
+         <img [src]="pow.visual"
+              *ngIf="pow.visual.length>0"
+              style="width:150px;"
+              (click)="change_visual()">
+          <button class="app-button login-button"
+                  *ngIf="pow.visual.length==0"
+                  mat-button mat-raised-button
+                  (click)="change_visual()">
+            Ajouter un visuel
+          </button>
+         <br>
+
+         </div>
+
+
       <mat-form-field  appearance="fill" class="app-field">
-        <mat-label>Lien internet principal</mat-label>
-        <input matInput placeholder="https://" type="text" max="300" [(ngModel)]="pow.url">
-        <mat-hint>Adresse internet permettant d'avoir plus d'information sur l'oeuvre</mat-hint>
+        <mat-label>Synopsis</mat-label>
+        <input matInput
+               type="text" max="3000"
+               [(ngModel)]="pow.description">
+        <mat-hint>Synopsis de l'oeuvre</mat-hint>
       </mat-form-field>
+       </mat-expansion-panel>
+
+      <mat-expansion-panel class="app-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Ajouter des hyperliens
+          </mat-panel-title>
+          <mat-panel-description class="app-mat-panel-description">
+            Description, Youtube
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div *ngFor="let link of pow.links" style="width: 80%;display: inline-block;text-align: left;font-size: small;font-weight: lighter;">
+          <mat-icon (click)="remove(link)" style="font-size: small;cursor: pointer;">cancel</mat-icon>
+          <a href="{{link.url}}" target="_blank">{{link.text}}</a>
+          <br>
+        </div>
+
+        <mat-form-field  appearance="fill" class="app-field">
+          <mat-label>Lien internet</mat-label>
+          <input matInput placeholder="https://"
+                 title="Peut être un lien vers une plateforme vidéo, la fiche wikipedia"
+                 type="text" max="300"
+                 [(ngModel)]="link.url">
+          <mat-hint>Adresse internet associé à l'oeuvre</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="app-field">
+          <mat-label>Libellé du lien</mat-label>
+          <input matInput type="text" max="300"
+                 [(ngModel)]="link.text">
+        </mat-form-field>
 
 
-      <mat-form-field appearance="fill" class="app-field">
-        <mat-label>Texte du lien</mat-label>
-        <input matInput type="text" max="300" [(ngModel)]="pow.text_url">
-        <mat-hint>Adresse internet permettant d'avoir plus d'information sur l'oeuvre</mat-hint>
-      </mat-form-field>
+        <mat-action-row>
+          <button class="app-button login-button"
+                  *ngIf="pow.title.length>0"
+                  mat-button mat-raised-button
+                  (click)="add_link()">
+            Ajouter
+          </button>
+        </mat-action-row>
+
+      </mat-expansion-panel>
+
+
+
     </div>
 
   </div>
 
   <div class="bottom-bar">
     <br><hr>
+
     <button class="app-button login-button"
-            *ngIf="pow.title.length>0"
             mat-button mat-raised-button
             (click)="quit(true)">
-      Enregistrer
-    </button>
-    <button class="app-button login-button"
-            mat-button mat-raised-button
-            (click)="quit(false)">
       Retour
     </button>
   </div>

@@ -1,0 +1,38 @@
+<div class="mainform">
+<div class="wrap-list" style="margin: 5px;">
+  <mat-expansion-panel *ngFor="let pow of pows" class="app-card-panel">
+    <mat-expansion-panel-header>
+       <mat-panel-title>
+      {{pow.title}}
+         </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <table>
+        <tr>
+          <td>
+            <img [src]="pow.visual" style="width: 125px;">
+          </td>
+          <td>
+              {{pow.description}}
+          </td>
+        </tr>
+      </table>
+
+    <div *ngFor="let link of pow.links" style="font-size: large;font-weight: lighter;">
+          <a href="{{link.url}}" target="_blank">{{link.text}}</a>
+    </div>
+
+    <div *ngIf="pow.works.length>0">
+      <div *ngFor="let work of pow.works">
+        {{work.job}}: {{work.name}}
+        <mat-icon style="font-size: medium;cursor: pointer;"
+                  title="Cliquer pour consulter le profil"
+                  (click)="open_search(work.name)">account_circle</mat-icon>
+      </div>
+    </div>
+
+
+
+  </mat-expansion-panel>
+</div>
+</div>

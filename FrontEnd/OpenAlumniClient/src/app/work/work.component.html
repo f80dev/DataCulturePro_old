@@ -16,9 +16,9 @@
   <mat-card-actions *ngIf="showAction" style="text-align: left;">
 
     <button mat-button mat-icon-button
-            *ngIf="work?.pow?.url"
-            (click)="openInfo(work.pow)"
-            [title]="work?.pow.text_url">
+            *ngIf="work?.pow?.links.length>0"
+            (click)="openInfo(work.pow.links[0])"
+            [title]="work?.pow.links[0].text">
       <mat-icon>info</mat-icon>
     </button>
 

@@ -42,6 +42,15 @@
     &nbsp;&nbsp;Ajouter des films
   </a>
 
+  <a title="Voir les oeuvres de la FEMIS"
+     routerLink="pows"
+     [queryParams]="{filter:'FEMIS'}"
+     mat-list-item
+     id="cmdShowMovies">
+    <mat-icon>event_seat</mat-icon>
+    &nbsp;&nbsp;Tous les films
+  </a>
+
   <a title="Changer vos permissions"
      *ngIf="config.user?.user?.email?.length>0"
      mat-list-item

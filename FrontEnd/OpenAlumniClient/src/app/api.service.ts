@@ -141,10 +141,6 @@ export class ApiService {
   }
 
   addpow(pow: any) {
-    if(pow.url=="http://" || pow.url=="https://"){
-      pow.url=null;
-      pow.text_url=null;
-    }
     return this._post("pows/","",pow);
   }
 

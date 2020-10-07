@@ -2,6 +2,7 @@ import datetime
 
 import django
 from django.contrib.auth.models import AbstractUser, User
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 # Create your models here.
@@ -27,6 +28,7 @@ class Profil(models.Model):
     cp=models.IntegerField(null=True)
     website=models.URLField(null=True)
     dtLastUpdate=models.DateField(null=False,auto_now=True)
+    biography=models.TextField(null=True,max_length=2000)
 
     class Meta(object):
         ordering=["lastname"]
@@ -102,6 +104,7 @@ class Work(models.Model):
 
     def __str__(self):
         d:dict=dict({
+            "name":self.profil.firstname+" "+self.profil.lastname,
             "job":self.job,
             "dtStart":str(self.dtStart),
             "comment":self.comment,
@@ -114,22 +117,34 @@ class Work(models.Model):
 
 
 class PieceOfWork(models.Model):
+    """
+    Description des oeuvres
+
+    """
     id = models.AutoField(primary_key=True)
-    budget=models.IntegerField(default=0)
-    dtStart=models.DateField(auto_now=True,null=False)
-    dtEnd=models.DateField(auto_now=True,null=False)
+    budget=models.IntegerField(default=0,help_text="Coût total de réalisation de l'oeuvre")
+    visual = models.TextField(blank=True,help_text="Visuel de l'oeuvre")
+    dtStart=models.DateField(auto_now=True,null=False,help_text="Date de début de la réalisation de l'oeuvre")
+    dtEnd=models.DateField(auto_now=True,null=False,help_text="Date de fin de la réalisation de l'oeuvre")
     title=models.TextField(null=False,unique=True,default="sans titre",help_text="Titre de l'oeuvre, même temporaire")
     nature=models.CharField(choices=[
         ('MOVIE','Film long métrage'),('COURT','Court métrage'),('PUB','Publicité'),('CORP',"Film d'entreprise"),
         ('SONG','Single/Album')
-    ],default='MOVIE',max_length=20)
-    url=models.URLField(null=True)
-    text_url=models.CharField(max_length=150,default="plus d'info",null=True)
-    imdb=models.URLField(null=True,default="")
+    ],default='MOVIE',max_length=20,help_text="Classification de l'oeuvre")
+
+    #Structure : "url" du document, "text" du lien
+    links=JSONField(null=True,help_text="Liens vers des références externes à l'oeuvre")
     owner=models.CharField(max_length=150,default="public")
+    description=models.TextField(null=True,max_length=3000,help_text="Description/Resumer de l'oeuvre")
+    # Structure : "url" du document, "type" de document (str), "title" du document
+    files=JSONField(null=True,help_text="Liens vers des documents attaché")
 
     def __str__(self):
         return self.title
+
+
+class Movie(PieceOfWork):
+    duration = models.DurationField(null=True,help_text="Durée du film")
 
 
 

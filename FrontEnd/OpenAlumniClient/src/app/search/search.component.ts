@@ -27,7 +27,8 @@ export class SearchComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if(this.query.value=="")this.query.value=this.routes.snapshot.queryParamMap.get("filter") || "";
+    if(this.query.value=="")
+      this.query.value=this.routes.snapshot.queryParamMap.get("filter") || this.routes.snapshot.queryParamMap.get("query") || "";
     this.refresh();
   }
 
@@ -56,7 +57,6 @@ export class SearchComponent implements OnInit {
       let param="/";
       let prefixe="";
       let q=this.translate(this.query.value);
-      debugger
       if(this.searchInTitle)prefixe="works__title:"
 
       if(q.length>0)param="search="+prefixe+q;

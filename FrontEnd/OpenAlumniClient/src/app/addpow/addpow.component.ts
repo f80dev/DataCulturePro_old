@@ -6,6 +6,8 @@ import {ConfigService} from "../config.service";
 import {ApiService} from "../api.service";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ImageSelectorComponent} from "../image-selector/image-selector.component";
+import {MatDialog} from "@angular/material/dialog";
 
 const reg_url = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -19,8 +21,10 @@ export class AddpowComponent implements OnInit {
   pows: any[]=[];
   showDetail=false;
   pow: any;
+  link:any={url:"",text:""};
 
   constructor(public _location:Location,
+              public dialog:MatDialog,
               public routes:ActivatedRoute,
               public router:Router,
               public api:ApiService,
@@ -32,7 +36,7 @@ export class AddpowComponent implements OnInit {
   }
 
   initPow(){
-    this.pow={title:"",url:"http://",text_url:"plus d'info"};
+    this.pow={title:"",links:[],description:"",visual:""};
     this.pow.owner=this.routes.snapshot.queryParamMap.get("owner");
   }
 
@@ -54,6 +58,7 @@ export class AddpowComponent implements OnInit {
         }
       } else {
         $$("Le titre n'est pas dans la base, on l'enregistre")
+        //this.pow.links=JSON.stringify(this.pow.links);
         this.api.addpow(this.pow).subscribe((r:any)=>{
           showMessage(this,"Enregistré");
           if(this.routes.snapshot.queryParamMap.get("redirect")=="addwork"){
@@ -95,5 +100,37 @@ export class AddpowComponent implements OnInit {
   select_title(pow:any) {
     this.pow=pow;
     this.quit(true);
+  }
+
+  remove(_url: any) {
+    this.pow.links.splice(this.pow.links.indexOf(_url),1);
+  }
+
+  add_link() {
+    if(!this.link.url.startsWith("http"))this.link.url="https://"+this.link.url;
+    this.pow.links.push(this.link);
+    this.link={url:"",text:""};
+  }
+
+
+  change_visual() {
+  this.dialog.open(ImageSelectorComponent, {position:
+        {left: '5vw', top: '5vh'},
+      maxWidth: 400, maxHeight: 700, width: '50vw', height: '90vh', data:
+                {
+                  result: this.pow.visual,
+                  checkCode: true,
+                  width: 200,
+                  height: 200,
+                  emoji: false,
+                  internet: false,
+                  ratio: 1,
+                  quality:0.7
+                }
+            }).afterClosed().subscribe((result) => {
+      if (result) {
+        this.pow.visual= result;
+      }
+    });
   }
 }
