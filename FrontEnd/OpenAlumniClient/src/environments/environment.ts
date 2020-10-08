@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   domain_server:"http://localhost:8000",
-  config_file:"http://localhost:4200/assets/config.yaml",
+  config_file:"config",
   domain_appli: "http://localhost:4200",
   appVersion: require('../../package.json').version + '-dev',
 };

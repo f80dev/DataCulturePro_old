@@ -50,7 +50,7 @@ export class ConfigService {
 
    private async getConfig(): Promise<any> {
       if (!this.config) {
-        this.config = (await this.api.getyaml(environment.config_file).toPromise());
+        this.config = (await this.api.getyaml("",environment.config_file).toPromise());
       }
       return Promise.resolve(this.config);
   }

@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1602150660930,
+  "timestamp": 1602153221849,
   "index": "https://dcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -30,7 +30,6 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://dcp.f80.fr/assets/config.yaml",
         "https://dcp.f80.fr/assets/default_jobs.json",
         "https://dcp.f80.fr/assets/icons/LinkedIn.png",
         "https://dcp.f80.fr/assets/icons/icon-128x128.png",
@@ -55,7 +54,6 @@
   "dataGroups": [],
   "hashTable": {
     "https://dcp.f80.fr/4.js": "d193ebdb11607479c9d2ba878c3d30b94597a83c",
-    "https://dcp.f80.fr/assets/config.yaml": "300bc6f67acc8cdd73c32e99c3177b0ff259c20b",
     "https://dcp.f80.fr/assets/default_jobs.json": "2c564458c2e15d101fadf154cbb3171407ed39c2",
     "https://dcp.f80.fr/assets/icons/LinkedIn.png": "dec770e0a226b15021d0b80154aa18841097a46e",
     "https://dcp.f80.fr/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
@@ -75,7 +73,7 @@
     "https://dcp.f80.fr/assets/spip_fictif.csv": "b47411b799f94ba3b2fb47359a5da194401bd762",
     "https://dcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://dcp.f80.fr/index.html": "57e54a7ce8810f4d6ff623ae5c0db52fd6be12cf",
-    "https://dcp.f80.fr/main.js": "a4f374450e0bbc3099888f2cb4174027aa073d20",
+    "https://dcp.f80.fr/main.js": "a74170b3ab3334179d87c7a982e1e849f8f195ca",
     "https://dcp.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
     "https://dcp.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "https://dcp.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",
