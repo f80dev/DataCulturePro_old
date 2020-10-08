@@ -23,9 +23,9 @@
   </a>
 
   <a title="Editer votre profil"
-     *ngIf="config.user?.user?.profil"
+     *ngIf="config.user?.profil"
      routerLink="edit"
-     [queryParams]="{id:this.user.profil}"
+     [queryParams]="{id:this.config.user?.profil}"
      mat-list-item
      id="cmdEditProfil">
     <mat-icon>build</mat-icon>

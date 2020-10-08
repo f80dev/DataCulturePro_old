@@ -78,7 +78,6 @@ export class EditComponent implements OnInit  {
       let id=this.routes.snapshot.queryParamMap.get("id")
       this.api._get("profils/"+id+"/","").subscribe((p:any)=>{
         if(p){
-          debugger
           this.profil=p;
           let d_min=1e9;
           for(let j of this.config.jobs){

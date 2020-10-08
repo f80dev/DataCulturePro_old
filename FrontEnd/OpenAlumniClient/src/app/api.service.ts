@@ -136,8 +136,10 @@ export class ApiService {
     return this._get("helloworld/");
   }
 
-  getPOW() {
-    return this._get("pows/");
+  getPOW(id=null) {
+    let params="";
+    if(id)params=id+"/";
+    return this._get("pows/"+params);
   }
 
   addpow(pow: any) {

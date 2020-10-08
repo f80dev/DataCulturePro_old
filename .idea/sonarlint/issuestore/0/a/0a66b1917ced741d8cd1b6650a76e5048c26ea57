@@ -1,11 +1,11 @@
 
-Tpython:S1066 "/Merge this if statement with the enclosing one.(Ό¤ÿÿÿÿÿ8μµύ‰Ι.
-Fpython:S1481Ό"&Remove the unused local variable "rc".(ΟΉ²8μµύ‰Ι.
-Cpython:S125υ"Remove this commented out code.(Υ½ρωÿÿÿÿ8¶λΠ.
-tpython:S3776"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(ΰώλ 8μµύ‰Ι.
 Fpython:S1481"&Remove the unused local variable "rc".(Ϊ­ς8‘¨Π.
-Lpython:S1481Γ",Remove the unused local variable "sections".(±ύ«8μµύ‰Ι.
 Cpython:S125„"Remove this commented out code.(ΎΥΜƒόÿÿÿÿ8μµύ‰Ι.
-Ppython:S5806ϊ"+Rename this variable; it shadows a builtin.(Αθμψÿÿÿÿ8„—ÿΠ.
-Opython:S1481Ϊ"*Remove the unused local variable "profil".(ερ•…ύÿÿÿÿ8μµύ‰Ι.
 Ppython:S1481¥"+Remove the unused local variable "profils".(υ¤ύÿÿÿÿ8μµύ‰Ι.
+tpython:S3776™"TRefactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed.(ΰώλ 8μµύ‰Ι.
+Fpython:S1481½"&Remove the unused local variable "rc".(ΟΉ²8μµύ‰Ι.
+Lpython:S1481Γ",Remove the unused local variable "sections".(±ύ«8μµύ‰Ι.
+Cpython:S125υ"Remove this commented out code.(Υ½ρωÿÿÿÿ8¶λΠ.
+Ppython:S5806ϊ"+Rename this variable; it shadows a builtin.(Αθμψÿÿÿÿ8„—ÿΠ.
+Tpython:S1066΅"/Merge this if statement with the enclosing one.(Ό¤ÿÿÿÿÿ8μµύ‰Ι.
+Opython:S1481Ϋ"*Remove the unused local variable "profil".(ερ•…ύÿÿÿÿ8μµύ‰Ι.

@@ -13,7 +13,7 @@
 
 
 <div class="wrap-list" style="margin: 5px;">
-  <mat-expansion-panel *ngFor="let pow of pows" class="app-card-panel">
+  <mat-expansion-panel *ngFor="let pow of pows" class="app-card-panel" (afterExpand)="get_pow(pow)" [expanded]="pow.expanded">
     <mat-expansion-panel-header>
        <mat-panel-title>
       {{pow.title}}
@@ -47,7 +47,24 @@
       </div>
     </div>
 
+    <mat-action-row>
+       <button class="app-button"
+               *ngIf="config.user.profil"
+               mat-button mat-raised-button
+               (click)="add_experience(pow)">
+      <div class="bloc-bouton">
+        Ajouter en<br>expérience
+      </div>
 
+    </button>
+
+      <button mat-icon-button mat-button title="Partager / Envoyer ce profil"
+            *ngIf="config.hasPerm('share')"
+            (click)="share(pow)">
+      <mat-icon>share</mat-icon>
+    </button>
+
+    </mat-action-row>
 
   </mat-expansion-panel>
 </div>

@@ -37,7 +37,7 @@ router.register(r'powsdoc', views.PowDocumentView,basename="powsdoc")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('alumni.urls')),
-    path('api/users/register', views.UserCreate.as_view()),
+    path('api/users/register/', views.UserCreate.as_view()),
     path('api/resend/', views.resend),
     path('api/send_to/', views.send_to),
     path('api/test/', views.test),

@@ -12,7 +12,6 @@ import {$$, initAvailableCameras} from "./tools";
 export class ConfigService {
   visibleTuto: Boolean | boolean=false;
   user: any;
-  device: any;
   values: any;
   config:any;
   webcamsAvailable: any;

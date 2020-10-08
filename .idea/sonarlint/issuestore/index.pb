@@ -149,8 +149,6 @@ S
 0FrontEnd/OpenAlumniClient/src/app/filter.pipe.ts,d\3\d3f63603a471e20bb58d2350f5230d2f8549c53c
 j
 :FrontEnd/OpenAlumniClient/src/app/login/login.component.ts,e\a\ea7960e7c9beed00a24cd680b39f500cd4c42903
-`
-0FrontEnd/OpenAlumniClient/src/assets/config.yaml,8\a\8aa2dc6c6490e8287686f3b2d107de03d0beecc4
 l
 <FrontEnd/OpenAlumniClient/src/app/login/login.component.html,9\c\9ca9b4465cf0dce41baff96817f81b59955e0e9f
 Y
@@ -251,3 +249,5 @@ A
 static/movies.csv,8\4\84aef898a3fb2b13d51c7b5992771e5ceacf4720
 m
 =FrontEnd/OpenAlumniClient/src/app/pows/pows.component.spec.ts,0\0\00d4917a69c4b55fd247007ffdb377298cf3e52d
+B
+static/config.yaml,9\3\93212bad3c7491c7f1798fec20f3f9ab72760763
