@@ -1,9 +1,23 @@
 <div class="mainform">
+   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
+    <mat-label>Filtrer</mat-label>
+      <input matInput matNativeControl
+             title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
+             (keyup)="onQuery($event)"
+             placeholder="Votre recherche" [(ngModel)]="query.value">
+      <mat-icon *ngIf="query.value?.length>0"
+                matSuffix style="cursor: pointer"
+                (click)="clearQuery()">cancel</mat-icon>
+    </mat-form-field>
+  <br>
+
+
 <div class="wrap-list" style="margin: 5px;">
   <mat-expansion-panel *ngFor="let pow of pows" class="app-card-panel">
     <mat-expansion-panel-header>
        <mat-panel-title>
       {{pow.title}}
+         <small>({{pow.year}})</small>
          </mat-panel-title>
     </mat-expansion-panel-header>
 

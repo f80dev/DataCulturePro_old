@@ -104,7 +104,6 @@ export class SearchComponent implements OnInit {
     this.handle=setTimeout(()=>{
       this.refresh();
     },1000);
-
   }
 
   clearQuery() {

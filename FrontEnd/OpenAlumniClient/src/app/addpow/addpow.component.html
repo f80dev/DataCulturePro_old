@@ -68,7 +68,32 @@
                type="text" max="3000"
                [(ngModel)]="pow.description">
         <mat-hint>Synopsis de l'oeuvre</mat-hint>
+      </mat-form-field> <br>
+
+
+      <mat-form-field  appearance="fill" class="app-field" style="max-width: 100px">
+        <mat-label>Année de sortie</mat-label>
+        <input matInput required
+               type="number" min="1900" max="2030"
+               [(ngModel)]="pow.year">
       </mat-form-field>
+
+      <mat-form-field  appearance="fill" class="app-field" style="max-width: 200px">
+        <mat-label>Budget</mat-label>
+        <input matInput
+               type="number" min="0"
+               [(ngModel)]="pow.budget">
+        <span matSuffix>€</span>
+      </mat-form-field>
+
+
+
+         <br>
+
+
+
+
+
        </mat-expansion-panel>
 
       <mat-expansion-panel class="app-panel">
@@ -105,7 +130,7 @@
 
         <mat-action-row>
           <button class="app-button login-button"
-                  *ngIf="pow.title.length>0"
+                  *ngIf="pow.title.length>0 && link.url.length>0"
                   mat-button mat-raised-button
                   (click)="add_link()">
             Ajouter
@@ -135,7 +160,13 @@
     <button class="app-button login-button"
             mat-button mat-raised-button
             (click)="quit(true)">
-      Retour
+      Enregistrer
+    </button>
+
+    <button class="app-button login-button"
+            mat-button mat-raised-button
+            (click)="quit(false)">
+      Annuler
     </button>
   </div>
 

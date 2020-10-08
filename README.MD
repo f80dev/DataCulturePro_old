@@ -3,7 +3,6 @@ Après avoir récupérer le code, on installe une version locale de postgre
 puis on execute
 <pre>python manage.py makemigrations</pre>
 <pre>python manage.py flush</pre>
-
 <pre>python manage.py migrate</pre><br>
 
 ##Création du compte admin

@@ -127,7 +127,7 @@ class PieceOfWork(models.Model):
     dtStart=models.DateField(auto_now=True,null=False,help_text="Date de début de la réalisation de l'oeuvre")
     dtEnd=models.DateField(auto_now=True,null=False,help_text="Date de fin de la réalisation de l'oeuvre")
     title=models.CharField(null=False,max_length=300,unique=True,default="sans titre",help_text="Titre de l'oeuvre, même temporaire")
-    year=models.IntegerField(null=True,help_text="Année de sortie")
+    year=models.CharField(null=True,max_length=4,help_text="Année de sortie")
     nature=models.CharField(choices=[
         ('MOVIE','Film long métrage'),
         ('COURT','Court métrage'),

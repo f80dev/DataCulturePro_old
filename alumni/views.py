@@ -122,11 +122,11 @@ def getyaml(request):
     url=request.GET.get("url","")
     if len(url)==0:
         name=request.GET.get("name","profil")
-        f=open(settings.STATIC_ROOT+"/"+name+".yaml", "r",encoding="utf8")
+        f=open(settings.STATIC_ROOT+"/"+name+".yaml", "r",encoding="utf-8")
     else:
         f=urlopen(url)
     result=yaml.safe_load(f.read())
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 
 # @api_view(["POST"])
@@ -269,6 +269,7 @@ def movie_importer(request,format=None):
             except Exception as inst:
                 log("Probléme d'enregistrement" + str(inst))
         i=i+1
+    log("Importation terminé de "+str(record)+" films")
 
     return Response(str(record) + " films importés", 200)
 
@@ -408,7 +409,7 @@ class PowDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('title','description','nature','category','year')
+    search_fields = ('title','description','category',"nature","year")
     filter_fields = {
         'id': {
             'field': 'id',

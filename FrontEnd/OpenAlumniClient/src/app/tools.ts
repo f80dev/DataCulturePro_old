@@ -60,18 +60,14 @@ export function getAuthServiceConfigs() {
 
 
 export function api(service: string , param: string= '', encode: boolean = true,format:string="json"): string  {
-  service=service.replace("//","/");
+  let rc=environment.domain_server + '/api/' + service+"/?";
   if (encode) { param = encodeURI(param); }
-  if(format.length>0)format="format="+format;
-  if(param.length==0){
-    if(format.length==0)
-      return(environment.domain_server + '/api/' + service);
-    else
-      return(environment.domain_server + '/api/' + service+"?"+format);
-  }else{
-   return(environment.domain_server + '/api/' + service + '/?' + param+"&"+format);
-  }
-
+  if(format.length>0)rc=rc+"&format="+format;
+  if(param.length>0)rc=rc+"&"+param;
+  for(let i=0;i<10;i++)
+    rc=rc.replace("//","/").replace("?&","?");
+  rc=rc.replace("http:/","http://");
+  return rc;
 }
 
 export function direct_api(service: string , param: string, encode: boolean = true): string  {

@@ -18,6 +18,7 @@ export class LoginbarComponent implements OnInit,OnChanges {
 
   @Input("user") user:any;
   @Output('logout') onlogout: EventEmitter<any>=new EventEmitter();
+  isLocal=false;
 
   constructor(public router:Router,
               public dialog:MatDialog,
@@ -27,7 +28,7 @@ export class LoginbarComponent implements OnInit,OnChanges {
               public api:ApiService) { }
 
   ngOnInit(): void {
-
+    this.isLocal=!environment.production;
   }
 
   logout() {
