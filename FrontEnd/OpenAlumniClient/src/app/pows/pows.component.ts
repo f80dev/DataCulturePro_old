@@ -105,6 +105,8 @@ export class PowsComponent implements OnInit {
         }
         r.works=rc;
         r.expanded=true;
+
+
         this.pows[index]=r;
       });
     }
