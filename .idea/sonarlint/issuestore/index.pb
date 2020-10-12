@@ -251,3 +251,7 @@ m
 =FrontEnd/OpenAlumniClient/src/app/pows/pows.component.spec.ts,0\0\00d4917a69c4b55fd247007ffdb377298cf3e52d
 B
 static/config.yaml,9\3\93212bad3c7491c7f1798fec20f3f9ab72760763
+j
+:FrontEnd/OpenAlumniClient/src/app/about/about.component.ts,f\a\fa6ce5546f07b40d30fdf49294baca6646d8c199
+\
+,alumni/migrations/0022_auto_20201007_1130.py,b\5\b57c68f8a0083c44b94d36a255ff81bc6383f25f

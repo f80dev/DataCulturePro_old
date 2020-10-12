@@ -70,6 +70,7 @@ export function api(service: string , param: string= '', encode: boolean = true,
   return rc;
 }
 
+
 export function direct_api(service: string , param: string, encode: boolean = true): string  {
   if (encode) { param = encodeURI(param); }
   return(environment.domain_server+ '/api/' + service + '?' + param);
