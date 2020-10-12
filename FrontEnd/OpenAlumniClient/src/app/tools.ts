@@ -60,6 +60,7 @@ export function getAuthServiceConfigs() {
 
 
 export function api(service: string , param: string= '', encode: boolean = true,format:string="json"): string  {
+  debugger
   let rc=environment.domain_server + '/api/' + service+"/?";
   if (encode) { param = encodeURI(param); }
   if(format.length>0)rc=rc+"&format="+format;
