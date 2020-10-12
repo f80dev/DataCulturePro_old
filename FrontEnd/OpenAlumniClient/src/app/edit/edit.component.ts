@@ -25,7 +25,7 @@ export class EditComponent implements OnInit  {
   profil: any=null;
   works: any[]=[];
   add_work:any;
-  showAddWork=0;
+  showAddWork=-1;
   private projects: any[];
 
    constructor(public _location:Location,
@@ -46,6 +46,7 @@ export class EditComponent implements OnInit  {
   pow:any;
   earning: any;
   acceptSponsor:boolean;
+  message:string="";
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -54,8 +55,12 @@ export class EditComponent implements OnInit  {
 
   ngOnInit(): void {
     if(checkLogin(this)){
-      this.loadProfil();
-      this.refresh();
+      this.message="Chargement de votre profil";
+      this.loadProfil(()=>{
+        this.showAddWork=0;
+        this.message="";
+        this.autoAddMovie();
+      });
     }
   }
 
@@ -74,9 +79,11 @@ export class EditComponent implements OnInit  {
     }
   }
 
-  loadProfil(){
+  loadProfil(func=null){
       let id=this.routes.snapshot.queryParamMap.get("id")
+      $$("Chargement du profil & des travaux");
       this.api._get("profils/"+id+"/","").subscribe((p:any)=>{
+        $$("Profil chargé ",p);
         if(p){
           this.profil=p;
           let d_min=1e9;
@@ -88,8 +95,11 @@ export class EditComponent implements OnInit  {
             }
           }
         }
+        if(func)func();
       });
+
       this.api._get("extraworks","search="+id).subscribe((r:any)=>{
+        $$("Travaux chargés");
         this.works=r.results;
       });
   }
@@ -147,7 +157,7 @@ export class EditComponent implements OnInit  {
       });
       this.save_user();
     }
-    this._location.back();
+    this.router.navigate(["search"],{replaceUrl:true});
   }
 
   del_work(wrk:any) {

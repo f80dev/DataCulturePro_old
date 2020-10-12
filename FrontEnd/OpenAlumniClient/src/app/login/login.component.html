@@ -37,11 +37,12 @@
       <br>
 
       <div *ngIf="messageCode.length>0">
-        <br><br><br>
-        {{messageCode}}<br>
         <br>
+        {{messageCode}}<br>
+        <br><br>
 
         <mat-form-field class="form-field-style" style="width: 150px !important;text-align: center;font-size: large;" >
+          <mat-label>Code d'accès</mat-label>
           <input type="number"
                  matInput
                  autofocus
@@ -49,7 +50,7 @@
                  min="10000"
                  max="999999"
                  title="Saisissez votre code d'accès à 6 chiffres"
-                 placeholder="Code d'accès"
+                 placeholder="Votre code"
                  [(ngModel)]="code"
                  (change)="updateCode($event)">
         </mat-form-field>

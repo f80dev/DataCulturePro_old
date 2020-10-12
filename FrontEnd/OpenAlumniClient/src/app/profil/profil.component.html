@@ -55,7 +55,9 @@
     <button mat-button mat-icon-button
             *ngIf="profil?.linkedin?.length>0 && config.hasPerm('r_linkedin')"
             (click)="openWebSite(profil?.linkedin)">
-        <img src="/assets/icons/LinkedIn.png" class="icon-button" style="background-color: white;">
+        <img src="/assets/icons/LinkedIn.png"
+             class="icon-button"
+             style="background-color: white;">
     </button>
   </mat-card-actions>
 </mat-card>

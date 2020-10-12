@@ -1,10 +1,14 @@
 <div class="mainform">
+
+   <app-tuto label="Vous pouvez également consulter la liste des élèves de la FEMIS (anciens et actuels), via le menu latéral"></app-tuto>
+
+
    <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
-    <mat-label>Filtrer</mat-label>
+    <mat-label>Rechercher un film</mat-label>
       <input matInput matNativeControl
              title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
              (keyup)="onQuery($event)"
-             placeholder="Votre recherche" [(ngModel)]="query.value">
+             placeholder="Un ou plusieurs mots du titre du films, une année" [(ngModel)]="query.value">
       <mat-icon *ngIf="query.value?.length>0"
                 matSuffix style="cursor: pointer"
                 (click)="clearQuery()">cancel</mat-icon>
@@ -49,7 +53,7 @@
 
     <mat-action-row>
        <button class="app-button"
-               *ngIf="config.user.profil"
+               *ngIf="config.user?.profil"
                mat-button mat-raised-button
                (click)="add_experience(pow)">
       <div class="bloc-bouton">
@@ -58,7 +62,10 @@
 
     </button>
 
-      <button mat-icon-button mat-button title="Partager / Envoyer ce profil"
+      <button mat-icon-button
+              mat-raised-button
+              class="icon-button"
+              mat-button title="Partager la fiche de ce film"
             *ngIf="config.hasPerm('share')"
             (click)="share(pow)">
       <mat-icon>share</mat-icon>

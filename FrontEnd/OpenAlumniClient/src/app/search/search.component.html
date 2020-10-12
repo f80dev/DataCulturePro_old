@@ -1,19 +1,22 @@
 <div style="margin:1%;text-align: center;min-width: 300px;">
+
+  <app-tuto label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
+
   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
-    <mat-label>Filtrer</mat-label>
+    <mat-label>Rechercher un profil</mat-label>
       <input matInput matNativeControl
              title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
              (keyup)="onQuery($event)"
-             placeholder="Votre recherche" [(ngModel)]="query.value">
+             placeholder="nom, métier, promotion ou titre d'une réalisation" [(ngModel)]="query.value">
       <mat-icon *ngIf="query.value?.length>0"
                 matSuffix style="cursor: pointer"
                 (click)="clearQuery()">cancel</mat-icon>
     </mat-form-field>
 
   <div *ngIf="config.hasPerm('advanced_search')">
-       <mat-checkbox [checked]="searchInTitle">
-          Chercher dans les titres
-        </mat-checkbox>
+<!--       <mat-checkbox [checked]="searchInTitle">-->
+<!--          Chercher uniquement via les titres-->
+<!--        </mat-checkbox>-->
     </div>
 
     <div *ngIf="config.hasPerm('stats')">
@@ -26,7 +29,7 @@
       <button mat-button mat-raised-button
               class="app-button"
               (click)="openStats()">
-        Console statistiques
+        <div class="bloc-bouton">Console<br>statistiques</div>
       </button>
     </div>
 

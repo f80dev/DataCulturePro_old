@@ -22,6 +22,15 @@
     &nbsp;&nbsp;Consulter l'annuaire
   </a>
 
+  <a title="Voir les oeuvres de la FEMIS"
+     routerLink="pows"
+     mat-list-item
+     id="cmdShowMovies">
+    <mat-icon>event_seat</mat-icon>
+    &nbsp;&nbsp;Consulter les films
+  </a>
+
+  <br>
   <a title="Editer votre profil"
      *ngIf="config.user?.profil"
      routerLink="edit"
@@ -31,16 +40,6 @@
     <mat-icon>build</mat-icon>
     &nbsp;&nbsp;Editer votre profil
   </a>
-
-  <a title="Voir les oeuvres de la FEMIS"
-     routerLink="pows"
-     [queryParams]="{filter:'FEMIS'}"
-     mat-list-item
-     id="cmdShowMovies">
-    <mat-icon>event_seat</mat-icon>
-    &nbsp;&nbsp;Consulter les films
-  </a>
-
 
  <a title="Ajouter des films dans le catalogue"
      *ngIf="config.hasPerm('add_movies') || isLocal"
@@ -61,7 +60,9 @@
     <mat-icon>lock</mat-icon>
     &nbsp;&nbsp;Permissions
   </a>
-
+  <br>
+  <hr>
+  <br>
   <a title="Effacer votre compte"
      *ngIf="config.user?.user?.email?.length>0"
      mat-list-item (click)="del_user()"
@@ -70,7 +71,7 @@
     &nbsp;&nbsp;Détruire votre compte
   </a>
 
-  <br>
+
   <a title="Se déconnecter"
      *ngIf="config.user?.user?.email?.length>0"
      mat-list-item (click)="logout()"

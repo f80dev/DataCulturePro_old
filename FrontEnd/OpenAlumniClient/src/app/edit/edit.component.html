@@ -1,9 +1,9 @@
 <div class="mainform"
-     *ngIf="profil && dataSource"
      style="text-align: center;">
 
-  <div *ngIf="showAddWork==0">
-    <br>
+  <app-hourglass [message]="message"></app-hourglass>
+
+  <div *ngIf="showAddWork==0 && profil">
     <mat-accordion style="display: inline-block;width:98%;">
       <!--      Civilité -->
       <mat-expansion-panel class="app-panel">
@@ -61,7 +61,7 @@
 
 
         <mat-action-row>
-          <button class="icon-button" mat-button mat-icon-button mat-raised-button (click)="quit(true)">
+          <button color="primary" class="icon-button" mat-button mat-icon-button mat-raised-button (click)="quit(true)">
             <mat-icon>save</mat-icon>
           </button>
         </mat-action-row>
@@ -86,7 +86,7 @@
       </mat-expansion-panel>
 
 <!--      Expérience -->
-      <mat-expansion-panel class="app-panel">
+      <mat-expansion-panel class="app-panel" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Expériences
@@ -113,7 +113,9 @@
         </table>
 
         <mat-action-row>
-          <button class="app-button" mat-button mat-raised-button (click)="add_pow()">
+          <button class="app-button" mat-button mat-raised-button
+                  color="accent"Conso
+                  (click)="add_pow()">
             Ajouter une expérience
           </button>
         </mat-action-row>
@@ -124,7 +126,7 @@
 
     <br><br>
     <p style="font-size: small">
-      Dernière mise a jour: {{profil.dtLastUpdate | date:"dd/MM/yy"}}
+      Mise a jour le, {{profil.dtLastUpdate | date:"dd/MM/yy"}}
     </p>
   </div>
 

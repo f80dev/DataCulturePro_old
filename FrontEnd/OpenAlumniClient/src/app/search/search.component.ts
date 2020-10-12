@@ -86,9 +86,10 @@ export class SearchComponent implements OnInit {
   }
 
   export_result() {
-    let param="filter{lastname.icontains}="+this.query.value
-    let url=api("profils/",param,false,"csv");
-    open(url);
+    let param="";
+    if(this.query.value.length>0)param="search="+this.query.value;
+    let url=api("profilsdoc/",param,false,"json");
+    open(url,"_blank","download");
   }
 
 

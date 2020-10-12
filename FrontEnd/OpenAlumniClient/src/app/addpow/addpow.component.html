@@ -39,7 +39,8 @@
 
     <div *ngIf="showDetail">
 
-       <mat-expansion-panel class="app-panel">
+      <mat-accordion [multi]="false" style="text-align: left;">
+        <mat-expansion-panel class="app-panel" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Informations générales
@@ -51,13 +52,14 @@
               *ngIf="pow.visual.length>0"
               style="width:150px;"
               (click)="change_visual()">
-          <button class="app-button login-button"
+          <button class="app-button login-button" color="primary"
                   *ngIf="pow.visual.length==0"
                   mat-button mat-raised-button
                   (click)="change_visual()">
             Ajouter un visuel
           </button>
          <br>
+           <br>
 
          </div>
 
@@ -95,8 +97,7 @@
 
 
        </mat-expansion-panel>
-
-      <mat-expansion-panel class="app-panel">
+        <mat-expansion-panel class="app-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Ajouter des hyperliens
@@ -138,7 +139,7 @@
         </mat-action-row>
 
       </mat-expansion-panel>
-
+      </mat-accordion>
     </div>
 
   </div>
