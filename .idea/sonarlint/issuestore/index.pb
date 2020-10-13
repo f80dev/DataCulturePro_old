@@ -255,3 +255,5 @@ j
 :FrontEnd/OpenAlumniClient/src/app/about/about.component.ts,f\a\fa6ce5546f07b40d30fdf49294baca6646d8c199
 \
 ,alumni/migrations/0022_auto_20201007_1130.py,b\5\b57c68f8a0083c44b94d36a255ff81bc6383f25f
+o
+?FrontEnd/OpenAlumniClient/src/environments/environment.build.ts,4\d\4d3868c3194b0655de53a809eed130122110cd79

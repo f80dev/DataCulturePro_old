@@ -138,6 +138,8 @@ export class AddpowComponent implements OnInit {
 
    import(fileInputEvent: any) {
       var reader = new FileReader();
+      let filename=fileInputEvent.target.files[0].name;
+      let format=filename.split(".")[1];
       this.message="Chargement du fichier";
       reader.onload = ()=>{
         this.message="Importation du fichier de films";

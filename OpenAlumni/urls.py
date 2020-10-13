@@ -19,6 +19,7 @@ from django.urls import path, include
 from graphene_django.views import GraphQLView
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from alumni import views
 from alumni.schema import schema
@@ -44,6 +45,8 @@ urlpatterns = [
     path('api/getyaml/', views.getyaml),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),
+    path('api/ask_for_update/', views.ask_for_update),
+    url(r'^api/movie_importer/$',views.movie_importer),
     url('^api/api-token-auth/', obtain_auth_token),
     path("api/",include(router.urls)),
     url(r'^graphql$', GraphQLView.as_view(graphiql=True,schema=schema))

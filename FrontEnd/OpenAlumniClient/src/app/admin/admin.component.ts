@@ -46,6 +46,12 @@ export class AdminComponent implements OnInit {
     })
   }
 
+  send_update(){
+    this.api._get("ask_for_update").subscribe((r:any)=>{
+      showMessage(this,r.message);
+    })
+  }
+
   initdb() {
     this.api._get("initdb").subscribe(()=>{
       showMessage(this,"Base initialisée")

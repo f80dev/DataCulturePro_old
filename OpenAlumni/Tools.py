@@ -3,8 +3,10 @@ import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from io import BytesIO
 
 import yaml
+import PyPDF2
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from linkedin_v2 import linkedin
@@ -12,7 +14,7 @@ from linkedin_v2.linkedin import LinkedInApplication
 
 from OpenAlumni import settings
 from OpenAlumni.settings import LINKEDIN_API_KEY, LINKEDIN_RETURN_URL, LINKEDIN_API_SECRET, DOMAIN_APPLI, DOMAIN_SERVER, \
-    APPNAME
+    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER
 
 authentication = linkedin.LinkedInAuthentication(
     LINKEDIN_API_KEY,
@@ -30,6 +32,24 @@ def stringToUrl(txt:str):
     return txt
 
 
+def extract_text_from_pdf(blob):
+    reader=PyPDF2.PdfFileReader(BytesIO(blob))
+    rc=list()
+    for page in reader.pages:
+        txt=page.extractText()
+        if "(promotion" in txt:
+            for line in txt.split("(promotion"):
+                words=line.split(" ")
+                index=len(words)-1
+                while True:
+                    name=words[index]
+                    if len(name)>3 or index==1:break
+                    index=index-1
+                rc.append[name]
+    return rc
+
+
+
 def reset_password(email,username):
     """
     Initialisation / RéInitialisation du mot de passe
@@ -38,21 +58,14 @@ def reset_password(email,username):
     :return:
     """
     password = str(tirage(999999, 100000))
-    welcome_file=settings.STATIC_ROOT+"/welcome.html"
-    body = open_html_file(welcome_file, {
+
+    sendmail("Voici votre code",email,"welcome",dict({
         "email": email,
         "url_appli":settings.DOMAIN_APPLI+"/?email="+email,
         "username": username,
         "code": password,
         "appname": APPNAME
-    })
-
-    send_mail("Voici votre code","",
-              settings.EMAIL_HOST_USER,
-              recipient_list=[email],
-              html_message=body,
-              auth_user=settings.EMAIL_HOST_USER,
-              auth_password=settings.EMAIL_HOST_PASSWORD+"!!")
+    }))
     print("passowrd=" + password)
     return password
 
@@ -121,8 +134,20 @@ def get_faqs(filters="",domain_appli=DOMAIN_APPLI,domain_server=DOMAIN_SERVER,co
 
 
 
+def sendmail(subject, _to, template, field):
+    field["appname"]=APPNAME
+    field["email"]=_to
+    html=open_html_file(template,field)
+    log("Envoi de "+html)
+    if _to in EMAIL_TESTER or len(EMAIL_TESTER)==0:
+        send_mail(subject,message="",from_email=EMAIL_HOST_USER,recipient_list=[_to],
+                  auth_user=settings.EMAIL_HOST_USER,html_message=html,
+                  auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
+
+
 def open_html_file(name:str,replace=dict(),domain_appli=DOMAIN_APPLI):
     if not name.endswith("html"):name=name+".html"
+    name=STATIC_ROOT+"/"+name
     with open(name, 'r', encoding='utf-8') as f: body = f.read()
 
     style="""

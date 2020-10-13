@@ -1,6 +1,6 @@
 import base64
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 from io import StringIO
 from urllib.request import urlopen
 
@@ -29,8 +29,9 @@ from django.shortcuts import redirect
 from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
-from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log
-from OpenAlumni.settings import APPNAME, DOMAIN_APPLI
+from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
+    sendmail
+from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
@@ -209,10 +210,35 @@ def raz(request):
     return Response("Compte effacé",status=200)
 
 
+#http://localhost:8000/api/raz/
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def ask_for_update(request):
+    delay=request.GET.get("delay",0)
+    now=datetime.timestamp(datetime.now())
+    count=0
+    for profil in Profil.objects.all():
+        days=(now-dateToTimestamp(profil.dtLastUpdate))/(3600*24)
+        days_notif=(now-dateToTimestamp(profil.dtLastNotif))/(3600*24)
+        if days>delay and days_notif>delay:
+            Profil.objects.filter(id=profil.id).update(dtLastNotif=datetime.now())
+            sendmail("Mettre a jour votre profil",profil.email,"update",{
+                "name":profil.firstname,
+                "appname":APPNAME,
+                "url":DOMAIN_APPLI+"/edit?id="+str(profil.id)+"&email="+profil.email,
+                "lastUpdate":str(profil.dtLastUpdate)
+            })
+            count=count+1
+
+    return Response("Message envoyé à "+str(count)+" comptes", status=200)
+
+
 #http://localhost:8000/api/importer/
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def send_to(request,format=None):
+def send_to(request):
     text=str(request.body,"utf8")
     log("Envoie du mail " + text)
 
@@ -221,22 +247,26 @@ def send_to(request,format=None):
 
     #TODO vérifier la black liste
 
-    send_mail(subject="["+APPNAME+"] Message de "+_from.profil.fullname,
+    sendmail("["+APPNAME+"] Message de "+_from.profil.fullname,
               from_email=settings.EMAIL_HOST_USER,
               message=text,
-              recipient_list=[_profil.email],
-              auth_user=settings.EMAIL_HOST_USER,
-              auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
+              recipient_list=[_profil.email])
     return Response("Message envoyé", status=200)
+
 
 
 #http://localhost:8000/api/movie_importer/
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def movie_importer(request,format=None):
+def movie_importer(request):
     log("Importation de films")
-    txt = str(base64.b64decode(str(request.body).split("base64,")[1]),encoding="utf-8")
-    d = csv.reader(StringIO(txt), delimiter=";")
+    header=str(request.body)[15:30]
+    if "excel" in header:
+        txt = str(base64.b64decode(str(request.body).split("base64,")[1]),encoding="utf-8")
+        d = csv.reader(StringIO(txt), delimiter=";")
+    else:
+        d=extract_text_from_pdf(base64.b64decode(str(request.body).split("base64,")[1]))
+
     i = 0
     record = 0
     for row in list(d):
@@ -248,8 +278,7 @@ def movie_importer(request,format=None):
             if row[11]=="":row[11]="1800"
 
             pow:PieceOfWork=PieceOfWork(
-                title=row[0],
-                description=row[1],
+                title=row[0], description=row[1],
                 visual=row[4],
                 nature=row[5],
                 dtStart=row[2],
@@ -368,27 +397,25 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('works__title','works__job','department','lastname','job','firstname','department','promo')
+    search_fields = ('works__title','works__job','lastname','job','firstname','department','promo')
     filter_fields = {
         'id': {
             'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
+            'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE,],
         },
         'name': 'name',
+        'title':'works__title',
+        'promo':'promo',
+        'job':'department'
     }
+
     ordering_fields = {
         'lastname': 'lastname'
     }
+
     suggester_fields = {
         'name_suggest': {
-            'field': 'name.suggest',
+            'field': 'lastname',
             'suggesters': [SUGGESTER_COMPLETION,],
         },
     }
@@ -413,14 +440,7 @@ class PowDocumentView(DocumentViewSet):
     filter_fields = {
         'id': {
             'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
+            'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE],
         }
     }
     ordering_fields = {

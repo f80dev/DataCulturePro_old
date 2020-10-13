@@ -54,14 +54,16 @@ export class EditComponent implements OnInit  {
   }
 
   ngOnInit(): void {
-    if(checkLogin(this)){
-      this.message="Chargement de votre profil";
-      this.loadProfil(()=>{
-        this.showAddWork=0;
-        this.message="";
-        this.autoAddMovie();
-      });
-    }
+    this.config.init_user(()=>{
+      if(checkLogin(this,null,null,"login")){
+        this.message="Chargement de votre profil";
+        this.loadProfil(()=>{
+          this.showAddWork=0;
+          this.message="";
+          this.autoAddMovie();
+        });
+      }
+    })
   }
 
   refresh(){

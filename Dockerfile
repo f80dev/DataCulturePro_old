@@ -26,6 +26,7 @@ RUN pip3 install python-linkedin-v2
 RUN pip3 install graphene-django
 RUN pip3 install PyYAML
 RUN pip3 install django-filter
+RUN pip3 install PyPDF2
 
 #Création des répertoires
 ENV APP_HOME=/home/app

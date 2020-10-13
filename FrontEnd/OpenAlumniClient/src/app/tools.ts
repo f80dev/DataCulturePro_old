@@ -66,6 +66,8 @@ export function api(service: string , param: string= '', encode: boolean = true,
   if(param.length>0)rc=rc+"&"+param;
   for(let i=0;i<10;i++)
     rc=rc.replace("//","/").replace("?&","?");
+
+  if(rc.endsWith("?"))rc=rc.substr(0,rc.length-1);
   rc=rc.replace("http:/","http://").replace("https:/","https://");
   return rc;
 }
@@ -723,10 +725,10 @@ export function checkConfig(vm:any) {
   }
 }
 
-export function checkLogin(vm,params: any = null,router: Router=null, ) {
+export function checkLogin(vm,params: any = null,router: Router=null,redirect="search" ) {
   if (vm.config.user==null || vm.config.user.user==null || vm.config.user.user.email=="") {
     if(router==null)router=vm.router;
-    router.navigate(['search'], {queryParams: params});
+    router.navigate([redirect], {queryParams: params});
     return false;
   } else {
     return true;

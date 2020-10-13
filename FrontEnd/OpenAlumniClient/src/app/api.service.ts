@@ -167,9 +167,6 @@ export class ApiService {
     return this._post("send_to","profil="+id+"&from="+_from,text);
   }
 
-  gettokenforimagesearchengine() {
-
-  }
 
   searchImage(result: any, number: number, access_token: any) {
 

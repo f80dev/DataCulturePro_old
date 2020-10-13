@@ -33,6 +33,7 @@ export class SearchComponent implements OnInit {
   }
 
   private translate(text:string):string {
+    if(text.length==0)return "";
     let dict={
       "nom":"lastname",
       "prenom":"firstname",
@@ -47,6 +48,13 @@ export class SearchComponent implements OnInit {
     for(let k in dict){
       text=text.replace(k+":",dict[k]+":");
     }
+
+    if(text.indexOf("&")>-1){
+      text="tags__term="+text.split("&")[0].trim()+"&tags__term="+text.split("&")[1].trim();
+    }
+    else
+      text="search="+text;
+
     return text;
   }
 
@@ -56,11 +64,12 @@ export class SearchComponent implements OnInit {
     if(this.query.value.length>3 || this.query.value.length==0){
       let param="/";
       let prefixe="";
-      let q=this.translate(this.query.value);
+
       if(this.searchInTitle)prefixe="works__title:"
 
-      if(q.length>0)param="search="+prefixe+q;
       this.message="Chargement des profils";
+
+      param=this.translate(prefixe+this.query.value);
 
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";
@@ -73,7 +82,7 @@ export class SearchComponent implements OnInit {
           this.profils.push(item);
         }
         if(this.profils.length==0){
-          if(q.length==0){
+          if(this.query.value.length==0){
             $$("La base des profils est vide, on propose l'importation")
             this.router.navigate(["import"]);
           }

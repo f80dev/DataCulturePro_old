@@ -18,7 +18,7 @@ import datetime
 from OpenAlumni.passwords import DB_PASSWORD
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+EMAIL_TESTER = ["hhoareau@gmail.com","paul.dudule@gmail.com","sophie.dudule@gmail.com"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

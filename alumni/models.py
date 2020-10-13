@@ -28,7 +28,8 @@ class Profil(models.Model):
     town = models.TextField(null=True)
     cp=models.IntegerField(null=True)
     website=models.URLField(null=True)
-    dtLastUpdate=models.DateField(null=False,auto_now=True)
+    dtLastUpdate=models.DateField(null=False,auto_now=True,help_text="Date de la dernière modification du profil")
+    dtLastNotif=models.DateField(null=False,auto_now=True,help_text="Date de la dernière notification envoyé")
     biography=models.TextField(null=True,max_length=2000)
 
     class Meta(object):
