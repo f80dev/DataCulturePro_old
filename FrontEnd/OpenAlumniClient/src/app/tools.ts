@@ -14,6 +14,32 @@ export function showError(vm:any,err:any){
 }
 
 
+export function translateQuery(text:string):string {
+    if(text.length==0)return "";
+    let dict={
+      "nom":"lastname",
+      "prenom":"firstname",
+      "prénom":"firstname",
+      "ville":"town",
+      "code postal":"cp",
+      "film":"works__title",
+      "promotion":"promo",
+      "titre":"works__title",
+      "job":"works__job"
+    }
+    for(let k in dict){
+      text=text.replace(k+":",dict[k]+":");
+    }
+
+    if(text.indexOf("&")>-1){
+      text="title__terms="+text.split("&")[0].trim()+"&title__terms="+text.split("&")[1].trim();
+    }
+    else
+      text="search="+text;
+
+    return text;
+  }
+
 export function brand_text(text:string,config:any){
   if(text==null || text.length==0)return "";
   if (config==null || config.values==null || config.values.brands==null )return text;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from "../api.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {showError, showMessage} from "../tools";
+import {$$, showError, showMessage, translateQuery} from "../tools";
 import {ConfigService} from "../config.service";
 import {NgNavigatorShareService} from "ng-navigator-share";
 import {ClipboardService} from "ngx-clipboard";
@@ -49,21 +49,21 @@ export class PowsComponent implements OnInit {
 
 
   private refresh() {
-    let param="";
-    if(this.query.value.length>0)param="search="+this.query.value;
+    let param=translateQuery(this.query.value);
+    param=param.replace("works__title","title__terms");
     this.api._get("powsdoc",param).subscribe((r:any)=>{
       this.pows=[];
       for(let i of r.results){
         let tmp=[];
-        if(i.hasOwnProperty("works")){
-        for(let w of i.works){
-          while(w.indexOf("'")>-1){
-            w=w.replace("'","\"");
-          }
-          tmp.push(JSON.parse(w));
-        }
-        }
-        i.works=tmp;
+        // if(i.hasOwnProperty("works") && i.works!={}){
+        //   for(let w of i.works){
+        //     while(w.indexOf("'")>-1){
+        //       w=w.replace("'","\"");
+        //     }
+        //     tmp.push(JSON.parse(w));
+        //   }
+        // }
+        // i.works=tmp;
         this.pows.push(i);
       }
     },(err)=>{
@@ -94,21 +94,25 @@ export class PowsComponent implements OnInit {
 
   get_pow(pow: any) {
     let index=this.pows.indexOf(pow);
-    if(!this.pows[index].hasOwnProperty("links")){
+    //if(!this.pows[index].hasOwnProperty("links")){
       this.api.getPOW(pow.id).subscribe((r:any)=>{
         let rc=[];
-        for(let w of r.works){
-          let json_str=w.replace(/\'/gi,"\"").replace("\xa0","");;
-          try {
-            rc.push(JSON.parse(json_str));
-          } catch (e) {}
+        if(r.hasOwnProperty("works")){
+          for(let w of r.works){
+            let json_str=w.replace(/\'/gi,"\"");
+            try {
+              rc.push(JSON.parse(json_str));
+            } catch (e) {
+              showError(this,e);
+              $$("Erreur de conversion de "+json_str,e);
+            }
+          }
         }
         r.works=rc;
         r.expanded=true;
 
-
         this.pows[index]=r;
       });
-    }
+   // }
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from "../api.service";
-import {$$, api, normaliser, showError, showMessage} from "../tools";
+import {$$, api, normaliser, showError, showMessage, translateQuery} from "../tools";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfigService} from "../config.service";
@@ -32,31 +32,6 @@ export class SearchComponent implements OnInit {
     this.refresh();
   }
 
-  private translate(text:string):string {
-    if(text.length==0)return "";
-    let dict={
-      "nom":"lastname",
-      "prenom":"firstname",
-      "prénom":"firstname",
-      "ville":"town",
-      "code postal":"cp",
-      "film":"works__title",
-      "promotion":"promo",
-      "titre":"works__title",
-      "job":"works__job"
-    }
-    for(let k in dict){
-      text=text.replace(k+":",dict[k]+":");
-    }
-
-    if(text.indexOf("&")>-1){
-      text="tags__term="+text.split("&")[0].trim()+"&tags__term="+text.split("&")[1].trim();
-    }
-    else
-      text="search="+text;
-
-    return text;
-  }
 
 
   refresh() {
@@ -69,7 +44,7 @@ export class SearchComponent implements OnInit {
 
       this.message="Chargement des profils";
 
-      param=this.translate(prefixe+this.query.value);
+      param=translateQuery(prefixe+this.query.value);
 
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";

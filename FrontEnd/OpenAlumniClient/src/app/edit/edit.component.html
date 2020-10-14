@@ -99,7 +99,7 @@
           <tr *ngFor="let work of works" style="width:100%;text-align: left;">
             <td>-</td>
             <td style="line-height: 100%;">
-              {{work.job}} sur "{{work.pow?.title}}" <br>
+              {{work.job}} sur <a href="./pows?filter={{work.pow?.title}}">"{{work.pow?.title}}"</a> <br>
               <small>en {{work.dtEnd | date:'yyyy'}}</small>
               <br>
             </td>

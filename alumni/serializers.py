@@ -126,4 +126,4 @@ class ProfilDocumentSerializer(DocumentSerializer):
 class PowDocumentSerializer(DocumentSerializer):
     class Meta:
         document=PowDocument
-        fields=("id","title","nature","description",'category','year')
+        fields=("id","title","nature","description",'category','year','works')

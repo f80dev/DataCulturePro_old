@@ -203,8 +203,11 @@ def scrap_linkedin(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def raz(request):
+    log("Effacement des profils")
     Profil.objects.all().delete()
+    log("Effacement des utilisateurs")
     User.objects.all().delete()
+    log("Effacement des oeuvres")
     PieceOfWork.objects.all().delete()
     log("Effacement de la base terminée")
     return Response("Compte effacé",status=200)
@@ -216,14 +219,19 @@ def raz(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def ask_for_update(request):
-    delay=request.GET.get("delay",0)
+    delay_notif=request.GET.get("delay_notif",10)
+    obso_max = request.GET.get("obso_max", 20)
     now=datetime.timestamp(datetime.now())
     count=0
     for profil in Profil.objects.all():
         days=(now-dateToTimestamp(profil.dtLastUpdate))/(3600*24)
         days_notif=(now-dateToTimestamp(profil.dtLastNotif))/(3600*24)
-        if days>delay and days_notif>delay:
-            Profil.objects.filter(id=profil.id).update(dtLastNotif=datetime.now())
+
+        #TODO: a compléter avec d'autres criteres
+        profil.obsolescenceScore=days*2
+
+        if profil.obsolescenceScore>obso_max and days_notif>delay_notif:
+            Profil.objects.filter(id=profil.id).update(dtLastNotif=datetime.now(),obsolescenceScore=profil.obsolescenceScore)
             sendmail("Mettre a jour votre profil",profil.email,"update",{
                 "name":profil.firstname,
                 "appname":APPNAME,
@@ -231,6 +239,8 @@ def ask_for_update(request):
                 "lastUpdate":str(profil.dtLastUpdate)
             })
             count=count+1
+        else:
+            Profil.objects.filter(id=profil.id).update(obsolescenceScore=profil.obsolescenceScore)
 
     return Response("Message envoyé à "+str(count)+" comptes", status=200)
 
@@ -260,12 +270,13 @@ def send_to(request):
 @permission_classes([AllowAny])
 def movie_importer(request):
     log("Importation de films")
-    header=str(request.body)[15:30]
+    header=str(request.body)[20:35]
     if "excel" in header:
         txt = str(base64.b64decode(str(request.body).split("base64,")[1]),encoding="utf-8")
         d = csv.reader(StringIO(txt), delimiter=";")
     else:
         d=extract_text_from_pdf(base64.b64decode(str(request.body).split("base64,")[1]))
+        return
 
     i = 0
     record = 0
@@ -278,7 +289,8 @@ def movie_importer(request):
             if row[11]=="":row[11]="1800"
 
             pow:PieceOfWork=PieceOfWork(
-                title=row[0], description=row[1],
+                title=row[0].replace(u'\xa0', u' '),
+                description=row[1],
                 visual=row[4],
                 nature=row[5],
                 dtStart=row[2],
@@ -293,7 +305,7 @@ def movie_importer(request):
             try:
                 pow.category=pow.category.replace("|"," ")
                 rc = pow.save()
-
+                log("Ajout de "+pow.title)
                 record = record + 1
             except Exception as inst:
                 log("Probléme d'enregistrement" + str(inst))

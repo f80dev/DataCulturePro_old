@@ -119,8 +119,6 @@ export class EditComponent implements OnInit  {
       });
   }
 
-
-
   select(element: any) {
     this.add_work={
       movie:element.title,

@@ -17,7 +17,10 @@
 
 
 <div class="wrap-list" style="margin: 5px;">
-  <mat-expansion-panel *ngFor="let pow of pows" class="app-card-panel" (afterExpand)="get_pow(pow)" [expanded]="pow.expanded">
+  <mat-expansion-panel *ngFor="let pow of pows"
+                       class="app-card-panel"
+                       (afterExpand)="get_pow(pow)"
+                       [expanded]="pow.expanded">
     <mat-expansion-panel-header>
        <mat-panel-title>
       {{pow.title}}
@@ -38,17 +41,31 @@
         </tr>
       </table>
 
-    <div *ngFor="let link of pow.links" style="font-size: large;font-weight: lighter;">
+    <div *ngIf="pow.links?.length>0">
+      <small>Liens complémentaires:</small><br>
+      <div *ngFor="let link of pow.links" style="font-size: large;font-weight: lighter;">
           <a href="{{link.url}}" target="_blank">{{link.text}}</a>
+      </div>
+      <br>
     </div>
 
-    <div *ngIf="pow.works.length>0">
-      <div *ngFor="let work of pow.works">
-        {{work.job}}: {{work.name}}
-        <mat-icon style="font-size: medium;cursor: pointer;"
+
+    <div *ngIf="pow.works?.length>0" style="line-height: 95%">
+      <hr>
+      <br>
+      <small>Casting FEMIS:</small><br><br>
+      <table style="width: 80%;display: inline-block;text-align: left;">
+        <tr *ngFor="let work of pow.works">
+          <td><span style="color:lightgrey">{{work.job}}:</span></td>
+          <td>{{work.name}}</td>
+          <td style="width: 10%;">
+            <mat-icon style="font-size: small;cursor: pointer;padding:0px;margin:0px;height: 17px;"
                   title="Cliquer pour consulter le profil"
                   (click)="open_search(work.name)">account_circle</mat-icon>
-      </div>
+          </td>
+        </tr>
+      </table>
+
     </div>
 
     <mat-action-row>
@@ -69,6 +86,13 @@
             *ngIf="config.hasPerm('share')"
             (click)="share(pow)">
       <mat-icon>share</mat-icon>
+    </button>
+
+      <button mat-icon-button
+              mat-raised-button
+              class="icon-button" mat-button
+            (click)="router.navigate(['faqs'],{queryParams:{open:'fiche_film'}})">
+      <mat-icon>help</mat-icon>
     </button>
 
     </mat-action-row>
