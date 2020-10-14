@@ -1,6 +1,11 @@
 <div style="margin:1%;text-align: center;min-width: 300px;">
 
-  <app-tuto label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
+  <app-tuto icon_button="login"
+            (click)="router.navigate(['login'])"
+            label="Connectez vous pour avoir accès à plus d'information sur les profils">
+  </app-tuto>
+
+  <app-tuto [delay]="10" label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
 
   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
     <mat-label>Rechercher un profil</mat-label>

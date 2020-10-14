@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {brand_text, hashCode} from "../tools";
 import {ConfigService} from "../config.service";
 import {TransPipe} from "../trans.pipe";
@@ -26,8 +26,9 @@ export class TutoComponent implements OnInit {
   @Input('color') color:string="white";
   @Input('force') force:boolean=false;
   @Input('faq') faq:string="";
-  @Input('button') _button:string="";
+  @Input('icon_button') _button:string="";
   @Input('height') height:string="auto";
+  @Output('click') onclick: EventEmitter<any>=new EventEmitter();
 
   constructor(public config:ConfigService,public transPipe:TransPipe) {}
 

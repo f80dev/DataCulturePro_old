@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit {
   constructor(public api:ApiService,
               public toast:MatSnackBar,
               public routes:ActivatedRoute,
-              private router: Router,
+              public router: Router,
               public config:ConfigService) { }
 
 

@@ -13,7 +13,10 @@
           </span>
 
           <span *ngIf="_button?.length>0">
-            <button class="app-button" mat-button mat-flat-button mat-icon-button>
+            <button class="icon-button"
+                    mat-button mat-flat-button
+                    mat-icon-button
+                    (click)="onclick.emit()">
               <mat-icon style="margin:10px;">{{_button}}</mat-icon>
             </button>
           </span>
@@ -54,7 +57,11 @@
       <div style="width:90%;margin-left:5%;margin-top:4vh;text-align:center;font-size: large;margin-bottom: 5vh;"
            [innerHTML]="subtitle | safe:'html'"></div>
 
-      <button class="app-button" mat-button mat-raised-button id="btnStart">{{labelButton}}</button>
+      <button class="app-button"
+              (click)="onclick.emit()"
+              mat-button mat-raised-button id="btnStart">
+        {{labelButton}}
+      </button>
 
     </div>
   </div>

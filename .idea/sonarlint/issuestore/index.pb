@@ -165,8 +165,6 @@ p
 @FrontEnd/OpenAlumniClient/src/app/profiles/profiles.component.ts,5\f\5f740ec39ac1c351d0577761b6f499b99eb3b7c7
 r
 BFrontEnd/OpenAlumniClient/src/app/profiles/profiles.component.html,1\a\1ac80c68050e3c4a2ba8df01d1308a4f38591944
-d
-4FrontEnd/OpenAlumniClient/src/assets/spip_fictif.csv,0\a\0a72a9fb4db4f89457c4e09d1ad4ece4b76f4683
 M
 alumni/migrations/__init__.py,f\6\f6c4d7dc6b4b5d705fffa495af6ddef74fc04fd3
 f
@@ -259,3 +257,7 @@ o
 ?FrontEnd/OpenAlumniClient/src/environments/environment.build.ts,4\d\4d3868c3194b0655de53a809eed130122110cd79
 B
 static/update.html,9\1\91dc5135178a053119e8b83e977336e16ab2ba1f
+G
+static/movies_light.csv,4\e\4eef099aeee3e0d8409ca79be2326f2149f4fded
+D
+static/versions.yaml,5\2\52f43bef0d496b62e6f55196e1233756fb0ac9f6
