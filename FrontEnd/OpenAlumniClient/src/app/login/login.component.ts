@@ -1,8 +1,6 @@
-import {
-  FacebookLoginProvider,
-  GoogleLoginProvider,
-  SocialService
-} from "ngx-social-button";
+import { SocialAuthService } from "angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+
 
 import {$$, clear, showError, showMessage} from "../tools";
 import {ApiService} from "../api.service";
@@ -44,7 +42,7 @@ export class LoginComponent implements OnInit {
               public _location: Location,
               public config: ConfigService,
               public route: ActivatedRoute,
-              private socialAuthService: SocialService) {
+              private socialAuthService: SocialAuthService) {
     // if(this.config.device.isMobile && this.config.device.infos.brower=="Opera"){
     //   $$("L'usage des plateformes d'authentification n'est pas compatible avec Opera pour smarphone");
     //   this.showAuthentPlatform=false;
@@ -171,13 +169,7 @@ export class LoginComponent implements OnInit {
   }
 
   signOut(){
-    if(this.socialAuthService.isSocialLoggedIn()){
-      this.socialAuthService.signOut().then(()=>{
-
-      }).catch((err)=>{
-
-      });
-    }
+    this.socialAuthService.signOut();
   }
 
   resend_code(){
@@ -188,12 +180,11 @@ export class LoginComponent implements OnInit {
 
 
 
-  updateCode(event,code=null){
-    if(!code)code=event.target.value;
-
+  updateCode(code){
     $$("Vérification du code");
+    debugger
     this.wait_message="Vérification du code";
-    this.api.checkCode(this.email, code).subscribe((r: any) => {
+    this.api.checkCode(code, code).subscribe((r: any) => {
       this.wait_message="";
       if (r != null) {
           this.api.token=r.token;
@@ -219,19 +210,24 @@ export class LoginComponent implements OnInit {
 
   initUser(data:any,askForCode=false){
     $$("Recherche d'un compte ayant ce mail",data);
-    debugger
     this.wait_message="Récupération de l'utilisateur";
     this.api.getuser(data.email).subscribe((result:any)=> {
       if (result.results.length > 0) {
-          let _old_user = result.results[0];
-          this.wait_message = "";
-          this.messageCode = "Le compte " + _old_user.email + " existe déjà, veuillez saisir votre mot de passe";
-          this.email = data.email;
+          // let _old_user = result.results[0];
+          // this.wait_message = "";
+          // this.messageCode = "Le compte " + _old_user.email + " existe déjà, veuillez saisir votre mot de passe";
+          // this.email = data.email;
+          this.updateCode(data.provider+"_"+data.provider_id)
         } else {
           $$("Il n'y a pas de compte à cet email");
           this.email = data.email;
-
-          this.api.register({"email": data.email,"username":data.last_name}).subscribe((res: any) => {
+          this.api.register({
+            "email": data.email,
+            "username":data.provider+"_"+data.provider_id,
+            "first_name":data.first_name,
+            "last_name":data.last_name,
+          }).subscribe((res: any) => {
+            this.updateCode(data.provider+"_"+data.provider_id);
             this.resend_code();
             this.messageCode = "Veuillez saisir le code qui vous a été envoyé sur votre adresse mail";
             this.wait_message = "";
@@ -240,6 +236,7 @@ export class LoginComponent implements OnInit {
           });
         }
       }
+
     );
   }
 
@@ -247,23 +244,24 @@ export class LoginComponent implements OnInit {
 
 
   public socialSignIn(socialPlatform : string) {
-    showMessage(this,"En construction");
-    return;
-
-    let socialPlatformProvider;
-    if(socialPlatform == "facebook"){
-      socialPlatformProvider = FacebookLoginProvider.PROVIDER_TYPE;
-    }else if(socialPlatform == "google"){
-      socialPlatformProvider = GoogleLoginProvider.PROVIDER_TYPE;
-    }
+    let servicePlatform=GoogleLoginProvider.PROVIDER_ID;
+    if(socialPlatform=="facebook")servicePlatform=FacebookLoginProvider.PROVIDER_ID;
 
     $$("Appel de la plateforme d'authentification "+socialPlatform);
     this.wait_message="Récupération de votre adresse mail via "+socialPlatform;
-    this.socialAuthService.signIn(socialPlatformProvider).then((socialUser) => {
+    this.socialAuthService.signIn(servicePlatform).then((socialUser) => {
       this.wait_message="";
       this.message="";
       $$("Resultat de l'authentification ",socialUser);
-        this.initUser({"email":socialUser.email,"firstname":socialUser.name.split(" ")[0],"photo":socialUser.image});
+        this.initUser({
+          "email":socialUser.email,
+          "first_name":socialUser.firstName,
+          "last_name":socialUser.lastName,
+          "url":socialUser.id,
+          "photo":socialUser.photoUrl,
+          "provider":socialUser.provider,
+          "provider_id":socialUser.id,
+        },false);
       },
       (err)=>{
       this.wait_message="";

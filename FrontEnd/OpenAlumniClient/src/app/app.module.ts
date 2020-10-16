@@ -32,7 +32,12 @@ import { LoginComponent } from './login/login.component';
 import { PromptComponent } from './prompt/prompt.component';
 import { WorkComponent } from './work/work.component';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
-import {SocialServiceConfig} from "ngx-social-button";
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+  SocialAuthService,
+  SocialAuthServiceConfig, SocialLoginModule
+} from "angularx-social-login";
 import {getAuthServiceConfigs} from "./tools";
 import { LoginbarComponent } from './loginbar/loginbar.component';
 import { ProfilesComponent } from './profiles/profiles.component';
@@ -103,6 +108,7 @@ import { PowsComponent } from './pows/pows.component';
         MatSnackBarModule,
         ImageCropperModule,
         TextFieldModule,
+        SocialLoginModule,
         MatFormFieldModule,
         MatInputModule,
         MatDialogModule,
@@ -120,8 +126,24 @@ import { PowsComponent } from './pows/pows.component';
         MatExpansionModule
     ],
   providers: [
-    ApiService,TransPipe,
-    {provide: SocialServiceConfig,useFactory: getAuthServiceConfigs},
+    ApiService,
+    TransPipe,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('794055474370-qrdn0gb051k774mtetvo7lifcslmlpgg.apps.googleusercontent.com'),
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('1064548794002409'),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
     {provide: MAT_DIALOG_DATA, useValue: {hasBackdrop: false}}
   ],
   bootstrap: [AppComponent]

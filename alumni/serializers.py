@@ -1,3 +1,4 @@
+from hashlib import sha256
 from urllib.request import urlopen
 
 import yaml
@@ -7,9 +8,11 @@ from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
 from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.validators import UniqueValidator
+from rsa import encrypt
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import reset_password, log
+from OpenAlumni.passwords import DB_PASSWORD
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 
@@ -18,17 +21,27 @@ class UserSerializer(HyperlinkedModelSerializer):
     email = serializers.EmailField(required=True,validators=[UniqueValidator(queryset=User.objects.all())])
     class Meta:
         model = User
-        fields = ['id','url', 'email','username','first_name',"last_name"]
+        fields = ['id','url','email','username','first_name',"last_name"]
 
     def create(self, data):
         """
-        Création d'un profil utilisateur
+        Création d'un profil utilisateur avec initialisation du mot de passe
         :param data:
         :return:
         """
         log("Création du password, du user et du token")
-        password = reset_password(data["email"], data["username"])
-        user = User.objects.create_user(username=data["username"], password=password, email=data["email"])
+        if not "@" in data["username"]:
+            password=dataQZEFa["username"]
+        else:
+            password = reset_password(data["email"], data["username"])
+
+        user = User.objects.create_user(
+            username=data["username"],
+            password=password,
+            email=data["email"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+        )
         token = Token.objects.create(user=user)
 
         log("Récupération des profils")
