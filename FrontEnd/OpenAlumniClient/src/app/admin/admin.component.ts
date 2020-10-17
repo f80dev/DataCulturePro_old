@@ -57,4 +57,10 @@ export class AdminComponent implements OnInit {
       showMessage(this,"Base initialisée")
     });
   }
+
+  batch() {
+    this.api._get("batch/").subscribe(()=>{
+      showMessage(this,"traitement terminé")
+    })
+  }
 }

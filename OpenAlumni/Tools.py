@@ -1,3 +1,6 @@
+from urllib.parse import urlparse
+
+import wikipedia
 import random
 import smtplib
 from datetime import datetime
@@ -68,6 +71,46 @@ def reset_password(email,username):
     }))
     print("passowrd=" + password)
     return password
+
+
+def extract_actor(name="céline sciamma"):
+    wikipedia.set_lang("fr")
+    rc=None
+    search=wikipedia.search(name)
+
+    if len(search)>0:
+        rc=dict({"links": [],"name": name})
+        page=wikipedia.page(search[0])
+        for img in page.images:
+            if img.endswith(".jpg"):rc["photo"]=img
+
+        save_domains=["unifrance.org","www.lefilmfrancais","www.allocine.fr","catalogue.bnf.fr","www.allmovie.com"]
+        libs = ["UniFrance", "Le Film Francais", "Allocine", "La BNF", "All movie"]
+        try:
+            for ref in page.references:
+                domain=urlparse(ref).netloc
+                try:
+                    idx = save_domains.index(domain)
+                    rc["links"].append({
+                        "text":libs[idx],
+                        "href":ref
+                    })
+                except:
+                    pass
+        except:
+            pass
+
+        html:wikipedia.BeautifulSoup= wikipedia.BeautifulSoup(page.html())
+        #Recherche de la section des films
+        # for link in html.findAll('a', attrs={'href': wikipedia.re.compile("^http://")}):
+        #     if "film" in link.text:
+        #         pass
+
+        rc["links"].append({"text":"wikipedia","href":page.url})
+        rc["summary"]=page.summary
+
+    return rc
+
 
 
 

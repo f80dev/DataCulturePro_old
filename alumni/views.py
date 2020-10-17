@@ -2,6 +2,8 @@ import base64
 import csv
 from datetime import datetime, timedelta
 from io import StringIO
+from threading import Thread
+from time import sleep
 from urllib.request import urlopen
 
 import yaml
@@ -30,7 +32,7 @@ from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
-    sendmail
+    sendmail, extract_actor
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
@@ -154,8 +156,30 @@ def resend(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def test(request):
-    u=User.objects.get(username="hhoareau")
-    return JsonResponse(u)
+    p=extract_actor()
+    return JsonResponse(p)
+
+
+#http://localhost:8000/api/batch
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def batch(request):
+    for profil in Profil.objects.all():
+        log("Traitement de "+profil.lastname)
+        try:
+            infos=extract_actor(profil.firstname+" "+profil.lastname)
+            sleep(1)
+            if not infos is None:
+                transact=Profil.objects.filter(id=profil.id)
+                if "photo" in infos:transact.update(photo=infos["photo"])
+                if "summary" in infos:transact.update(biography=infos["summary"])
+        except:
+            pass
+
+
+
+
+
 
 
 

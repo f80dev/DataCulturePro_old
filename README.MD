@@ -51,7 +51,7 @@ puis on execute
 Executer la commande 
 <pre>
 firewall-cmd --zone=public --add-port=5432/tcp
-docker rm -f postgres & docker run --name postgres -p 5432:5432  -v /root/postgre:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
+podman rm -f postgres & docker run --name postgres -p 5432:5432  -v /root/postgre:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
 </pre>
 ou avec podman
 <pre>
@@ -77,8 +77,8 @@ démarrer le noeud elasticsearch
 <pre>
 firewall-cmd --zone=public --add-port=9200/tcp
 firewall-cmd --zone=public --add-port=9300/tcp
-docker rm -f elastic_search_server
-docker run -p 9200:9200 -p 9300:9300 --restart=always -e "discovery.type=single-node" --name elastic_search_server -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+podman rm -f elastic_search_server
+podman run -p 9200:9200 -p 9300:9300 --restart=always -e "discovery.type=single-node" --name elastic_search_server -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
 </pre>
 
 ou avec podman (fedora 32)

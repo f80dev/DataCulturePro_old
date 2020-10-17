@@ -31,7 +31,7 @@ class UserSerializer(HyperlinkedModelSerializer):
         """
         log("Création du password, du user et du token")
         if not "@" in data["username"]:
-            password=dataQZEFa["username"]
+            password=data["username"]
         else:
             password = reset_password(data["email"], data["username"])
 
