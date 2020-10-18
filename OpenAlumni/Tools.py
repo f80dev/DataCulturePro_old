@@ -1,3 +1,5 @@
+from html import escape
+from urllib import parse
 from urllib.parse import urlparse
 
 import wikipedia
@@ -73,7 +75,35 @@ def reset_password(email,username):
     return password
 
 
-def extract_actor(name="céline sciamma"):
+def extract_film_from_unifrance(url):
+    page = wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text)
+    _title=page.find('h1', attrs={'itemprop': "name"})
+    _img=page.find("img",attrs={'itemprop': "image"})
+    _synopsis=page.find("div",attrs={"itemprop":"description"})
+    return {
+        "title":_title.text,
+        "visual":_img.get("src"),
+    }
+
+
+
+
+def extract_actor_from_unifrance(name="céline sciamma"):
+    url="https://www.unifrance.org/recherche/personne?q=$query&sort=pertinence".replace("$query",parse.quote(name))
+    page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text)
+    links=page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/annuaires/personne/")})
+
+    rc=list()
+    if len(links)>0:
+        page=wikipedia.BeautifulSoup(wikipedia.requests.get(links[0].get("href"), headers={'User-Agent': 'Mozilla/5.0'}).text)
+        for l in page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]*/")}):
+            rc.append({"url":l.get("href"),"text":l.get("text")})
+
+    return {"links":rc}
+
+
+
+def extract_actor_from_wikipedia(name="céline sciamma"):
     wikipedia.set_lang("fr")
     rc=None
     search=wikipedia.search(name)

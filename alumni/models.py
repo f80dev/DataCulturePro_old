@@ -24,14 +24,16 @@ class Profil(models.Model):
     photo=models.TextField(blank=True)
     gender=models.CharField(max_length=1,blank=False,default="M",choices=(('M','Male'),('F','Female')))
     linkedin=models.URLField(blank=True)
-    address=models.TextField(null=True)
-    town = models.TextField(null=True)
-    cp=models.IntegerField(null=True)
+    address=models.TextField(null=True,help_text="Adresse postale, rue")
+    town = models.TextField(null=True,help_text="Adresse postale, ville")
+    cp=models.IntegerField(null=True,help_text="Adresse postale, code postal")
     website=models.URLField(null=True)
     dtLastUpdate=models.DateField(null=False,auto_now=True,help_text="Date de la dernière modification du profil")
     dtLastNotif=models.DateField(null=False,auto_now=True,help_text="Date de la dernière notification envoyé")
     obsolescenceScore=models.IntegerField(default=0,help_text="Indique le degré d'obsolescence probable")
     biography=models.TextField(null=True,max_length=2000)
+    links = JSONField(null=True, help_text="Liens vers des références externes au profil")
+    auto_updates=models.CharField(max_length=300,null=False, default="0,0,0,0,0,0",help_text="Date de mise a jour")
 
     class Meta(object):
         ordering=["lastname"]

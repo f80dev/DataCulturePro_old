@@ -32,7 +32,7 @@ from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
-    sendmail, extract_actor
+    sendmail, extract_actor_from_wikipedia, extract_actor_from_unifrance, extract_film_from_unifrance
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
@@ -156,8 +156,11 @@ def resend(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def test(request):
-    p=extract_actor()
-    return JsonResponse(p)
+
+
+    return JsonResponse(infos)
+
+
 
 
 #http://localhost:8000/api/batch
@@ -165,16 +168,42 @@ def test(request):
 @permission_classes([AllowAny])
 def batch(request):
     for profil in Profil.objects.all():
-        log("Traitement de "+profil.lastname)
-        try:
-            infos=extract_actor(profil.firstname+" "+profil.lastname)
-            sleep(1)
-            if not infos is None:
-                transact=Profil.objects.filter(id=profil.id)
-                if "photo" in infos:transact.update(photo=infos["photo"])
-                if "summary" in infos:transact.update(biography=infos["summary"])
-        except:
-            pass
+
+        #Recherche des films
+        infos = extract_actor_from_unifrance(profil.firstname+" "+profil.lastname)
+        for l in infos["links"]:
+            film = extract_film_from_unifrance(l["url"])
+            pow = PieceOfWork.objects.filter(title=film["title"])
+            if not pow.exists():
+                log("Ajout de "+film["title"])
+                pow = PieceOfWork(title=film["title"], visual=film["visual"])
+                pow.save()
+                work = Work(pow=pow.id,profil=profil)
+                work.save()
+
+
+        lastUpdates=profil.auto_updates.replace("[","").replace("]","").split(",")
+        if (datetime.now().timestamp()-float(lastUpdates[0]))>1000:
+            log("Traitement de "+profil.lastname)
+            try:
+                infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
+                sleep(1)
+                if not infos is None:
+                    transact=Profil.objects.filter(id=profil.id)
+                    if "photo" in infos:transact.update(photo=infos["photo"])
+                    if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
+                    if "links" in infos:
+                        if profil.links is None:
+                            profil.links = infos["links"]
+                        else:
+                            for l in infos["links"]:
+                                profil.links.append(l)
+                        transact.update(links=profil.links)
+                    lastUpdates[0]=datetime.now().timestamp()
+                    transact.update(auto_updates=lastUpdates)
+
+            except:
+                pass
 
 
 
