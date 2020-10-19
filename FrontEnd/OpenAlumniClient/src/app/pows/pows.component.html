@@ -92,6 +92,15 @@
 
         <button mat-icon-button
                 mat-raised-button
+                class="icon-button"
+                mat-button title="Enlever le film"
+                *ngIf="config.hasPerm('delete_pow')"
+                (click)="deletePow(pow)">
+          <mat-icon>cancel</mat-icon>
+        </button>
+
+        <button mat-icon-button
+                mat-raised-button
                 class="icon-button" mat-button
                 (click)="router.navigate(['faqs'],{queryParams:{open:'fiche_film'}})">
           <mat-icon>help</mat-icon>

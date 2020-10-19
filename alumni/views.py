@@ -133,13 +133,6 @@ def getyaml(request):
     return JsonResponse(result,safe=False)
 
 
-# @api_view(["POST"])
-# @permission_classes([AllowAny])
-# def add_job(request):
-#     profil=request.POST.get("profil")
-#     pow=request.POST.get("pow")
-#     work=Work.objects.create(request.body)
-#     return Response({"message":"Check your email"})
 
 
 @api_view(["GET"])
@@ -175,7 +168,7 @@ def batch(request):
             # Recherche des films
             infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
             for l in infos["links"]:
-                sleep(random())
+                sleep(random()*5)
                 film = extract_film_from_unifrance(l["url"])
                 pow = PieceOfWork.objects.filter(title=film["title"])
                 if not pow.exists():
@@ -193,7 +186,7 @@ def batch(request):
 
             try:
                 infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
-                sleep(random())
+                sleep(random()*5)
                 if not infos is None:
 
                     if "photo" in infos:transact.update(photo=infos["photo"])
@@ -213,18 +206,12 @@ def batch(request):
 
 
 
-
-
-
-
-
-
-
-
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def initdb(request):
     profils=yaml.load(DOMAIN_APPLI+"/assets/profils.yaml")
+
+
 
 
 @api_view(["GET"])
@@ -282,8 +269,6 @@ def raz(request):
     log("Effacement de la base terminée")
     return Response("Compte effacé",status=200)
 
-
-#http://localhost:8000/api/raz/
 
 
 @api_view(["GET"])

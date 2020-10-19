@@ -103,9 +103,9 @@ export class ApiService {
 
 
 
-  checkCode(username: string, code: any) {
-    let body={"username":username,"password":code};
-    return this._post("api-token-auth/","",body);
+  checkCode(username: string, code: string) {
+    let body={"username":username,"password":code}
+    return this._post("api-token-auth/", "",body);
   }
 
 

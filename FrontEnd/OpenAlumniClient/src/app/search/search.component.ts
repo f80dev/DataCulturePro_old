@@ -95,4 +95,10 @@ export class SearchComponent implements OnInit {
     this.query.value='';
     this.refresh();
   }
+
+  deleteProfil(profil: any) {
+    this.api._delete("profils/"+profil.id).subscribe(()=>{
+      showMessage(this,"Profil supprimé");
+    })
+  }
 }

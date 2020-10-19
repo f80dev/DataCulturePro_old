@@ -13,6 +13,12 @@ perms:
   - tag: firstname
     description: au prénom
 
+  - tag: delete_pow
+    description: la suppression des oeuvres
+
+  - tag: delete_profil
+    description: la suppression d'un profil
+
   - tag: lastname
     description: au nom
 

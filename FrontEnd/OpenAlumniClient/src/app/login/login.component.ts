@@ -180,10 +180,10 @@ export class LoginComponent implements OnInit {
 
 
 
-  updateCode(code){
+  updateCode(code:string){
     $$("Vérification du code");
-    debugger
     this.wait_message="Vérification du code";
+    debugger
     this.api.checkCode(code, code).subscribe((r: any) => {
       this.wait_message="";
       if (r != null) {

@@ -115,4 +115,10 @@ export class PowsComponent implements OnInit {
       });
    // }
   }
+
+  deletePow(pow: any) {
+    this.api._delete("/pows/"+pow.id).subscribe(()=>{
+      showMessage(this,"film supprimé");
+    })
+  }
 }

@@ -46,6 +46,13 @@
       <mat-icon>public</mat-icon>
     </button>
 
+    <button mat-button mat-icon-button
+            title="Consulter son site web"
+            *ngIf="config.hasPerm('delete_profil')"
+            (click)="deleteProfil(profil)">
+      <mat-icon>cancel</mat-icon>
+    </button>
+
      <button mat-button mat-icon-button
             title="Editer mon profil"
             *ngIf="config.user?.user?.email==profil?.email"

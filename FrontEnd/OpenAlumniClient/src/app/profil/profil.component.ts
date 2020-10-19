@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {showMessage} from "../tools";
 import {NgNavigatorShareService} from "ng-navigator-share";
 import {ClipboardService} from "ngx-clipboard";
@@ -21,6 +21,7 @@ export class ProfilComponent implements OnInit,OnChanges {
   @Input("writeAccess") writeAccess:boolean=false;
   @Input("backgroundColor") backgroundColor:string="x404040";
   @Input("width") width="300px";
+  @Output('delete') ondelete: EventEmitter<any>=new EventEmitter();
 
 
   constructor(public toast:MatSnackBar,
@@ -64,6 +65,10 @@ export class ProfilComponent implements OnInit,OnChanges {
 
   write(profil:any) {
     this.router.navigate(["write"],{queryParams:{id:profil.id}})
+  }
+
+  deleteProfil(profil: any) {
+    this.ondelete.emit();
   }
 }
 

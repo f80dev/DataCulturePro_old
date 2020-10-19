@@ -45,10 +45,12 @@
   <app-hourglass [message]="message"></app-hourglass>
 </div>
 
+<span *ngIf="profils?.length==0 && message.length==0">Aucun profil ne correspond à cette recherche</span>
+
 <div class="wrap-list" *ngIf="message.length==0 && config.ready">
-<!--  *ngFor="let profil of profils | filter:['filter_tag',query.value.toLowerCase()]"-->
   <app-profil
               *ngFor="let profil of profils"
+              (delete)="deleteProfil(profil)"
               [writeAccess]="config.user && config.user.profil==profil?.id"
               class="app-card" [profil]="profil">
 
