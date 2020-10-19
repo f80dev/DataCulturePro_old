@@ -1,102 +1,104 @@
 <div class="mainform">
 
-   <app-tuto label="Vous pouvez également consulter la liste des élèves de la FEMIS (anciens et actuels), via le menu latéral"></app-tuto>
+  <app-tuto label="Vous pouvez également consulter la liste des élèves de la FEMIS (anciens et actuels), via le menu latéral"></app-tuto>
 
 
-   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
+  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
     <mat-label>Rechercher un film</mat-label>
-      <input matInput matNativeControl
-             title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
-             (keyup)="onQuery($event)"
-             placeholder="Un ou plusieurs mots du titre du films, une année" [(ngModel)]="query.value">
-      <mat-icon *ngIf="query.value?.length>0"
-                matSuffix style="cursor: pointer"
-                (click)="clearQuery()">cancel</mat-icon>
-    </mat-form-field>
+    <input matInput matNativeControl
+           title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
+           (keyup)="onQuery($event)"
+           placeholder="Un ou plusieurs mots du titre du films, une année" [(ngModel)]="query.value">
+    <mat-icon *ngIf="query.value?.length>0"
+              matSuffix style="cursor: pointer"
+              (click)="clearQuery()">cancel</mat-icon>
+  </mat-form-field>
   <br>
 
 
-<div class="wrap-list" style="margin: 5px;">
-  <mat-expansion-panel *ngFor="let pow of pows"
-                       class="app-card-panel"
-                       (afterExpand)="get_pow(pow)"
-                       [expanded]="pow.expanded">
-    <mat-expansion-panel-header>
-       <mat-panel-title>
-      {{pow.title}}
-         <small>({{pow.year}})</small>
-         </mat-panel-title>
-    </mat-expansion-panel-header>
+  <div class="wrap-list" style="margin: 5px;">
+    <mat-expansion-panel *ngFor="let pow of pows"
+                         class="app-card-panel"
+                         (afterExpand)="get_pow(pow)"
+                         [expanded]="pow.expanded">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <strong>{{pow.title}}&nbsp;</strong>
+          <small>({{pow.year}})</small>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-    <table>
-        <tr>
-          <td>
-            <img [src]="pow.visual"
-                 style="width: 125px;"
-            >
-          </td>
-          <td>
+      <div style="text-align: center;">
+        <table style="width: 100%;">
+          <tr>
+            <td *ngIf="pow.visual?.length>0">
+              <img [src]="pow.visual"
+                   style="width: 125px;"
+              >
+            </td>
+            <td style="font-size: small;line-height: 97%;text-align: left;">
               {{pow.description}}
-          </td>
-        </tr>
-      </table>
+            </td>
+          </tr>
+        </table>
 
-    <div *ngIf="pow.links?.length>0">
-      <small>Liens complémentaires:</small><br>
-      <div *ngFor="let link of pow.links" style="font-size: large;font-weight: lighter;">
+      </div>
+
+      <div *ngIf="pow.links?.length>0">
+        <small>Liens complémentaires:</small><br>
+        <div *ngFor="let link of pow.links" style="font-size: large;font-weight: lighter;">
           <a href="{{link.url}}" target="_blank">{{link.text}}</a>
-      </div>
-      <br>
-    </div>
-
-
-    <div *ngIf="pow.works?.length>0" style="line-height: 95%">
-      <hr>
-      <br>
-      <small>Casting FEMIS:</small><br><br>
-      <table style="width: 80%;display: inline-block;text-align: left;">
-        <tr *ngFor="let work of pow.works">
-          <td><span style="color:lightgrey">{{work.job}}:</span></td>
-          <td>{{work.name}}</td>
-          <td style="width: 10%;">
-            <mat-icon style="font-size: small;cursor: pointer;padding:0px;margin:0px;height: 17px;"
-                  title="Cliquer pour consulter le profil"
-                  (click)="open_search(work.name)">account_circle</mat-icon>
-          </td>
-        </tr>
-      </table>
-
-    </div>
-
-    <mat-action-row>
-       <button class="app-button"
-               *ngIf="config.user?.profil"
-               mat-button mat-raised-button
-               (click)="add_experience(pow)">
-      <div class="bloc-bouton">
-        Ajouter en<br>expérience
+        </div>
+        <br>
       </div>
 
-    </button>
 
-      <button mat-icon-button
-              mat-raised-button
-              class="icon-button"
-              mat-button title="Partager la fiche de ce film"
-            *ngIf="config.hasPerm('share')"
-            (click)="share(pow)">
-      <mat-icon>share</mat-icon>
-    </button>
+      <div *ngIf="pow.works?.length>0" style="line-height: 95%">
+        <hr>
+        <br>
+        <small>Casting FEMIS:</small><br><br>
+        <table style="width: 80%;display: inline-block;text-align: left;">
+          <tr *ngFor="let work of pow.works">
+            <td><span style="color:lightgrey">{{work.job}}:</span></td>
+            <td>{{work.name}}</td>
+            <td style="width: 10%;">
+              <mat-icon style="font-size: small;cursor: pointer;padding:0px;margin:0px;height: 17px;"
+                        title="Cliquer pour consulter le profil"
+                        (click)="open_search(work.name)">account_circle</mat-icon>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-      <button mat-icon-button
-              mat-raised-button
-              class="icon-button" mat-button
-            (click)="router.navigate(['faqs'],{queryParams:{open:'fiche_film'}})">
-      <mat-icon>help</mat-icon>
-    </button>
+      <mat-action-row>
+        <button class="app-button"
+                *ngIf="config.user?.profil"
+                mat-button mat-raised-button
+                (click)="add_experience(pow)">
+          <div class="bloc-bouton">
+            Ajouter en<br>expérience
+          </div>
 
-    </mat-action-row>
+        </button>
 
-  </mat-expansion-panel>
-</div>
+        <button mat-icon-button
+                mat-raised-button
+                class="icon-button"
+                mat-button title="Partager la fiche de ce film"
+                *ngIf="config.hasPerm('share')"
+                (click)="share(pow)">
+          <mat-icon>share</mat-icon>
+        </button>
+
+        <button mat-icon-button
+                mat-raised-button
+                class="icon-button" mat-button
+                (click)="router.navigate(['faqs'],{queryParams:{open:'fiche_film'}})">
+          <mat-icon>help</mat-icon>
+        </button>
+
+      </mat-action-row>
+
+    </mat-expansion-panel>
+  </div>
 </div>

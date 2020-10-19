@@ -38,6 +38,19 @@ class Profil(models.Model):
     class Meta(object):
         ordering=["lastname"]
 
+    def delay_update(self,_type,update=False):
+        """
+        :return: delay de mise a jour en heure
+        """
+        lastUpdates = self.auto_updates.replace("[", "").replace("]", "").split(",")
+        rc=(datetime.datetime.now().timestamp() - float(lastUpdates[_type]))/3600
+        if update:
+            lastUpdates[_type]=str(datetime.datetime.now().timestamp())
+            self.auto_updates=",".join(lastUpdates)
+
+        return rc
+
+
     @property
     def public_url(self):
         return DOMAIN_APPLI+"/public/?id="+str(self.id)

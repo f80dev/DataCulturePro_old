@@ -28,6 +28,7 @@ RUN pip3 install PyYAML
 RUN pip3 install django-filter
 RUN pip3 install PyPDF2
 RUN pip3 install wikipedia
+RUN pip3 install rsa
 
 #Création des répertoires
 ENV APP_HOME=/home/app

@@ -75,15 +75,39 @@ def reset_password(email,username):
     return password
 
 
-def extract_film_from_unifrance(url):
-    page = wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text)
+def extract_film_from_unifrance(url:str):
+    rc=dict()
+    if not url.startswith("http"):
+        log("On passe par la page de recherche pour retrouver le titre")
+        page = wikipedia.BeautifulSoup(wikipedia.requests.get("https://unifrance.org/recherche?q="+parse.quote(url), headers={'User-Agent': 'Mozilla/5.0'}).text)
+        _link=page.find("a",attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]")})
+        if _link is None:return rc
+
+        url=_link.get("href")
+
+    r=wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0',"accept-encoding": "gzip, deflate"})
+    page = wikipedia.BeautifulSoup(str(r.content,encoding="utf-8"))
     _title=page.find('h1', attrs={'itemprop': "name"})
+    if not _title is None:rc["title"]=_title.text
+
     _img=page.find("img",attrs={'itemprop': "image"})
-    _synopsis=page.find("div",attrs={"itemprop":"description"})
-    return {
-        "title":_title.text,
-        "visual":_img.get("src"),
-    }
+    if not _img is None:
+        src:str=_img.get("src")
+        if not src.startswith("/ressource"):
+            rc["visual"]=src
+
+    for div in page.findAll("div",attrs={'class': "details_bloc"}):
+        if "Année de production : " in div.text:
+            rc["year"]=div.text.replace("Année de production : ","")
+        if "Genre(s) : " in div.text:
+            rc["category"]=div.text.replace("Genre(s) : ","")
+
+    _synopsis = page.find("div", attrs={"itemprop": "description"})
+    if not _synopsis is None:rc["synopsis"]=_synopsis.getText(strip=True)
+
+    return rc
+
+
 
 
 

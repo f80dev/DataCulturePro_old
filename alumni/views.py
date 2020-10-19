@@ -2,6 +2,7 @@ import base64
 import csv
 from datetime import datetime, timedelta
 from io import StringIO
+from random import random
 from threading import Thread
 from time import sleep
 from urllib.request import urlopen
@@ -152,12 +153,11 @@ def resend(request):
     return Response({"message":"Check your email"})
 
 
-#http://localhost:8000/api/test
+#http://localhost:8000/api/test/?movie=joker
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def test(request):
-
-
+    infos=extract_film_from_unifrance(request.GET.get("movie"))
     return JsonResponse(infos)
 
 
@@ -168,28 +168,34 @@ def test(request):
 @permission_classes([AllowAny])
 def batch(request):
     for profil in Profil.objects.all():
-
-        #Recherche des films
-        infos = extract_actor_from_unifrance(profil.firstname+" "+profil.lastname)
-        for l in infos["links"]:
-            film = extract_film_from_unifrance(l["url"])
-            pow = PieceOfWork.objects.filter(title=film["title"])
-            if not pow.exists():
-                log("Ajout de "+film["title"])
-                pow = PieceOfWork(title=film["title"], visual=film["visual"])
-                pow.save()
-                work = Work(pow=pow.id,profil=profil)
-                work.save()
-
-
-        lastUpdates=profil.auto_updates.replace("[","").replace("]","").split(",")
-        if (datetime.now().timestamp()-float(lastUpdates[0]))>1000:
+        transact = Profil.objects.filter(id=profil.id)
+        if profil.delay_update(0,True)>1000:
             log("Traitement de "+profil.lastname)
+
+            # Recherche des films
+            infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
+            for l in infos["links"]:
+                sleep(random())
+                film = extract_film_from_unifrance(l["url"])
+                pow = PieceOfWork.objects.filter(title=film["title"])
+                if not pow.exists():
+                    log("Ajout de " + film["title"])
+                    pow = PieceOfWork(title=film["title"])
+                    if "synopsis" in film: pow.description = film["synopsis"]
+                    if "visual" in film:pow.visual=film["visual"]
+                    if "category" in film:pow.category=film["category"]
+                    if "year" in film:pow.year=film["year"]
+
+                    pow.save()
+                    work = Work(pow=pow, profil=profil,job=profil.department)
+                    work.save()
+
+
             try:
                 infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
-                sleep(1)
+                sleep(random())
                 if not infos is None:
-                    transact=Profil.objects.filter(id=profil.id)
+
                     if "photo" in infos:transact.update(photo=infos["photo"])
                     if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
                     if "links" in infos:
@@ -199,11 +205,13 @@ def batch(request):
                             for l in infos["links"]:
                                 profil.links.append(l)
                         transact.update(links=profil.links)
-                    lastUpdates[0]=datetime.now().timestamp()
-                    transact.update(auto_updates=lastUpdates)
 
             except:
                 pass
+
+        transact.update(auto_updates=profil.auto_updates)
+
+
 
 
 
@@ -256,12 +264,21 @@ def scrap_linkedin(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def raz(request):
-    log("Effacement des profils")
-    Profil.objects.all().delete()
-    log("Effacement des utilisateurs")
-    User.objects.all().delete()
-    log("Effacement des oeuvres")
-    PieceOfWork.objects.all().delete()
+    filter=request.GET.get("tables","all")
+    log("Effacement de "+filter)
+
+    if "profils" in filter or filter=="all":
+        log("Effacement des profils")
+        Profil.objects.all().delete()
+
+    if "users" in filter  or filter=="all":
+        log("Effacement des utilisateurs")
+        User.objects.all().delete()
+
+    if "pows" in filter  or filter=="all":
+        log("Effacement des oeuvres")
+        PieceOfWork.objects.all().delete()
+
     log("Effacement de la base terminée")
     return Response("Compte effacé",status=200)
 

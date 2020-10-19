@@ -15,6 +15,7 @@ export class ProfilComponent implements OnInit,OnChanges {
 
   @Input("profil") profil:any={};
   @Input("level") level:number=1;
+  @Input("height") height="auto";
   @Input("pows") pows:number=1;
   @Input("showAction") showAction:boolean=true;
   @Input("writeAccess") writeAccess:boolean=false;

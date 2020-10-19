@@ -20,9 +20,9 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  raz() {
+  raz(table:string) {
     this.message="Effacement de la base de données";
-    this.api._get("raz/","",200).subscribe(()=>{
+    this.api._get("raz/","tables="+table,200).subscribe(()=>{
       showMessage(this,"Base de données effacée");
       this.message="";
       this.initdb();

@@ -22,6 +22,7 @@ class ProfilDocument(Document):
     name = fields.TextField(fielddata=True,attr='lastname',fields={'suggest': fields.Completion(),})
     works= fields.ObjectField(properties={"job":fields.TextField(),"title":fields.TextField()})
     promo=fields.TextField(attr="promo")
+    public_url=fields.TextField(attr="public_url")
     class Index:
         name='profils'
         settings={"number_of_shards":1,"number_of_replicas":0}

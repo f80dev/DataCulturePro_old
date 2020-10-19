@@ -2,9 +2,7 @@
 <div class="h-zone">Commandes disponibles</div>
 <br>
 
-<button mat-raised-button mat-button class="app-button" (click)="raz()">Raz</button>
 &nbsp;
-<button mat-raised-button mat-button class="app-button" (click)="router.navigate(['import'])">Importation</button>
 &nbsp;
 <button mat-raised-button mat-button class="app-button" (click)="router.navigate(['search'])">Recherche</button>
 
@@ -20,7 +18,14 @@
 <button mat-raised-button mat-button class="app-button" (click)="send_update()">Demande de mise a jour</button>
 
 <hr>
+Importation des données<br>
+
 <button mat-raised-button mat-button class="app-button" (click)="batch()">Batch de traitement</button>
+<button mat-raised-button mat-button class="app-button" (click)="router.navigate(['import'])">Importation</button>
+<br>
+Raz:
+<button mat-raised-button mat-button class="app-button" (click)="raz('profils')">Profils</button>
+<button mat-raised-button mat-button class="app-button" (click)="raz('pows')">Films</button>
 
 
 <br><br>

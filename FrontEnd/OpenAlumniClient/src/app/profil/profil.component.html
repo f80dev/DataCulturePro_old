@@ -1,4 +1,4 @@
-<mat-card [ngStyle]="{width:width,backgroundColor:backgroundColor,textAlign:'left'}" [class.mat-elevation-z8]="true">
+<mat-card [ngStyle]="{height:height,width:width,backgroundColor:backgroundColor,textAlign:'left'}" [class.mat-elevation-z8]="true">
   <mat-card-header>
     <div mat-card-avatar *ngIf="config.hasPerm('r_photo')">
       <img mat-card-avatar [src]="profil?.photo" class="icon-profil">
@@ -32,7 +32,8 @@
     </button>
 
 
-    <button mat-icon-button mat-button title="Partager / Envoyer ce profil"
+    <button mat-icon-button mat-button
+            title="Partager / Envoyer ce profil"
             *ngIf="profil?.public_url?.length>0 && config.hasPerm('share')"
             (click)="share(profil)">
       <mat-icon>share</mat-icon>
