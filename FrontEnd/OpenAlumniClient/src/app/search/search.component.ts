@@ -5,6 +5,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfigService} from "../config.service";
 import {environment} from "../../environments/environment";
+import {PromptComponent} from "../prompt/prompt.component";
+import {MatDialog} from "@angular/material/dialog";
 
 
 @Component({
@@ -20,6 +22,7 @@ export class SearchComponent implements OnInit {
   dtLastSearch: number=0;
 
   constructor(public api:ApiService,
+              public dialog:MatDialog,
               public toast:MatSnackBar,
               public routes:ActivatedRoute,
               public router: Router,
@@ -97,8 +100,20 @@ export class SearchComponent implements OnInit {
   }
 
   deleteProfil(profil: any) {
-    this.api._delete("profils/"+profil.id).subscribe(()=>{
-      showMessage(this,"Profil supprimé");
-    })
+     this.dialog.open(PromptComponent,{data: {
+        title: 'Confirmation',
+        question: 'Supprimer ce profil ?',
+        onlyConfirm: true,
+        canEmoji: false,
+        lbl_ok: 'Oui',
+        lbl_cancel: 'Non'
+      }}).afterClosed().subscribe((result_code) => {
+      if (result_code != 'no') {
+        this.api._delete("profils/"+profil.id).subscribe(()=>{
+          showMessage(this,"Profil supprimé");
+          this.refresh();
+        })
+      }
+    });
   }
 }

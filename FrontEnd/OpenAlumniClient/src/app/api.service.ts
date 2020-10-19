@@ -92,7 +92,7 @@ export class ApiService {
 
 
 
-   login(user) {
+  login(user) {
     this.http.post('/api-token-auth/', JSON.stringify(user), this.getHttpOptions()).subscribe(
       data => {
         this.updateData(data['token']);
@@ -175,7 +175,9 @@ export class ApiService {
     return this._get("pows","search="+query);
   }
 
-   getfaqs() {
+
+
+  getfaqs() {
     return this.http.get(api('getyaml',"name=faqs"));
   }
 }

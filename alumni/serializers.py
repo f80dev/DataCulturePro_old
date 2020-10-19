@@ -30,10 +30,13 @@ class UserSerializer(HyperlinkedModelSerializer):
         :return:
         """
         log("Création du password, du user et du token")
-        if not "@" in data["username"]:
-            password=data["username"]
+        if "___" in data["username"]:
+            password=data["username"].split("___")[1]
         else:
             password = reset_password(data["email"], data["username"])
+
+        if not "first_name" in data:data["first_name"]=data["email"].split(".")[0]
+        if not "last_name" in data:data["last_name"]=""
 
         user = User.objects.create_user(
             username=data["username"],

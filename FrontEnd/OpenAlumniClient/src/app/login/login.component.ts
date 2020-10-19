@@ -180,11 +180,12 @@ export class LoginComponent implements OnInit {
 
 
 
-  updateCode(code:string){
+  updateCode(code:any){
+    if(typeof(code)=="object")code=code.target.value;
     $$("Vérification du code");
     this.wait_message="Vérification du code";
     debugger
-    this.api.checkCode(code, code).subscribe((r: any) => {
+    this.api.checkCode(this.email, code).subscribe((r: any) => {
       this.wait_message="";
       if (r != null) {
           this.api.token=r.token;
@@ -217,17 +218,18 @@ export class LoginComponent implements OnInit {
           // this.wait_message = "";
           // this.messageCode = "Le compte " + _old_user.email + " existe déjà, veuillez saisir votre mot de passe";
           // this.email = data.email;
-          this.updateCode(data.provider+"_"+data.provider_id)
+          this.updateCode(data.provider_id)
         } else {
           $$("Il n'y a pas de compte à cet email");
           this.email = data.email;
+          debugger
           this.api.register({
-            "email": data.email,
-            "username":data.provider+"_"+data.provider_id,
+            "email": data.email+"___"+data.provider_id,
+            "username":data.email,
             "first_name":data.first_name,
             "last_name":data.last_name,
           }).subscribe((res: any) => {
-            this.updateCode(data.provider+"_"+data.provider_id);
+            this.updateCode(data.provider_id);
             this.resend_code();
             this.messageCode = "Veuillez saisir le code qui vous a été envoyé sur votre adresse mail";
             this.wait_message = "";
