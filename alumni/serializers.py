@@ -34,7 +34,7 @@ class UserSerializer(HyperlinkedModelSerializer):
         if data["username"].startswith("___"):
             password = data["username"].replace("___","")
             data["username"]=data["email"]
-            sendmail("Voici votre code de connexion via mail", data["email"], "welcome_goole", dict({
+            sendmail("Voici votre code de connexion via mail", data["email"], "welcome_google", dict({
                 "email": data["email"],
                 "url_appli": settings.DOMAIN_APPLI + "/?email=" + data["email"],
                 "firstname":data["first_name"],

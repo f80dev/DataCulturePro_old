@@ -184,7 +184,7 @@ export class LoginComponent implements OnInit {
     if(typeof(code)=="object")code=code.target.value;
     $$("Vérification du code");
     this.wait_message="Vérification du code";
-    debugger
+
     this.api.checkCode(this.email, code).subscribe((r: any) => {
       this.wait_message="";
       if (r != null) {
@@ -230,7 +230,6 @@ export class LoginComponent implements OnInit {
             "last_name":data.last_name,
           }).subscribe((res: any) => {
             this.updateCode(data.provider_id);
-            this.resend_code();
             this.messageCode = "Veuillez saisir le code qui vous a été envoyé sur votre adresse mail";
             this.wait_message = "";
           },(err)=>{
