@@ -13,18 +13,18 @@ from OpenAlumni.settings import DOMAIN_APPLI
 
 class Profil(models.Model):
     id=models.AutoField(primary_key=True)
-    firstname=models.CharField(max_length=70, null=False, default='')
+    firstname=models.CharField(max_length=40, null=False, default='')
     lastname=models.CharField(max_length=70, null=False, default='')
     birthdate=models.DateField(null=True)
     mobile=models.CharField(max_length=20,null=True,default="06")
     nationality=models.CharField(max_length=30,null=False,default="Française")
-    department=models.CharField(max_length=30,null=True)
+    department=models.CharField(max_length=35,null=True,default="")
     degree_year=models.IntegerField(null=True)
     email=models.EmailField(default="",null=False)
     photo=models.TextField(blank=True)
     gender=models.CharField(max_length=1,blank=False,default="M",choices=(('M','Male'),('F','Female')))
     linkedin=models.URLField(blank=True)
-    address=models.TextField(null=True,help_text="Adresse postale, rue")
+    address=models.CharField(null=True,max_length=200,help_text="Adresse postale, rue")
     town = models.TextField(null=True,help_text="Adresse postale, ville")
     cp=models.IntegerField(null=True,help_text="Adresse postale, code postal")
     website=models.URLField(null=True)
@@ -62,6 +62,14 @@ class Profil(models.Model):
     @property
     def fullname(self):
         return '%s %s' % (self.firstname, self.lastname)
+
+    @property
+    def str_links(self):
+        if self.links is None:return ""
+        s=""
+        for l in self.links:
+            s=s+l.url+";"
+        return s
 
     def __str__(self):
         return self.email

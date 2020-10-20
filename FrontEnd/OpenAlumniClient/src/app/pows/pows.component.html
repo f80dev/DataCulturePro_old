@@ -29,14 +29,15 @@
       </mat-expansion-panel-header>
 
       <div style="text-align: center;">
-        <table style="width: 100%;">
+        <table style="width: 100%;padding: 3px;">
           <tr>
             <td *ngIf="pow.visual?.length>0">
               <img [src]="pow.visual"
-                   style="width: 125px;"
+                   class="image-photo"
+                   style="width: 100px;"
               >
             </td>
-            <td style="font-size: small;line-height: 97%;text-align: left;">
+            <td style="font-size: small;line-height: 97%;text-align: left;padding:5px;width: 90%;display: inline-block;">
               {{pow.description}}
             </td>
           </tr>

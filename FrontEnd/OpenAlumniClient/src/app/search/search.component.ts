@@ -7,7 +7,6 @@ import {ConfigService} from "../config.service";
 import {environment} from "../../environments/environment";
 import {PromptComponent} from "../prompt/prompt.component";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSidenav} from "@angular/material/sidenav";
 import {MatSelect} from "@angular/material/select";
 
 
@@ -51,8 +50,8 @@ export class SearchComponent implements OnInit {
       this.message="Chargement des profils";
 
       param=translateQuery(prefixe+this.query.value);
-      if(this.order)param=param+"&order="+this.order.value;
-      debugger
+      if(this.order)param=param+"&ordering="+this.order.value;
+
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";
         this.profils=[];
@@ -85,13 +84,17 @@ export class SearchComponent implements OnInit {
 
 
   openStats() {
-    //router.navigate(['stats'])
     open(environment.domain_server+"/graphql","stats");
   }
 
   handle=null;
   searchInTitle: boolean = false;
-  fields=[{field:"Nom",value:"lastname"},{field:"Prénom",value:"firstname"},{field:"Promo",value:"promo"}]
+  fields=[
+    {field:"Nom",value:"lastname"},
+    {field:"Prénom",value:"firstname"},
+    {field:"Métier",value:"job"},
+    {field:"Promo",value:"promo"}]
+
 
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);

@@ -1,4 +1,4 @@
-<mat-card [ngStyle]="{'backgroundColor':backgroundColor}">
+<mat-card [ngStyle]="{'backgroundColor':backgroundColor,'text-align':'left','min-width':'350px','height':height}">
   <mat-card-header>
     <div mat-card-avatar>
       <img src="/assets/img/movie.png" class="icon-profil">
@@ -16,7 +16,7 @@
   <mat-card-actions *ngIf="showAction" style="text-align: left;">
 
     <button mat-button mat-icon-button
-            *ngIf="work?.pow?.links.length>0"
+            *ngIf="work?.pow?.links?.length>0"
             (click)="openInfo(work.pow.links[0])"
             [title]="work?.pow.links[0].text">
       <mat-icon>info</mat-icon>

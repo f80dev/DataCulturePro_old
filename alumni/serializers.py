@@ -110,7 +110,7 @@ class ProfilSerializer(serializers.ModelSerializer):
         fields=["id","lastname","firstname",
                 "mobile","email","photo","gender",
                 "linkedin","degree_year","department",
-                "dtLastUpdate",
+                "dtLastUpdate","links","str_links",
                 "cp","public_url","fullname","works",
                 "address","town","promo"]
 
@@ -138,10 +138,11 @@ class ExtraPOWSerializer(HyperlinkedModelSerializer):
 
 #ProfilDocument utilisé par elasticsearch
 class ProfilDocumentSerializer(DocumentSerializer):
+    works=serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         document=ProfilDocument
         fields=("id","firstname","lastname",
-                "email","name","works",
+                "email","name",
                 "degree_year","public_url",
                 "photo","mobile","cp","department",
                 "address","town","promo",

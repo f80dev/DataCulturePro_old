@@ -1,10 +1,21 @@
 <div class="mainform">
-
   <div class="h-zone">Réalisations</div>
   <div class="wrap-list">
     <div *ngFor="let wrk of works" style="max-width: 400px;margin:1%;">
-      <app-work [work]="wrk" backgroundColor="#265480" [showAction]="true">
+      <app-work [work]="wrk" backgroundColor="#155480" height="200px" [showAction]="true">
+        <div style="display: flex;font-size: small;">
+          <div *ngIf="wrk.pow.visual?.length>0" style="flex: 40%">
+             <img [src]="wrk.pow.visual"
+                   class="image-photo"
+                   style="width: 100px;"
+              >
+          </div>
+          <div style="flex: 55%">
+            {{wrk.pow.description}}
+          </div>
+        </div>
         <small>{{wrk.comment}}</small>
+
       </app-work>
     </div>
   </div>

@@ -31,6 +31,7 @@ export class ProfilComponent implements OnInit,OnChanges {
               public _clipboardService:ClipboardService) { }
 
   ngOnInit(): void {
+
   }
 
   share(profil:any){

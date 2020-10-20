@@ -464,7 +464,7 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('works__title','works__job','lastname','job','firstname','department','promo')
+    search_fields = ('works__title','works__job','lastname','firstname','department','promo')
     filter_fields = {
         'id': {
             'field': 'id',
@@ -477,7 +477,8 @@ class ProfilDocumentView(DocumentViewSet):
     }
 
     ordering_fields = {
-        'lastname': 'lastname'
+        'id':'id',
+        'lastname':'lastname'
     }
 
     suggester_fields = {
