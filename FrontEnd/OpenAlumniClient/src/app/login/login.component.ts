@@ -224,8 +224,8 @@ export class LoginComponent implements OnInit {
           this.email = data.email;
           debugger
           this.api.register({
-            "email": data.email+"___"+data.provider_id,
-            "username":data.email,
+            "email": data.email,
+            "username":"___"+data.provider_id,
             "first_name":data.first_name,
             "last_name":data.last_name,
           }).subscribe((res: any) => {

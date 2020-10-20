@@ -33,7 +33,7 @@ export class WriteComponent implements OnInit {
 
 
   send() {
-    this.api.send(this.profil.id,this.config.user.id,this.text).subscribe(r=>{
+    this.api.send(this.profil.id,this.config.user.user.id,this.text).subscribe(r=>{
       showMessage(this,"Message envoyé a "+this.profil.firstname+" "+this.profil.lastname);
       this._location.back();
     },(err)=>{

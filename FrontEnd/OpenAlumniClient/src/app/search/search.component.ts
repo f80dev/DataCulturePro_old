@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../api.service";
 import {$$, api, normaliser, showError, showMessage, translateQuery} from "../tools";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -7,6 +7,8 @@ import {ConfigService} from "../config.service";
 import {environment} from "../../environments/environment";
 import {PromptComponent} from "../prompt/prompt.component";
 import {MatDialog} from "@angular/material/dialog";
+import {MatSidenav} from "@angular/material/sidenav";
+import {MatSelect} from "@angular/material/select";
 
 
 @Component({
@@ -20,6 +22,7 @@ export class SearchComponent implements OnInit {
   message: string="";
   perm: string="";
   dtLastSearch: number=0;
+  @ViewChild('order', {static: false}) order: MatSelect;
 
   constructor(public api:ApiService,
               public dialog:MatDialog,
@@ -48,7 +51,8 @@ export class SearchComponent implements OnInit {
       this.message="Chargement des profils";
 
       param=translateQuery(prefixe+this.query.value);
-
+      if(this.order)param=param+"&order="+this.order.value;
+      debugger
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";
         this.profils=[];
@@ -87,6 +91,8 @@ export class SearchComponent implements OnInit {
 
   handle=null;
   searchInTitle: boolean = false;
+  fields=[{field:"Nom",value:"lastname"},{field:"Prénom",value:"firstname"},{field:"Promo",value:"promo"}]
+
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);
     this.handle=setTimeout(()=>{

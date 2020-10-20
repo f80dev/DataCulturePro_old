@@ -104,6 +104,7 @@ export class ApiService {
 
 
   checkCode(username: string, code: string) {
+    $$("Vérification du code pour username="+username);
     let body={"username":username,"password":code}
     return this._post("api-token-auth/", "",body);
   }

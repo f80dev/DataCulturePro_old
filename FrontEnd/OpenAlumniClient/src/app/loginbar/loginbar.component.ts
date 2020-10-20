@@ -55,9 +55,8 @@ export class LoginbarComponent implements OnInit,OnChanges {
         lbl_cancel: 'Non'
       }}).afterClosed().subscribe((result_code) => {
       if (result_code != 'no') {
-        this.api._delete("users/"+this.config.user.id+"/","").subscribe(()=>{
+        this.api._delete("users/"+this.config.user.user.id+"/","").subscribe(()=>{
               showMessage(this,"Votre compte est effacé");
-              this.api.logout();
               window.location.reload();
             })
       }

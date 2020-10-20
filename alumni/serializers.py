@@ -11,8 +11,9 @@ from rest_framework.validators import UniqueValidator
 from rsa import encrypt
 
 from OpenAlumni import settings
-from OpenAlumni.Tools import reset_password, log
+from OpenAlumni.Tools import reset_password, log, sendmail
 from OpenAlumni.passwords import DB_PASSWORD
+from OpenAlumni.settings import APPNAME
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 
@@ -30,8 +31,16 @@ class UserSerializer(HyperlinkedModelSerializer):
         :return:
         """
         log("Création du password, du user et du token")
-        if "___" in data["username"]:
-            password=data["username"].split("___")[1]
+        if data["username"].startswith("___"):
+            password = data["username"].replace("___","")
+            data["username"]=data["email"]
+            sendmail("Voici votre code de connexion via mail", data["email"], "welcome_goole", dict({
+                "email": data["email"],
+                "url_appli": settings.DOMAIN_APPLI + "/?email=" + data["email"],
+                "firstname":data["first_name"],
+                "code": password,
+                "appname": APPNAME
+            }))
         else:
             password = reset_password(data["email"], data["username"])
 

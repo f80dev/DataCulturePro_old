@@ -36,6 +36,7 @@ export class AppComponent {
   logout() {
     this.api.logout();
     this.config.raz_user();
+    window.location.reload();
   }
 
 

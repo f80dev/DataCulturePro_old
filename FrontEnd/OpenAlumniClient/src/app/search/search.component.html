@@ -7,7 +7,7 @@
 
   <app-tuto [delay]="10" label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
 
-  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
+  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: large;" autofocus>
     <mat-label>Rechercher un profil</mat-label>
       <input matInput matNativeControl
              title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
@@ -17,6 +17,16 @@
                 matSuffix style="cursor: pointer"
                 (click)="clearQuery()">cancel</mat-icon>
     </mat-form-field>
+  &nbsp;&nbsp;&nbsp;
+  <mat-form-field appearance="legacy" style="max-width:200px;width:96%;font-size: large;" autofocus>
+    <mat-label>Trier par</mat-label>
+     <mat-select #order (selectionChange)="refresh()">
+      <mat-option *ngFor="let f of fields" [value]="f.value">
+        {{f.field}}
+      </mat-option>
+  </mat-select>
+    </mat-form-field>
+
 
   <div *ngIf="config.hasPerm('advanced_search')">
 <!--       <mat-checkbox [checked]="searchInTitle">-->
