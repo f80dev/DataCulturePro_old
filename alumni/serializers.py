@@ -111,7 +111,7 @@ class ProfilSerializer(serializers.ModelSerializer):
                 "mobile","email","photo","gender",
                 "linkedin","degree_year","department",
                 "dtLastUpdate","links","str_links",
-                "cp","public_url","fullname","works",
+                "cp","public_url","fullname","works","cursus"
                 "address","town","promo"]
 
 
@@ -142,7 +142,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
     class Meta:
         document=ProfilDocument
         fields=("id","firstname","lastname",
-                "email","name",
+                "email","name","cursus",
                 "degree_year","public_url",
                 "photo","mobile","cp","department",
                 "address","town","promo",

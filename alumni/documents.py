@@ -29,7 +29,11 @@ class ProfilDocument(Document):
 
     class Django(object):
         model=Profil
-        fields=["id","firstname","lastname","email","department","cp","mobile","photo","address","town","degree_year"]
+        fields=["id","firstname","lastname",
+                "email","department",
+                "cp","cursus",
+                "mobile","photo","address",
+                "town","degree_year"]
 
     def get_queryset(self):
         return super().get_queryset().select_related('extrauser')

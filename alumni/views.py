@@ -376,46 +376,69 @@ def movie_importer(request):
 @permission_classes([AllowAny])
 def importer(request,format=None):
     log("Importation de profil")
-    txt=str(base64.b64decode(str(request.body).split("base64,")[1]),"utf-8")
+    data=base64.b64decode(str(request.body).split("base64,")[1])
+
+    for _encoding in ["utf-8","ansi"]:
+        try:
+            txt=str(data, encoding=_encoding)
+            break
+        except:
+            pass
+
     d =csv.reader(StringIO(txt), delimiter=";")
     i=0
     record=0
     for row in d:
-        if i>0:
-            if row[5]=="1":
-                if len(row[34])==0:
-                    if row[0]=="Monsieur":
-                        photo="/assets/img/boy.png"
+        if i==0:
+            header=[x.lower() for x in row]
+        else:
+            if row[header.index("treat")]=="1":
+
+                firstname=row[header.index("firstname")]
+                lastname=row[header.index("lastname")]
+                email=row[header.index("email")]
+                #Eligibilité
+                if len(lastname)>2 and len(lastname)+len(firstname)>5 and len(email)>0:
+                    if len(row[header.index("photo")])==0:
+                        if row[header.index("genre")]=="Monsieur" or row[header.index("genre")]=="M." or row[header.index("genre")].startswith("Mr"):
+                            photo="/assets/img/boy.png"
+                        else:
+                            photo = "/assets/img/girl.png"
                     else:
-                        photo = "/assets/img/girl.png"
-                else:
-                    photo=stringToUrl(row[34])
+                        photo=stringToUrl(row[header.index("photo")])
 
-                #Calcul
-                ts=dateToTimestamp(row[3])
-                dt = None
-                if not ts is None:dt=datetime.fromtimestamp(ts)
+                    #Calcul
+                    ts=dateToTimestamp(row[header.index("birthday")])
+                    dt = None
+                    if not ts is None:dt=datetime.fromtimestamp(ts)
 
-                profil=Profil(
-                    firstname=row[1],
-                    lastname=row[2],
-                    nationality=row[4],
-                    birthdate=dt,
-                    department=row[8],
-                    degree_year=int(row[7]),
-                    cp=row[11],
-                    website=stringToUrl(row[18]),
-                    email=row[14],
-                    photo=photo,
-                    linkedin=row[33]
-                )
-                try:
-                    rc=profil.save()
-                    record=record+1
-                except Exception as inst:
-                    log("Probléme d'enregistrement"+str(inst))
+                    profil=Profil(
+                        firstname=firstname,
+                        lastname=lastname,
+                        mobile=row[header.index("mobile")][:20],
+                        nationality=row[header.index("nationality")],
+                        birthdate=dt,
+                        department=row[header.index("job")][:60],
+                        degree_year=row[header.index("promo")],
+                        address=row[header.index("address")][:200],
+                        town=row[header.index("town")][:50],
+                        cp=row[header.index("cp")],
+                        website=stringToUrl(row[header.index("website")]),
+                        email=email,
+                        photo=photo,
+                        linkedin=row[header.index("linkedin")],
+                        cursus=row[header.index("cursus")],
+                    )
+                    try:
+                        rc=profil.save()
+                        record=record+1
+                    except Exception as inst:
+                        log("Probléme d'enregistrement de "+email+" :"+str(inst))
         i=i+1
-    return Response(str(record)+" profils importés",200)
+
+    cr=str(record)+" profils importés"
+    log(cr)
+    return Response(cr,200)
 
 
 
@@ -471,6 +494,7 @@ class ProfilDocumentView(DocumentViewSet):
             'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE,],
         },
         'name': 'name',
+        'cursus': 'cursus',
         'title':'works__title',
         'promo':'promo',
         'job':'department'
