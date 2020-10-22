@@ -32,6 +32,7 @@ LinkedInApplication(authentication)
 
 
 def stringToUrl(txt:str):
+    if txt is None:return None
     if txt=="http://":return ""
     if not txt.startswith("http"):txt="http://"+txt
     return txt

@@ -9,7 +9,7 @@
     </mat-card-title>
     <mat-card-subtitle *ngIf="config.hasPerm('r_promo')">
       <span *ngIf="profil?.cursus=='P'">Cursus Pro - </span>
-       Promotion
+      <span *ngIf="profil?.cursus=='S'">Promotion </span>
       {{profil?.degree_year}}
     </mat-card-subtitle>
   </mat-card-header>

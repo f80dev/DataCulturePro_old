@@ -65,7 +65,7 @@
             <td style="width: 10%;">
               <mat-icon style="font-size: small;cursor: pointer;padding:0px;margin:0px;height: 17px;"
                         title="Cliquer pour consulter le profil"
-                        (click)="open_search(work.name)">account_circle</mat-icon>
+                        (click)="open_search(work.name.split(' ')[1])">account_circle</mat-icon>
             </td>
           </tr>
         </table>

@@ -173,7 +173,10 @@ def batch(request):
                 pow = PieceOfWork.objects.filter(title=film["title"])
                 if not pow.exists():
                     log("Ajout de " + film["title"])
-                    pow = PieceOfWork(title=film["title"])
+                    pow = PieceOfWork(
+                        title=film["title"],
+                        links={"links":[{"text":"unifrance","url":l["url"]}]}
+                    )
                     if "synopsis" in film: pow.description = film["synopsis"]
                     if "visual" in film:pow.visual=film["visual"]
                     if "category" in film:pow.category=film["category"]
@@ -378,9 +381,14 @@ def movie_importer(request):
 def importer(request,format=None):
 
     header=list()
-    def idx(col:str):
+    def idx(col:str,row=None,default=None):
         for c in col.lower().split(","):
-            if c in header:return header.index(c)
+            if c in header:
+                if row is not None:
+                    return row[header.index(c)]
+                else:
+                    return header.index(c)
+        return default
 
 
 
@@ -401,50 +409,49 @@ def importer(request,format=None):
         if i==0:
             header=[x.lower() for x in row]
         else:
-            if row[idx("treat")]=="1":
-
-                firstname=row[idx("firstname,prenom")]
-                lastname=row[idx("lastname,nom")]
-                email=row[idx("email,mail")]
-                #Eligibilité
-                if len(lastname)>2 and len(lastname)+len(firstname)>5 and len(email)>0:
-                    if len(row[idx("photo")])==0:
-                        if row[idx("genre,civilite")]=="Monsieur" or \
-                                row[idx("genre,civilite")]=="M." or \
-                                row[idx("genre,civilite")].startswith("Mr"):
-                            photo="/assets/img/boy.png"
-                        else:
-                            photo = "/assets/img/girl.png"
+            firstname=row[idx("firstname,prenom")]
+            lastname=row[idx("lastname,nom")]
+            email=row[idx("email,mail")]
+            idx_photo=idx("photo,picture,image")
+            #Eligibilité
+            if len(lastname)>2 and len(lastname)+len(firstname)>5 and len(email)>4 and "@" in email:
+                if idx_photo is None or len(row[idx_photo])==0:
+                    if row[idx("genre,civilite")]=="Monsieur" or \
+                            row[idx("genre,civilite")]=="M." or \
+                            row[idx("genre,civilite")].startswith("Mr"):
+                        photo="/assets/img/boy.png"
                     else:
-                        photo=stringToUrl(row[idx("photo")])
+                        photo = "/assets/img/girl.png"
+                else:
+                    photo=stringToUrl(row[idx("photo")])
 
-                    #Calcul
-                    ts=dateToTimestamp(row[idx("birthday,anniversaire,datenaissance")])
-                    dt = None
-                    if not ts is None:dt=datetime.fromtimestamp(ts)
+                #Calcul
+                ts=dateToTimestamp(row[idx("birthday,anniversaire,datenaissance")])
+                dt = None
+                if not ts is None:dt=datetime.fromtimestamp(ts)
 
-                    profil=Profil(
-                        firstname=firstname,
-                        lastname=lastname,
-                        mobile=row[idx("mobile,telephone,tel")][:20],
-                        nationality=row[idx("nationality,country,pays")],
-                        birthdate=dt,
-                        department=row[idx("job,departement,department,metier")][:60],
-                        degree_year=row[idx("promo,promotion,anneesortie")],
-                        address=row[idx("address,adresse")][:200],
-                        town=row[idx("town,ville")][:50],
-                        cp=row[idx("cp,codepostal")],
-                        website=stringToUrl(row[idx("website,siteweb,site,url")]),
-                        email=email,
-                        photo=photo,
-                        linkedin=row[idx("linkedin")],
-                        cursus=row[idx("cursus")],
-                    )
-                    try:
-                        rc=profil.save()
-                        record=record+1
-                    except Exception as inst:
-                        log("Probléme d'enregistrement de "+email+" :"+str(inst))
+                profil=Profil(
+                    firstname=firstname,
+                    lastname=lastname,
+                    mobile=row[idx("mobile,telephone,tel")][:20],
+                    nationality=row[idx("nationality,country,pays")],
+                    birthdate=dt,
+                    department=idx("job,departement,department,metier",row,"")[:60],
+                    degree_year=row[idx("promo,promotion,anneesortie")],
+                    address=row[idx("address,adresse")][:200],
+                    town=idx("town,ville",row,"")[:50],
+                    cp=idx("cp,codepostal,code_postal,postal_code,postalcode",row,"")[:5],
+                    website=stringToUrl(idx("website,siteweb,site,url",row)),
+                    email=email,
+                    photo=photo,
+                    linkedin=idx("linkedin",row),
+                    cursus=idx("cursus",row,"S"),
+                )
+                try:
+                    rc=profil.save()
+                    record=record+1
+                except Exception as inst:
+                    log("Probléme d'enregistrement de "+email+" :"+str(inst))
         i=i+1
 
     cr=str(record)+" profils importés"

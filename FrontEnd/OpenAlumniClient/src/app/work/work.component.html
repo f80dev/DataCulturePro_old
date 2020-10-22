@@ -4,7 +4,10 @@
       <img src="/assets/img/movie.png" class="icon-profil">
     </div>
     <mat-card-title>{{work?.pow?.title}}</mat-card-title>
-    <mat-card-subtitle>{{work.job}} du {{work.dtStart | date:'dd/MM'}} au {{work.dtStart | date:'dd/MM/yy'}}</mat-card-subtitle>
+    <mat-card-subtitle>
+      {{work.job}} du {{work.dtStart | date:'dd/MM'}}
+      au
+      {{work.dtStart | date:'dd/MM/yy'}}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -13,7 +16,8 @@
 
   </mat-card-content>
 
-  <mat-card-actions *ngIf="showAction" style="text-align: left;">
+  <mat-card-actions *ngIf="showAction"
+                    style="text-align: left;">
 
     <button mat-button mat-icon-button
             *ngIf="work?.pow?.links?.length>0"

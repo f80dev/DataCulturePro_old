@@ -24,7 +24,11 @@ export class WorksComponent implements OnInit {
         showMessage(this,"Aucune production référencée pour ce profil");
         this._location.back();
       }else{
-        this.works=r.results;
+        this.works=[];
+        for(let w of r.results){
+          w.pow.short_desc=w.pow.description.substr(0,Math.min(200,w.pow.description.length));
+          this.works.push(w);
+        }
       }
     });
   }
