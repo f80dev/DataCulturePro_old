@@ -371,10 +371,19 @@ def movie_importer(request):
 
 
 
+
 #http://localhost:8000/api/importer/
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def importer(request,format=None):
+
+    header=list()
+    def idx(col:str):
+        for c in col.lower().split(","):
+            if c in header:return header.index(c)
+
+
+
     log("Importation de profil")
     data=base64.b64decode(str(request.body).split("base64,")[1])
 
@@ -392,42 +401,44 @@ def importer(request,format=None):
         if i==0:
             header=[x.lower() for x in row]
         else:
-            if row[header.index("treat")]=="1":
+            if row[idx("treat")]=="1":
 
-                firstname=row[header.index("firstname")]
-                lastname=row[header.index("lastname")]
-                email=row[header.index("email")]
+                firstname=row[idx("firstname,prenom")]
+                lastname=row[idx("lastname,nom")]
+                email=row[idx("email,mail")]
                 #Eligibilité
                 if len(lastname)>2 and len(lastname)+len(firstname)>5 and len(email)>0:
-                    if len(row[header.index("photo")])==0:
-                        if row[header.index("genre")]=="Monsieur" or row[header.index("genre")]=="M." or row[header.index("genre")].startswith("Mr"):
+                    if len(row[idx("photo")])==0:
+                        if row[idx("genre,civilite")]=="Monsieur" or \
+                                row[idx("genre,civilite")]=="M." or \
+                                row[idx("genre,civilite")].startswith("Mr"):
                             photo="/assets/img/boy.png"
                         else:
                             photo = "/assets/img/girl.png"
                     else:
-                        photo=stringToUrl(row[header.index("photo")])
+                        photo=stringToUrl(row[idx("photo")])
 
                     #Calcul
-                    ts=dateToTimestamp(row[header.index("birthday")])
+                    ts=dateToTimestamp(row[idx("birthday,anniversaire,datenaissance")])
                     dt = None
                     if not ts is None:dt=datetime.fromtimestamp(ts)
 
                     profil=Profil(
                         firstname=firstname,
                         lastname=lastname,
-                        mobile=row[header.index("mobile")][:20],
-                        nationality=row[header.index("nationality")],
+                        mobile=row[idx("mobile,telephone,tel")][:20],
+                        nationality=row[idx("nationality,country,pays")],
                         birthdate=dt,
-                        department=row[header.index("job")][:60],
-                        degree_year=row[header.index("promo")],
-                        address=row[header.index("address")][:200],
-                        town=row[header.index("town")][:50],
-                        cp=row[header.index("cp")],
-                        website=stringToUrl(row[header.index("website")]),
+                        department=row[idx("job,departement,department,metier")][:60],
+                        degree_year=row[idx("promo,promotion,anneesortie")],
+                        address=row[idx("address,adresse")][:200],
+                        town=row[idx("town,ville")][:50],
+                        cp=row[idx("cp,codepostal")],
+                        website=stringToUrl(row[idx("website,siteweb,site,url")]),
                         email=email,
                         photo=photo,
-                        linkedin=row[header.index("linkedin")],
-                        cursus=row[header.index("cursus")],
+                        linkedin=row[idx("linkedin")],
+                        cursus=row[idx("cursus")],
                     )
                     try:
                         rc=profil.save()
