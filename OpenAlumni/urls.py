@@ -19,7 +19,6 @@ from django.urls import path, include
 from graphene_django.views import GraphQLView
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.urlpatterns import format_suffix_patterns
 
 from alumni import views
 from alumni.schema import schema
@@ -43,6 +42,7 @@ urlpatterns = [
     path('api/send_to/', views.send_to),
     path('api/test/', views.test),
     path('api/batch/', views.batch),
+    path('api/search/', views.search),
     path('api/getyaml/', views.getyaml),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),

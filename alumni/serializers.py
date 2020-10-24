@@ -80,7 +80,7 @@ class ExtraUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = ExtraUser
-        fields  = ['id','user','perm','acceptSponsor','sponsorOf','profil']
+        fields  = ['id','user','perm','acceptSponsor','sponsorOf','profil',"ask","friends"]
 
 
 
@@ -108,10 +108,10 @@ class ProfilSerializer(serializers.ModelSerializer):
     class Meta:
         model=Profil
         fields=["id","lastname","firstname",
-                "mobile","email","photo","gender",
+                "mobile","email","photo","gender","job",
                 "linkedin","degree_year","department",
                 "dtLastUpdate","links","str_links",
-                "cp","public_url","fullname","works","cursus"
+                "cp","public_url","fullname","works","cursus",
                 "address","town","promo"]
 
 
@@ -120,13 +120,13 @@ class ExtraWorkSerializer(serializers.ModelSerializer):
     pow= POWSerializer(many=False,read_only=True)
     class Meta:
         model=Work
-        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job"]
+        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job","source"]
 
 
 class WorkSerializer(serializers.ModelSerializer):
     class Meta:
         model=Work
-        fields=["profil","pow","dtStart","dtEnd","duration","comment","job","title"]
+        fields=["profil","pow","dtStart","dtEnd","duration","comment","job","title","source"]
 
 
 
@@ -142,9 +142,9 @@ class ProfilDocumentSerializer(DocumentSerializer):
     class Meta:
         document=ProfilDocument
         fields=("id","firstname","lastname",
-                "email","name","cursus",
+                "name","cursus","job",
                 "degree_year","public_url",
-                "photo","mobile","cp","department",
+                "photo","cp","department",
                 "address","town","promo",
                 "dtLastUpdate")
 

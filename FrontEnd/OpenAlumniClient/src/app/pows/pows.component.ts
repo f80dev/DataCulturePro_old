@@ -39,6 +39,8 @@ export class PowsComponent implements OnInit {
   }
 
   handle:any;
+  message: string ="";
+
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);
     this.handle=setTimeout(()=>{
@@ -51,7 +53,9 @@ export class PowsComponent implements OnInit {
   private refresh() {
     let param=translateQuery(this.query.value);
     param=param.replace("works__title","title__terms");
+    this.message="Recherche des films";
     this.api._get("powsdoc",param).subscribe((r:any)=>{
+      this.message="";
       this.pows=[];
       for(let i of r.results){
         let tmp=[];

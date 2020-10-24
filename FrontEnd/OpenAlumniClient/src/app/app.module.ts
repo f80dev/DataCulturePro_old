@@ -62,6 +62,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { PowsComponent } from './pows/pows.component';
+import {NgChatModule} from "ng-chat";
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { PowsComponent } from './pows/pows.component';
         SocialLoginModule,
         MatFormFieldModule,
         MatInputModule,
+      NgChatModule,
         MatDialogModule,
         MatButtonModule,
         MatIconModule,

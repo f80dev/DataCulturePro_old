@@ -16,6 +16,9 @@ perms:
   - tag: delete_pow
     description: la suppression des oeuvres
 
+  - tag: ask_friend
+    description: à la demande d'ami
+
   - tag: delete_profil
     description: la suppression d'un profil
 

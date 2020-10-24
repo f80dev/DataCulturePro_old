@@ -1,10 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ConfigService} from "./config.service";
 import {ApiService} from "./api.service";
 import {$$} from "./tools";
 import {Router} from "@angular/router";
 import {environment} from "../environments/environment";
 import {MatSidenav} from "@angular/material/sidenav";
+import {ChatAdapter} from "ng-chat";
+import { MyAdapter } from './MyAdapter';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,7 @@ export class AppComponent {
   message: string="";
   appVersion: any;
   @ViewChild('drawer', {static: false}) drawer: MatSidenav;
+  public adapter: ChatAdapter = new MyAdapter();
 
     constructor(public config: ConfigService,public api:ApiService,public router:Router){
       this.appVersion=environment.appVersion;

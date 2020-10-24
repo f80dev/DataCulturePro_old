@@ -2,7 +2,7 @@ import datetime
 
 import django
 from django.contrib.auth.models import AbstractUser, User
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db import models
 
 # Create your models here.
@@ -19,6 +19,7 @@ class Profil(models.Model):
     mobile=models.CharField(max_length=20,null=True,default="06")
     nationality=models.CharField(max_length=30,null=False,default="Française")
     department=models.CharField(max_length=60,null=True,default="")
+    job=models.CharField(max_length=60,null=True,default="")
     degree_year=models.IntegerField(null=True)
     email=models.EmailField(null=False,unique=True)
     photo=models.TextField(blank=True)
@@ -35,6 +36,7 @@ class Profil(models.Model):
     biography=models.TextField(null=True,max_length=2000)
     links = JSONField(null=True, help_text="Liens vers des références externes au profil")
     auto_updates=models.CharField(max_length=300,null=False, default="0,0,0,0,0,0",help_text="Date de mise a jour")
+    advices=JSONField(null=True,help_text="Le système fourni des conseils pour augmenter le rayonnement d'une personne")
 
     class Meta(object):
         ordering=["lastname"]
@@ -96,15 +98,8 @@ class ExtraUser(models.Model):
     acceptSponsor=models.BooleanField(null=False,default=False)
     sponsorOf=models.ForeignKey('ExtraUser',null=True,on_delete=models.PROTECT)
     level=models.IntegerField(default=0,help_text="Niveau de l'utilisateur")
-
-
-
-# @receiver(post_save, sender=User)
-# def save_user_extra(sender, instance, **kwargs):
-#     instance.user.save()
-
-#________________________________________________________________________________________________
-
+    ask=ArrayField(base_field=models.IntegerField(null=False,default=0),null=True)
+    friends=ArrayField(base_field=models.IntegerField(null=False,default=0),null=True)
 
 
 
@@ -123,6 +118,7 @@ class Work(models.Model):
     duration=models.IntegerField(default=0,null=False)
     comment=models.TextField(max_length=400,null=False,default="",blank=True)
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
+    source=models.URLField(null=True)
 
     @property
     def title(self):

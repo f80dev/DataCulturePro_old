@@ -91,9 +91,10 @@ export class SearchComponent implements OnInit {
   searchInTitle: boolean = false;
   fields=[
     {field:"Nom",value:"lastname"},
-    {field:"Prénom",value:"firstname"},
-    {field:"Métier",value:"job"},
-    {field:"Promo",value:"promo"}]
+    {field:"Formation",value:"formation"},
+    {field:"Promo",value:"promo"},
+    {field:"Promo inversé",value:"-promo"},
+    ]
 
 
   onQuery($event: KeyboardEvent) {
@@ -124,5 +125,16 @@ export class SearchComponent implements OnInit {
         })
       }
     });
+  }
+
+  askfriend(profil: any) {
+    debugger
+    this.api._get("askfriend","from="+this.config.user.id+"&to="+profil.id).subscribe(()=>{
+      showMessage(this,"Votre demande est envoyée");
+    })
+  }
+
+  help() {
+    this.router.navigate(["faqs"],{queryParams:{open:'query'}});
   }
 }

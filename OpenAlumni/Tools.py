@@ -80,14 +80,14 @@ def extract_film_from_unifrance(url:str):
     rc=dict()
     if not url.startswith("http"):
         log("On passe par la page de recherche pour retrouver le titre")
-        page = wikipedia.BeautifulSoup(wikipedia.requests.get("https://unifrance.org/recherche?q="+parse.quote(url), headers={'User-Agent': 'Mozilla/5.0'}).text)
+        page = wikipedia.BeautifulSoup(wikipedia.requests.get("https://unifrance.org/recherche?q="+parse.quote(url), headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
         _link=page.find("a",attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]")})
         if _link is None:return rc
 
         url=_link.get("href")
 
     r=wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0',"accept-encoding": "gzip, deflate"})
-    page = wikipedia.BeautifulSoup(str(r.content,encoding="utf-8"))
+    page = wikipedia.BeautifulSoup(str(r.content,encoding="utf-8"),"html5lib")
     _title=page.find('h1', attrs={'itemprop': "name"})
     if not _title is None:rc["title"]=_title.text
 
@@ -115,16 +115,23 @@ def extract_film_from_unifrance(url:str):
 
 def extract_actor_from_unifrance(name="céline sciamma"):
     url="https://www.unifrance.org/recherche/personne?q=$query&sort=pertinence".replace("$query",parse.quote(name))
-    page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text)
+    page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
     links=page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/annuaires/personne/")})
 
     rc=list()
     if len(links)>0:
-        page=wikipedia.BeautifulSoup(wikipedia.requests.get(links[0].get("href"), headers={'User-Agent': 'Mozilla/5.0'}).text)
+        page=wikipedia.BeautifulSoup(wikipedia.requests.get(links[0].get("href"), headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
+
+        photo = ""
+        _photo = page.find('div', attrs={'class': "profil-picture pull-right"})
+        if not _photo is None: photo = _photo.find("a").get("href")
+
         for l in page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]*/")}):
             rc.append({"url":l.get("href"),"text":l.get("text")})
+    else:
+        return None
 
-    return {"links":rc}
+    return {"links":rc,"photo":photo}
 
 
 
@@ -155,7 +162,7 @@ def extract_actor_from_wikipedia(name="céline sciamma"):
         except:
             pass
 
-        html:wikipedia.BeautifulSoup= wikipedia.BeautifulSoup(page.html())
+        html:wikipedia.BeautifulSoup= wikipedia.BeautifulSoup(page.html(),"html5lib")
         #Recherche de la section des films
         # for link in html.findAll('a', attrs={'href': wikipedia.re.compile("^http://")}):
         #     if "film" in link.text:

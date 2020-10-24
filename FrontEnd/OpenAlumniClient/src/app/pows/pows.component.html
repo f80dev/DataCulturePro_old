@@ -2,7 +2,6 @@
 
   <app-tuto label="Vous pouvez également consulter la liste des élèves de la FEMIS (anciens et actuels), via le menu latéral"></app-tuto>
 
-
   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
     <mat-label>Rechercher un film</mat-label>
     <input matInput matNativeControl
@@ -14,6 +13,10 @@
               (click)="clearQuery()">cancel</mat-icon>
   </mat-form-field>
   <br>
+
+  <div class="div-center">
+    <app-hourglass [message]="message"></app-hourglass>
+  </div>
 
 
   <div class="wrap-list" style="margin: 5px;">

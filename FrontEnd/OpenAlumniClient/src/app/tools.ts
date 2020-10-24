@@ -20,15 +20,22 @@ export function translateQuery(text:string):string {
       "nom":"lastname",
       "prenom":"firstname",
       "prénom":"firstname",
-      "ville":"town",
       "code postal":"cp",
       "film":"works__title",
+      "ville":"town",
       "promotion":"promo",
-      "titre":"works__title",
       "job":"works__job"
     }
     for(let k in dict){
       text=text.replace(k+":",dict[k]+":");
+    }
+
+    if(text.indexOf(":")>0){
+      let rc="";
+      for(let term of text.split(" ")){
+        rc=rc + term.replace(":","=")+"&"
+      }
+      return rc.substr(0,rc.length-1);
     }
 
     if(text.indexOf("&")>-1){
@@ -95,6 +102,7 @@ export function api(service: string , param: string= '', encode: boolean = true,
 
   if(rc.endsWith("?"))rc=rc.substr(0,rc.length-1);
   rc=rc.replace("http:/","http://").replace("https:/","https://");
+  rc=rc.replace("&&","&");
   return rc;
 }
 

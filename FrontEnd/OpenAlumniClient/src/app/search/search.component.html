@@ -5,17 +5,22 @@
             label="Connectez vous pour avoir accès à plus d'information sur les profils">
   </app-tuto>
 
-  <app-tuto [delay]="10" label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
+  <app-tuto [delay]="10"
+            label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
 
   <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: large;" autofocus>
     <mat-label>Rechercher un profil</mat-label>
       <input matInput matNativeControl
              title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
              (keyup)="onQuery($event)"
-             placeholder="nom, métier, promotion ou titre d'une réalisation" [(ngModel)]="query.value">
+             placeholder="nom, métier, promotion ou titre d'une réalisation"
+             [(ngModel)]="query.value">
       <mat-icon *ngIf="query.value?.length>0"
                 matSuffix style="cursor: pointer"
                 (click)="clearQuery()">cancel</mat-icon>
+    <mat-icon *ngIf="query.value?.length==0"
+                matSuffix style="cursor: pointer;font-size: medium;color:lightgray;"
+                (click)="help()">help</mat-icon>
     </mat-form-field>
   &nbsp;&nbsp;&nbsp;
   <mat-form-field appearance="legacy" style="max-width:200px;width:96%;font-size: large;" autofocus>
@@ -60,13 +65,14 @@
   <app-hourglass [message]="message"></app-hourglass>
 </div>
 
-<span *ngIf="profils?.length==0 && message.length==0">Aucun profil ne correspond à cette recherche</span>
+<span *ngIf="profils?.length==0 && message.length==0 && query.value?.length>0">Aucun profil ne correspond à cette recherche</span>
 
 <div class="wrap-list" *ngIf="message.length==0 && config.ready">
   <app-profil
               *ngFor="let profil of profils"
               (delete)="deleteProfil(profil)"
               [writeAccess]="config.user && config.user.profil==profil?.id"
+              (askfriend)="askfriend(profil)"
               class="app-card" [profil]="profil">
 
     <div *ngIf="config.hasPerm('r_department')"

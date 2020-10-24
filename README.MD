@@ -1,35 +1,11 @@
-#Installation du serveur
-##Installation de cockpit
-<pre>
-dnf install cockpit
-dnf install cockpit-dashboard cockpit-podman cockpit-machines cockpit-networkmanager cockpit-packagekit cockpit-storaged
-systemctl restart cockpit.socket
-</pre>
-
-##Installation du firewall
-<pre>
-dnf install 
-systemctl unmask firewalld
-systemctl start firewalld
-systemctl enable firewalld
-</pre>
-
-##Installation de podman (remplacent de docker pour fedora)
- <pre>
- yum -y install podman
- </pre>
- 
-
-##Installation de docker-ce
-<pre>
-sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-sudo sed -i 's/$releasever/31/g' /etc/yum.repos.d/docker-ce.repo
-sudo dnf install docker-ce
-sudo systemctl enable --now docker
-</pre>
-
 
 #Configuration de développpement
+##Netoyage préalable
+Il peut être nécessaire de netoyer la base prélablement:
+<pre>python manage.py flush
+python manage.py search_index --rebuild</pre>
+
+##Installation
 Après avoir récupérer le code, on installe une version locale de postgre
 puis on execute
 <pre>python manage.py makemigrations</pre>
@@ -112,3 +88,34 @@ https://bezkoder.com/django-angular-crud-rest-framework/
 Accès aux information LinkedIn:
 
 Demande d'accès au profil complet : https://docs.microsoft.com/en-us/linkedin/shared/references/v2/profile/full-profile?context=linkedin/consumer/context
+
+
+#Installation du serveur
+##Installation de cockpit
+<pre>
+dnf install cockpit
+dnf install cockpit-dashboard cockpit-podman cockpit-machines cockpit-networkmanager cockpit-packagekit cockpit-storaged
+systemctl restart cockpit.socket
+</pre>
+
+##Installation du firewall
+<pre>
+dnf install 
+systemctl unmask firewalld
+systemctl start firewalld
+systemctl enable firewalld
+</pre>
+
+##Installation de podman (remplacent de docker pour fedora)
+ <pre>
+ yum -y install podman
+ </pre>
+ 
+
+##Installation de docker-ce
+<pre>
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo sed -i 's/$releasever/31/g' /etc/yum.repos.d/docker-ce.repo
+sudo dnf install docker-ce
+sudo systemctl enable --now docker
+</pre>

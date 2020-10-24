@@ -16,6 +16,8 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
     OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
 from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -154,6 +156,25 @@ def test(request):
     return JsonResponse(infos)
 
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def askfriend(request):
+    u=ExtraUser.objects.filter(id=request.GET.get("to"))
+    asks=u.ask
+    asks.append(request.GET.get("from"))
+    u.update(ask=asks)
+    return JsonResponse(u)
+
+
+#http://localhost:8000/api/search?q=hoareau
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def search(request):
+    q=request.GET.get("q","")
+    s=Search().using(Elasticsearch()).query("match",title=q)
+    return s.execute()
+
+
 
 
 #http://localhost:8000/api/batch
@@ -167,45 +188,58 @@ def batch(request):
 
             # Recherche des films
             infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
-            for l in infos["links"]:
-                sleep(random()*5)
-                film = extract_film_from_unifrance(l["url"])
-                pow = PieceOfWork.objects.filter(title=film["title"])
-                if not pow.exists():
-                    log("Ajout de " + film["title"])
-                    pow = PieceOfWork(
-                        title=film["title"],
-                        links={"links":[{"text":"unifrance","url":l["url"]}]}
-                    )
-                    if "synopsis" in film: pow.description = film["synopsis"]
-                    if "visual" in film:pow.visual=film["visual"]
-                    if "category" in film:pow.category=film["category"]
-                    if "year" in film:pow.year=film["year"]
+            if infos is None:
+                advices=dict({"ref":"Vous devriez créer votre profil sur UniFrance"})
+                transact.update(advices=advices)
+            else:
+                if len(infos["photo"])>0 and not profil.photo.startswith("http"):transact.update(photo=infos["photo"])
 
-                    pow.save()
-                    work = Work(pow=pow, profil=profil,job=profil.department)
-                    work.save()
+                for l in infos["links"]:
+                    sleep(random()*2)
+                    film = extract_film_from_unifrance(l["url"])
+                    query_pow = PieceOfWork.objects.filter(title=film["title"])
+                    if not query_pow.exists():
+                        log("Ajout de " + film["title"])
+                        pow = PieceOfWork(
+                            title=film["title"],
+                            links={"links":[{"text":"unifrance","url":l["url"]}]}
+                        )
+                        if "synopsis" in film: pow.description = film["synopsis"]
+                        if "visual" in film:pow.visual=film["visual"]
+                        if "category" in film:pow.category=film["category"]
+                        if "year" in film:pow.year=film["year"]
+
+                        pow.save()
+                    else:
+                        pow=query_pow.get()
+
+                    job = profil.job
+                    if "job" in film: job = film["job"]
+                    if not Work.objects.filter(pow_id=pow.id,profil_id=profil.id).exists():
+                        log("Ajout de l'experience "+pow.title+" à "+profil.lastname)
+                        work = Work(pow=pow, profil=profil,job=job,source=l["url"])
+                        work.save()
 
 
-            try:
-                infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
-                sleep(random()*5)
-                if not infos is None:
+                try:
+                    infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
+                    sleep(random()*5)
+                    if not infos is None:
 
-                    if "photo" in infos:transact.update(photo=infos["photo"])
-                    if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
-                    if "links" in infos:
-                        if profil.links is None:
-                            profil.links = infos["links"]
-                        else:
-                            for l in infos["links"]:
-                                profil.links.append(l)
-                        transact.update(links=profil.links)
+                        if "photo" in infos:transact.update(photo=infos["photo"])
+                        if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
+                        if "links" in infos:
+                            if profil.links is None:
+                                profil.links = infos["links"]
+                            else:
+                                for l in infos["links"]:
+                                    profil.links.append(l)
+                            transact.update(links=profil.links)
 
-            except:
-                pass
+                except:
+                    pass
 
-        transact.update(auto_updates=profil.auto_updates)
+            transact.update(auto_updates=profil.auto_updates)
 
 
 
@@ -434,9 +468,10 @@ def importer(request,format=None):
                     firstname=firstname,
                     lastname=lastname,
                     mobile=row[idx("mobile,telephone,tel")][:20],
-                    nationality=row[idx("nationality,country,pays")],
+                    nationality=idx("nationality,country,pays",row,"France"),
                     birthdate=dt,
-                    department=idx("job,departement,department,metier",row,"")[:60],
+                    department=idx("departement,department,formation",row,"")[:60],
+                    job=idx("job,metier,competences",row,"")[:60],
                     degree_year=row[idx("promo,promotion,anneesortie")],
                     address=row[idx("address,adresse")][:200],
                     town=idx("town,ville",row,"")[:50],
@@ -505,22 +540,23 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('works__title','works__job','lastname','firstname','department','promo')
+    search_fields = ('works__title','works__job','lastname','firstname','department','promo','town')
     filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE,],
-        },
         'name': 'name',
-        'cursus': 'cursus',
+        'lastname':'lastname',
+        'firstname': 'firstname',
+        'cursus':'cursus',
         'title':'works__title',
         'promo':'promo',
-        'job':'department'
+        'town':'town',
+        'formation':'department'
     }
 
     ordering_fields = {
         'id':'id',
-        'lastname':'lastname'
+        'lastname':'lastname',
+        'promo':'degree_year',
+        'formation':'department',
     }
 
     suggester_fields = {

@@ -5,6 +5,7 @@ import {ClipboardService} from "ngx-clipboard";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {ConfigService} from "../config.service";
+import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-profil',
@@ -22,11 +23,13 @@ export class ProfilComponent implements OnInit,OnChanges {
   @Input("backgroundColor") backgroundColor:string="x404040";
   @Input("width") width="300px";
   @Output('delete') ondelete: EventEmitter<any>=new EventEmitter();
+  @Output('askfriend') onaskfriend: EventEmitter<any>=new EventEmitter();
 
 
   constructor(public toast:MatSnackBar,
               public router:Router,
               public config:ConfigService,
+              public api:ApiService,
               public ngNavigatorShareService:NgNavigatorShareService,
               public _clipboardService:ClipboardService) { }
 
@@ -70,6 +73,10 @@ export class ProfilComponent implements OnInit,OnChanges {
 
   deleteProfil(profil: any) {
     this.ondelete.emit();
+  }
+
+  askFriend(profil: any) {
+    this.onaskfriend.emit(profil);
   }
 }
 
