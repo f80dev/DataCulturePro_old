@@ -142,7 +142,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
     class Meta:
         document=ProfilDocument
         fields=("id","firstname","lastname",
-                "name","cursus","job",
+                "name","cursus","job","links",
                 "degree_year","public_url",
                 "photo","cp","department",
                 "address","town","promo",
