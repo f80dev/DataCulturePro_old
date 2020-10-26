@@ -51,6 +51,15 @@
     &nbsp;&nbsp;Ajouter des films
   </a>
 
+  <a title="Accèder à la console de statistiques"
+     *ngIf="config.hasPerm('stats') || isLocal"
+     routerLink="stats"
+     mat-list-item
+     id="cmdOpenStats">
+    <mat-icon>leaderboard</mat-icon>
+    &nbsp;&nbsp;Statistiques
+  </a>
+
 
   <a title="Changer vos permissions"
      *ngIf="config.user?.user?.email?.length>0"

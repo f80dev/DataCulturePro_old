@@ -84,7 +84,8 @@ export class SearchComponent implements OnInit {
 
 
   openStats() {
-    open(environment.domain_server+"/graphql","stats");
+    this.router.navigate(["stats"]);
+    //open(environment.domain_server+"/graphql","stats");
   }
 
   handle=null;

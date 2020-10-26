@@ -39,22 +39,9 @@
 <!--        </mat-checkbox>-->
     </div>
 
-    <div *ngIf="config.hasPerm('stats')">
-      <br>
-      <button mat-button mat-raised-button
-              class="app-button"
-              (click)="export_result()">
-        Exporter
-      </button>
-      <button mat-button mat-raised-button
-              class="app-button"
-              (click)="openStats()">
-        <div class="bloc-bouton">Console<br>statistiques</div>
-      </button>
-    </div>
-
     <div *ngIf="profils.length>3">
       <br>
+      <span *ngIf="profils.length==500">+ de </span>
       {{profils.length}} profils
     </div>
 

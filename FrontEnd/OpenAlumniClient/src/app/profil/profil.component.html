@@ -59,7 +59,7 @@
 
      <button mat-button mat-icon-button
             title="Editer mon profil"
-            *ngIf="config.user?.user?.email==profil?.email"
+            *ngIf="config.user?.user?.email && config.user?.user?.email==profil?.email"
             (click)="editProfil(profil)">
       <mat-icon>create</mat-icon>
     </button>
