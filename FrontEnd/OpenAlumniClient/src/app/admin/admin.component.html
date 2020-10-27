@@ -20,8 +20,18 @@
 <hr>
 Importation des données<br>
 
-<button mat-raised-button mat-button class="app-button" (click)="batch()">Batch de traitement</button>
-<button mat-raised-button mat-button class="app-button" (click)="router.navigate(['import'])">Importation</button>
+<button mat-raised-button mat-button
+        class="app-button" (click)="batch()">Batch de traitement
+</button>
+
+<button mat-raised-button mat-button
+        class="app-button" (click)="router.navigate(['import'])">Importation
+</button>
+
+<button mat-raised-button mat-button
+        class="app-button" (click)="update_index()">Réindexer
+</button>
+
 <br>
 Raz:
 <button mat-raised-button mat-button class="app-button" (click)="raz('profils')">Profils</button>

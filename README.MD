@@ -2,8 +2,10 @@
 #Configuration de développpement
 ##Netoyage préalable
 Il peut être nécessaire de netoyer la base prélablement:
-<pre>python manage.py flush
-python manage.py search_index --rebuild</pre>
+<pre>
+python manage.py flush
+python manage.py search_index --rebuild
+</pre>
 
 ##Installation
 Après avoir récupérer le code, on installe une version locale de postgre
@@ -27,12 +29,14 @@ puis on execute
 Executer la commande 
 <pre>
 firewall-cmd --zone=public --add-port=5432/tcp
-podman rm -f postgres & docker run --name postgres -p 5432:5432  -v /root/postgre:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
+docker rm -f postgres & docker run --name postgres -p 5432:5432  -v /root/postgre:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
 </pre>
 ou avec podman
 <pre>
-podman rm -f postgres & podman run --name postgres -p 5432:5432  -v /root/postgre:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
+podman rm -f postgres & podman run --name postgres -p 5432:5432  -v /root/postgres:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
 </pre>
+
+Si probléme d'accès au répertoire /root/postgres, il faut fixer avec su -c "setenforce 0"
 
 Créer les utilisateurs admin & anonymous
 

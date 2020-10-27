@@ -4,10 +4,18 @@
       <img src="/assets/img/movie.png" class="icon-profil">
     </div>
     <mat-card-title>{{work?.pow?.title}}</mat-card-title>
-    <mat-card-subtitle>
+    <mat-card-subtitle >
+      <div *ngIf="work.dtStart && work.dtEnd">
       {{work.job}} du {{work.dtStart | date:'dd/MM'}}
       au
-      {{work.dtStart | date:'dd/MM/yy'}}</mat-card-subtitle>
+      {{work.dtStart | date:'dd/MM/yy'}}
+      </div>
+
+      <div *ngIf="!work.dtStart || !work.dtEnd">
+        <small>Période non précisée</small>
+      </div>
+    </mat-card-subtitle>
+
   </mat-card-header>
 
   <mat-card-content>

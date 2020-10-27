@@ -42,6 +42,16 @@
 
   <div class="bottom-bar">
     <hr>
+
+    <button mat-button mat-raised-button
+            *ngIf="config.query_cache?.length>0"
+            title="Exporter le résultat de votre dernière recherche"
+            class="app-button"
+            (click)="export_stats()">
+      Export
+    </button>
+
+
     <button mat-button mat-raised-button
             class="app-button"
             (click)="showGraphQL=true">

@@ -63,4 +63,10 @@ export class AdminComponent implements OnInit {
       showMessage(this,"traitement terminé")
     })
   }
+
+  update_index() {
+    this.api._get("rebuild_index","name=profils").subscribe((r:any)=>{
+      showMessage(this,r.message);
+    });
+  }
 }

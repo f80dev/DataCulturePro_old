@@ -67,21 +67,14 @@ export class SearchComponent implements OnInit {
             $$("La base des profils est vide, on propose l'importation")
             this.router.navigate(["import"]);
           }
-
+        } else {
+          this.config.query_cache=this.profils;
         }
       },(err)=>{
         showError(this,err);
       });
     }
   }
-
-  export_result() {
-    let param="";
-    if(this.query.value.length>0)param="search="+this.query.value;
-    let url=api("profilsdoc/",param,false,"json");
-    open(url,"_blank","download");
-  }
-
 
   openStats() {
     this.router.navigate(["stats"]);

@@ -46,6 +46,7 @@ urlpatterns = [
     path('api/getyaml/', views.getyaml),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),
+    path('api/rebuild_index/', views.rebuild_index),
     path('api/ask_for_update/', views.ask_for_update),
     url(r'^api/movie_importer/$',views.movie_importer),
     url('^api/api-token-auth/', obtain_auth_token),

@@ -10,6 +10,7 @@ from urllib.request import urlopen
 import yaml
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
     LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
@@ -255,6 +256,19 @@ def initdb(request):
 @permission_classes([IsAuthenticatedOrReadOnly])
 def helloworld(request):
     return Response({"message": "Hello world"})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def rebuild_index(request):
+
+    index_name=request.GET.get("name","profils")
+
+    es = Index(index_name,using="default")
+    if es.exists():es.delete()
+    es.create("default")
+    es.save("default")
+    return Response({"message": "Reconstruction de l'index "+index_name+" terminée"})
 
 
 

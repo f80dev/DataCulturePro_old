@@ -78,7 +78,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware'
 ]
 
 
@@ -142,7 +141,7 @@ DATABASES = {
 
 
 
-    "default": {
+    "prod": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "alumni_db",
         "USER": "hhoareau",
@@ -154,20 +153,27 @@ DATABASES = {
         }
     },
 
-    "prod": {
+    "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "NAME": "alumni_db",
             "USER": "hhoareau",
             "PASSWORD": DB_PASSWORD,
-            'HOST': 'localhost',
+            'HOST': '172.24.96.56',
             'PORT': '5432',
             'OPTIONS': {
                 'options': '-c statement_timeout=5000'
             }
         }
+}
 
-
-
+#Installation d'
+ELASTICSEARCH_DSL = {
+    'prod': {
+        'hosts': '161.97.75.165:9200'
+    },
+    'default': {
+        'hosts': '172.24.96.56:9200'
+    },
 }
 
 REST_FRAMEWORK = {
@@ -188,12 +194,7 @@ GRAPHENE = {
     'SCHEMA': 'alumni.profil.schema'
 }
 
-#Installation d'
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': '161.97.75.165:9200'
-    },
-}
+
 
 #https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/quick_start.html#installation
 #chemin du répertoire document

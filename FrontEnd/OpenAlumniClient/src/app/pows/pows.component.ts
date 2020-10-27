@@ -30,6 +30,7 @@ export class PowsComponent implements OnInit {
   }
 
   open_search(name: string) {
+    if(name.indexOf(" ")>-1)name=name.split(' ')[1];
     this.router.navigate(["search"],{queryParams:{filter:name}});
   }
 

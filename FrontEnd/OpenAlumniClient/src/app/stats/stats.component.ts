@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Location} from "@angular/common";
-import {checkLogin} from "../tools";
+import {checkLogin, showMessage} from "../tools";
 import {ConfigService} from "../config.service";
 import {Router} from "@angular/router";
 import {ApiService} from "../api.service";
@@ -32,5 +32,9 @@ export class StatsComponent implements OnInit {
   }
 
 
-
+  export_stats() {
+    this.api._post("export","",this.config.query_cache).subscribe(()=>{
+      showMessage(this,"Consulter votre boite mail");
+    })
+  }
 }
