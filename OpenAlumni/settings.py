@@ -141,7 +141,7 @@ DATABASES = {
 
 
 
-    "prod": {
+    "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "alumni_db",
         "USER": "hhoareau",
@@ -153,7 +153,7 @@ DATABASES = {
         }
     },
 
-    "default": {
+    "dev": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "NAME": "alumni_db",
             "USER": "hhoareau",
@@ -168,10 +168,10 @@ DATABASES = {
 
 #Installation d'
 ELASTICSEARCH_DSL = {
-    'prod': {
+    'default': {
         'hosts': '161.97.75.165:9200'
     },
-    'default': {
+    'dev': {
         'hosts': '172.24.96.56:9200'
     },
 }
