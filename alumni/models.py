@@ -7,7 +7,11 @@ from django.db import models
 
 # Create your models here.
 #Mise a jour du model : python manage.py makemigrations
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django_elasticsearch_dsl.registries import registry
 
+from OpenAlumni.Tools import now
 from OpenAlumni.settings import DOMAIN_APPLI
 
 
@@ -52,6 +56,17 @@ class Profil(models.Model):
             self.auto_updates=",".join(lastUpdates)
 
         return rc
+
+    def add_link(self,url,title,description=""):
+        if self.links is None:self.links=[]
+        obj={"url":url,"text":title,"update":now(),"desc":description}
+        for l in self.links:
+            if l["url"]==url:
+                self.links.remove(l)
+                break
+
+        self.links.append(obj)
+        return self.links
 
 
     @property
@@ -169,6 +184,24 @@ class PieceOfWork(models.Model):
 
     def __str__(self):
         return self.title
+
+
+    def add_link(self, url, title, description=""):
+        if self.links is None: self.links = []
+        obj = {"url": url, "text": title, "update": now(), "desc": description}
+        for l in self.links:
+            if l["url"] == url:
+                self.links.remove(l)
+                break
+
+        self.links.append(obj)
+        return self.links
+
+
+@receiver(post_save,sender=Work)
+def update_pow(sender, **kwargs):
+    instance = kwargs['instance']
+    registry.update(instance.profil)
 
 
 class Movie(PieceOfWork):

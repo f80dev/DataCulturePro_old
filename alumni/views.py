@@ -11,6 +11,7 @@ import yaml
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django_elasticsearch_dsl import Index
+from django_elasticsearch_dsl.registries import registry
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
     LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
@@ -194,6 +195,7 @@ def batch(request):
                 transact.update(advices=advices)
             else:
                 if len(infos["photo"])>0 and not profil.photo.startswith("http"):transact.update(photo=infos["photo"])
+                transact.update(links=profil.add_link(infos["url"],"UniFrance"))
 
                 for l in infos["links"]:
                     sleep(random()*2)
@@ -201,10 +203,8 @@ def batch(request):
                     query_pow = PieceOfWork.objects.filter(title=film["title"])
                     if not query_pow.exists():
                         log("Ajout de " + film["title"])
-                        pow = PieceOfWork(
-                            title=film["title"],
-                            links={"links":[{"text":"unifrance","url":l["url"]}]}
-                        )
+                        pow = PieceOfWork(title=film["title"])
+                        pow.add_link(url=infos["url"],title="UniFrance")
                         if "synopsis" in film: pow.description = film["synopsis"]
                         if "visual" in film:pow.visual=film["visual"]
                         if "category" in film:pow.category=film["category"]
@@ -226,17 +226,10 @@ def batch(request):
                     infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
                     sleep(random()*5)
                     if not infos is None:
-
                         if "photo" in infos:transact.update(photo=infos["photo"])
                         if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
                         if "links" in infos:
-                            if profil.links is None:
-                                profil.links = infos["links"]
-                            else:
-                                for l in infos["links"]:
-                                    profil.links.append(l)
-                            transact.update(links=profil.links)
-
+                            transact.update(links=profil.add_link(infos["links"]["url"],infos["links"]["text"]))
                 except:
                     pass
 
@@ -318,7 +311,7 @@ def raz(request):
         PieceOfWork.objects.all().delete()
 
     log("Effacement de la base terminée")
-    return Response("Compte effacé",status=200)
+    return Response("Compte effacé")
 
 
 

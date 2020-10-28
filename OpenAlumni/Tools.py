@@ -120,7 +120,8 @@ def extract_actor_from_unifrance(name="céline sciamma"):
 
     rc=list()
     if len(links)>0:
-        page=wikipedia.BeautifulSoup(wikipedia.requests.get(links[0].get("href"), headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
+        url=links[0].get("href")
+        page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
 
         photo = ""
         _photo = page.find('div', attrs={'class': "profil-picture pull-right"})
@@ -131,7 +132,7 @@ def extract_actor_from_unifrance(name="céline sciamma"):
     else:
         return None
 
-    return {"links":rc,"photo":photo}
+    return {"links":rc,"photo":photo,"url":url}
 
 
 

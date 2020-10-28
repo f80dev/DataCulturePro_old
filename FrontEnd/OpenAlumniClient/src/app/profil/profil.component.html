@@ -20,19 +20,26 @@
 
   </mat-card-content>
 
-  <mat-card-actions *ngIf="showAction" style="text-align: left;">
+  <mat-card-actions *ngIf="showAction" style="text-align: left;padding: 0px;">
     <button mat-button mat-icon-button
             *ngIf="config.user?.user?.email!=profil?.email && config.hasPerm('write_email')"
             (click)="write(profil)"
             title="Lui envoyer un message">
       <mat-icon>email</mat-icon>
     </button>
-
+  &nbsp;
     <button mat-button mat-icon-button
             title="Réalisations / Films / Livres"
             *ngIf="profil?.works?.length>0 && config.hasPerm('r_works')"
             (click)="openWork(profil)">
       <mat-icon>videocam</mat-icon>
+    </button>
+
+    <button mat-button mat-icon-button
+            title="Références (liens web)"
+            *ngIf="profil?.links?.length>0"
+            (click)="openLink(profil)">
+      <mat-icon>link</mat-icon>
     </button>
 
 

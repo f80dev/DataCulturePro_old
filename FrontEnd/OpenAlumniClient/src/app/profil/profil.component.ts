@@ -78,5 +78,9 @@ export class ProfilComponent implements OnInit,OnChanges {
   askFriend(profil: any) {
     this.onaskfriend.emit(profil);
   }
+
+  openLink(profil: any) {
+    open(profil.links[0].url);
+  }
 }
 
