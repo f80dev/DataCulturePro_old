@@ -13,6 +13,9 @@ perms:
   - tag: firstname
     description: au prénom
 
+  - tag: edit_profil
+    description: l'édition de l'ensemble des profils
+
   - tag: delete_pow
     description: la suppression des oeuvres
 

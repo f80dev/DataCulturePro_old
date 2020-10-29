@@ -42,7 +42,7 @@ profils:
     perm:
         r_photo r_cpr_firstname r_works r_linkedin w_cp w_firstname advanced_search
         w_production w_email w_linkedin admin write_email r_mobile r_address
-        r_department stats delete_profil delete_pow ask_friend
+        r_department stats delete_profil delete_pow ask_friend edit_profil
     price: 0
     subscription: offline
 
@@ -62,7 +62,7 @@ profils:
     description: profil destiné aux organisme en charge de statistique
     perm:
       stats r_cp r_firstname r_promo r_lastname r_works ask_friend
-      r_photo r_linkedin w_cp w_firstname w_production w_email w_linkedin
+      r_photo r_linkedin w_cp w_firstname w_production w_email w_linkedin edit_profil
       write_email r_mobile r_address r_department share advanced_search delete_profil
     price: 0
     subscription: online

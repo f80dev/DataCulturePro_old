@@ -20,27 +20,29 @@ export class AppComponent {
   @ViewChild('drawer', {static: false}) drawer: MatSidenav;
   public adapter: ChatAdapter = new MyAdapter();
 
-    constructor(public config: ConfigService,public api:ApiService,public router:Router){
-      this.appVersion=environment.appVersion;
-      config.init(() => {
-        this.config.init_user(()=>{
-          //this.router.navigate(["search"]);
-        },()=>{
-          //this.router.navigate(["search"]);
-        });
+  constructor(public config: ConfigService,
+              public api:ApiService,
+              public router:Router){
+    this.appVersion=environment.appVersion;
+    config.init(() => {
+      this.config.init_user(()=>{
+        //this.router.navigate(["search"]);
+      },()=>{
+        //this.router.navigate(["search"]);
       });
+    });
+  }
+
+
+    closeMenu() {
+      this.drawer.close();
     }
 
-
-    closeMenu(){
-    this.drawer.close();
-  }
-
-  logout() {
-    this.api.logout();
-    this.config.raz_user();
-    window.location.reload();
-  }
+    logout() {
+      this.api.logout();
+      this.config.raz_user();
+      window.location.reload();
+    }
 
 
 }

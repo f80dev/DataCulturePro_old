@@ -24,6 +24,7 @@ export class ProfilComponent implements OnInit,OnChanges {
   @Input("width") width="320px";
   @Output('delete') ondelete: EventEmitter<any>=new EventEmitter();
   @Output('askfriend') onaskfriend: EventEmitter<any>=new EventEmitter();
+  @Output('onclick') onclick: EventEmitter<any>=new EventEmitter();
 
 
   constructor(public toast:MatSnackBar,

@@ -8,7 +8,7 @@
   <app-tuto [delay]="10"
             label="Vous pouvez également consulter la liste des réalisations de la FEMIS, via le menu latéral"></app-tuto>
 
-  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: large;" autofocus>
+  <mat-form-field appearance="legacy" style="max-width:250px;width:96%;font-size: large;" autofocus>
     <mat-label>Rechercher un profil</mat-label>
       <input matInput matNativeControl
              title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
@@ -23,7 +23,9 @@
                 (click)="help()">help</mat-icon>
     </mat-form-field>
   &nbsp;&nbsp;&nbsp;
-  <mat-form-field appearance="legacy" style="max-width:200px;width:96%;font-size: large;" autofocus>
+  <mat-form-field appearance="legacy"
+                  *ngIf="profils?.length>3"
+                  style="max-width:100px;width:96%;font-size: large;" autofocus>
     <mat-label>Trier par</mat-label>
      <mat-select #order (selectionChange)="refresh()">
       <mat-option *ngFor="let f of fields" [value]="f.value">
@@ -33,14 +35,13 @@
     </mat-form-field>
 
 
-  <div *ngIf="config.hasPerm('advanced_search')">
+<!--  <div *ngIf="config.hasPerm('advanced_search')">-->
 <!--       <mat-checkbox [checked]="searchInTitle">-->
 <!--          Chercher uniquement via les titres-->
 <!--        </mat-checkbox>-->
-    </div>
+<!--    </div>-->
 
-    <div *ngIf="profils.length>3">
-      <br>
+    <div *ngIf="profils.length>3" >
       <span *ngIf="profils.length==500">+ de </span>
       {{profils.length}} profils
     </div>
@@ -58,13 +59,16 @@
   <app-profil
               *ngFor="let profil of profils"
               (delete)="deleteProfil(profil)"
-              [writeAccess]="config.user && config.user.profil==profil?.id"
+              [writeAccess]="config.user && config.user.profil==profil?.id || config.hasPerm('edit_profil')"
               (askfriend)="askfriend(profil)"
+              (onclick)="openQuery($event)"
               class="app-card" [profil]="profil">
 
     <div *ngIf="config.hasPerm('r_department')"
          style="margin-top:20px;margin-bottom:20px;width: 100%;text-align: center;font-size: large">
-      {{profil?.department}}
+      <span style='cursor: pointer' (click)="openQuery(profil.department)">
+        {{profil?.department}}
+      </span>
     </div>
 
   </app-profil>

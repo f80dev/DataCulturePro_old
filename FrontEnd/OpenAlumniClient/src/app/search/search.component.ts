@@ -4,7 +4,7 @@ import {$$, api, normaliser, showError, showMessage, translateQuery} from "../to
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfigService} from "../config.service";
-import {environment} from "../../environments/environment";
+import {Location} from "@angular/common"
 import {PromptComponent} from "../prompt/prompt.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSelect} from "@angular/material/select";
@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit {
   constructor(public api:ApiService,
               public dialog:MatDialog,
               public toast:MatSnackBar,
+              public _location:Location,
               public routes:ActivatedRoute,
               public router: Router,
               public config:ConfigService) { }
@@ -39,7 +40,9 @@ export class SearchComponent implements OnInit {
 
 
 
-  refresh() {
+  refresh(q=null) {
+    if(q)this.query.value=q;
+
     if(this.api.token)this.perm="mail";else this.perm="";
     if(this.query.value.length>3 || this.query.value.length==0){
       let param="/";
@@ -122,7 +125,6 @@ export class SearchComponent implements OnInit {
   }
 
   askfriend(profil: any) {
-    debugger
     this.api._get("askfriend","from="+this.config.user.id+"&to="+profil.id).subscribe(()=>{
       showMessage(this,"Votre demande est envoyée");
     })
@@ -130,5 +132,12 @@ export class SearchComponent implements OnInit {
 
   help() {
     this.router.navigate(["faqs"],{queryParams:{open:'query'}});
+  }
+
+  openQuery(q) {
+    this.router.navigate(
+      ['search'],
+      {queryParams:{filter:q},skipLocationChange:false}
+      );
   }
 }

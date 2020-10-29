@@ -10,7 +10,10 @@
     <mat-card-subtitle *ngIf="config.hasPerm('r_promo')">
       <span *ngIf="profil?.cursus=='P'">Cursus Pro - </span>
       <span *ngIf="profil?.cursus=='S'">Promotion </span>
-      {{profil?.degree_year}}
+      <span style='cursor: pointer'
+            (click)="onclick.emit(profil?.degree_year)">
+        {{profil?.degree_year}}
+      </span>
     </mat-card-subtitle>
   </mat-card-header>
 
@@ -66,7 +69,7 @@
 
      <button mat-button mat-icon-button
             title="Editer mon profil"
-            *ngIf="config.user?.user?.email && config.user?.user?.email==profil?.email"
+            *ngIf="writeAccess"
             (click)="editProfil(profil)">
       <mat-icon>create</mat-icon>
     </button>
