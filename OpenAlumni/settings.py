@@ -138,9 +138,6 @@ WSGI_APPLICATION = 'OpenAlumni.wsgi.application'
 
 
 DATABASES = {
-
-
-
     "prod": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "alumni_db",

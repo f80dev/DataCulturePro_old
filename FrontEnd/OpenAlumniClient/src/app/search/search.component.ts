@@ -53,6 +53,19 @@ export class SearchComponent implements OnInit {
       this.message="Chargement des profils";
 
       param=translateQuery(prefixe+this.query.value);
+
+      if(this.advanced_search.length>0){
+        param="";
+        for(let i of this.advanced_search){
+          if(i.value && i.value.length>0)
+            param=param + i.field + "__wildcard="+i.value+"&";
+        }
+        param=param.substr(0,param.length-1);
+      }
+      debugger
+
+
+      //Ajout du tri
       if(this.order)param=param+"&ordering="+this.order.value;
 
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
@@ -66,7 +79,7 @@ export class SearchComponent implements OnInit {
           this.profils.push(item);
         }
         if(this.profils.length==0){
-          if(this.query.value.length==0){
+          if(this.query.value.length==0 && this.advanced_search.length==0){
             $$("La base des profils est vide, on propose l'importation")
             this.router.navigate(["import"]);
           }
@@ -92,6 +105,9 @@ export class SearchComponent implements OnInit {
     {field:"Promo",value:"promo"},
     {field:"Promo inversé",value:"-promo"},
     ]
+
+
+  advanced_search=[];
 
 
   onQuery($event: KeyboardEvent) {
@@ -139,5 +155,18 @@ export class SearchComponent implements OnInit {
       ['search'],
       {queryParams:{filter:q},skipLocationChange:false}
       );
+  }
+
+
+  switch_motor() {
+if(this.advanced_search.length==0){
+      this.advanced_search=[
+        {label:"Prénom",width:"100px",value:"",field:"firstname",title:"Paul, Pa*, Fr?d?ri*"},
+        {label:"Nom",width:"100px",value:"",field:"lastname",title:"Un nom ou le début du nom et *"},
+        {label:"Formation",width:"100px",value:"",field:"formation",title:"Scénario, Réalisation, Atelier*"},
+        {label:"Promo",width:"50px",value:"",field:"promo",title:"2001,20*,19??"}
+      ]
+    }
+    else this.advanced_search=[];
   }
 }
