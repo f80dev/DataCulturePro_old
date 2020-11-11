@@ -192,13 +192,13 @@
     <br>
     <br>
 
-    <mat-form-field class="app-field">
+    <mat-wform-field class="app-field">
       <mat-label>Fonction</mat-label>
       <mat-select  [(ngModel)]="job">
         <mat-option *ngFor="let job of config.jobs" [value]="job.value">{{job.label}}</mat-option>
       </mat-select>
       <mat-hint>Sélectionner le poste que vous aviez sur le projet</mat-hint>
-    </mat-form-field>
+    </mat-wform-field>
     <br>
 
     <br>

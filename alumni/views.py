@@ -6,7 +6,7 @@ from random import random
 from threading import Thread
 from time import sleep
 from urllib.request import urlopen
-
+import html5lib
 import yaml
 from django.core.mail import send_mail
 from django.http import JsonResponse
@@ -199,10 +199,10 @@ def batch(request):
 
                 for l in infos["links"]:
                     sleep(random()*2)
-                    film = extract_film_from_unifrance(l["url"])
+                    film = extract_film_from_unifrance(l["url"],job_for=infos["url"])
                     query_pow = PieceOfWork.objects.filter(title=film["title"])
                     if not query_pow.exists():
-                        log("Ajout de " + film["title"])
+                        log("Ajout de " + film["title"]+" à l'adresse "+l["url"])
                         pow = PieceOfWork(title=film["title"])
                         pow.add_link(url=infos["url"],title="UniFrance")
                         if "synopsis" in film: pow.description = film["synopsis"]
@@ -216,6 +216,7 @@ def batch(request):
 
                     job = profil.job
                     if "job" in film: job = film["job"]
+
                     if not Work.objects.filter(pow_id=pow.id,profil_id=profil.id).exists():
                         log("Ajout de l'experience "+pow.title+" à "+profil.lastname)
                         work = Work(pow=pow, profil=profil,job=job,source=l["url"])

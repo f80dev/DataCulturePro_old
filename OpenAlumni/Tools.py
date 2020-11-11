@@ -1,18 +1,14 @@
-from html import escape
+
 from urllib import parse
 from urllib.parse import urlparse
 
 import wikipedia
 import random
-import smtplib
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from io import BytesIO
 
 import yaml
 import PyPDF2
-from django.conf.urls.static import static
 from django.core.mail import send_mail
 from linkedin_v2 import linkedin
 from linkedin_v2.linkedin import LinkedInApplication
@@ -76,7 +72,7 @@ def reset_password(email,username):
     return password
 
 
-def extract_film_from_unifrance(url:str):
+def extract_film_from_unifrance(url:str,job_for=None):
     rc=dict()
     if not url.startswith("http"):
         log("On passe par la page de recherche pour retrouver le titre")
@@ -102,6 +98,23 @@ def extract_film_from_unifrance(url:str):
             rc["year"]=div.text.replace("Année de production : ","")
         if "Genre(s) : " in div.text:
             rc["category"]=div.text.replace("Genre(s) : ","")
+
+
+
+    if not job_for is None:
+        page.find("h2")
+        for div in page.findAll("div",{"class":"col-sm-5 col-xs-10"}):
+            if len(div.findAll("a",{"href":job_for}))>0:
+                jobs=div.findAll("h2")
+                talents=div.findAll("a")
+                idx=0
+                for t in talents:
+                    if t.get("href")==job_for:
+                        if len(jobs)>idx:
+                            rc["job"]=jobs[idx].text.replace(" : ","")
+                            break
+                    idx=idx+1
+
 
     _synopsis = page.find("div", attrs={"itemprop": "description"})
     if not _synopsis is None:rc["synopsis"]=_synopsis.getText(strip=True)

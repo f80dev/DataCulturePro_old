@@ -7,11 +7,5 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://161.97.75.165:5432/alumni_db</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="alumni_db@172.24.96.56" uuid="180ba249-3534-4d45-b195-163c504805c4">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://172.24.96.56:5432/alumni_db</jdbc-url>
-    </data-source>
   </component>
 </project>

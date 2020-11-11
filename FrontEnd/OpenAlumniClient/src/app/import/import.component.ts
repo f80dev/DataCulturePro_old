@@ -9,7 +9,6 @@ import {Router} from "@angular/router";
   styleUrls: ['./import.component.sass']
 })
 export class ImportComponent implements OnInit {
-  private items: any[];
   message: string="";
 
   constructor(public api:ApiService,public router:Router) { }

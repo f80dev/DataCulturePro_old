@@ -112,7 +112,7 @@ import {NgChatModule} from "ng-chat";
         SocialLoginModule,
         MatFormFieldModule,
         MatInputModule,
-      NgChatModule,
+        NgChatModule,
         MatDialogModule,
         MatButtonModule,
         MatIconModule,
