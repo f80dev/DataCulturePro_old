@@ -14,9 +14,14 @@
   </mat-form-field>
   <br>
 
+  <div class="div-center" *ngIf="message.length==0">
+    <span *ngIf="pows.length==500">+ de {{pows.length}} films</span>
+    <span *ngIf="pows.length<500">{{pows.length}} films</span>
+    <br>
+  </div>
+
   <div class="div-center">
-    {{pows.length}} films
-    <app-hourglass [message]="message"></app-hourglass>
+      <app-hourglass [message]="message"></app-hourglass>
   </div>
 
 
