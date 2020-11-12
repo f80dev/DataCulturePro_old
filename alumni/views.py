@@ -180,6 +180,7 @@ def search(request):
 
 
 #http://localhost:8000/api/batch
+#https://server.f80.fr:8000/api/batch
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def batch(request):
@@ -204,7 +205,7 @@ def batch(request):
                     if not query_pow.exists():
                         log("Ajout de " + film["title"]+" à l'adresse "+l["url"])
                         pow = PieceOfWork(title=film["title"])
-                        pow.add_link(url=infos["url"],title="UniFrance")
+                        pow.add_link(url=l["url"],title="UniFrance")
                         if "synopsis" in film: pow.description = film["synopsis"]
                         if "visual" in film:pow.visual=film["visual"]
                         if "category" in film:pow.category=film["category"]

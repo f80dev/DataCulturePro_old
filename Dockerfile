@@ -29,6 +29,7 @@ RUN pip3 install django-filter
 RUN pip3 install PyPDF2
 RUN pip3 install wikipedia
 RUN pip3 install rsa
+RUN pip3 install html5lib
 
 #Création des répertoires
 ENV APP_HOME=/home/app
