@@ -139,6 +139,10 @@ class Work(models.Model):
     def title(self):
         return self.pow.title
 
+    @property
+    def lastname(self):
+        return self.profil.lastname
+
     def __str__(self):
         d:dict=dict({
             "name":self.profil.firstname+" "+self.profil.lastname,

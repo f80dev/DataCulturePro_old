@@ -25,6 +25,7 @@ export class ProfilComponent implements OnInit,OnChanges {
   @Output('delete') ondelete: EventEmitter<any>=new EventEmitter();
   @Output('askfriend') onaskfriend: EventEmitter<any>=new EventEmitter();
   @Output('onclick') onclick: EventEmitter<any>=new EventEmitter();
+  isOpen=false;
 
 
   constructor(public toast:MatSnackBar,
@@ -81,6 +82,8 @@ export class ProfilComponent implements OnInit,OnChanges {
   }
 
   openLink(profil: any) {
+    debugger
+    this.isOpen=true;
     open(profil.links[0].url);
   }
 }

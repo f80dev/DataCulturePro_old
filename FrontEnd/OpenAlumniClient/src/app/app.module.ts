@@ -63,6 +63,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { PowsComponent } from './pows/pows.component';
 import {NgChatModule} from "ng-chat";
+import {OverlayModule} from "@angular/cdk/overlay";
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import {NgChatModule} from "ng-chat";
         MatToolbarModule,
         MatListModule,
         MatCheckboxModule,
-        MatExpansionModule
+        MatExpansionModule,
+        OverlayModule
     ],
   providers: [
     ApiService,

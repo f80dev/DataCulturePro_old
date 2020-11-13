@@ -31,10 +31,14 @@
                          (afterExpand)="get_pow(pow)"
                          [expanded]="pow.expanded">
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          <strong>{{pow.title}}&nbsp;</strong>
-          <small>({{pow.year}})</small>
+        <mat-panel-title style="text-align: left;font-size: small;">
+          <span style="font-weight: bold">{{pow.title}}&nbsp;</span>
+          <small>({{pow.category}} - {{pow.year}})</small>
         </mat-panel-title>
+        <mat-panel-description>
+
+        </mat-panel-description>
+
       </mat-expansion-panel-header>
 
       <div style="text-align: center;">
@@ -54,9 +58,9 @@
 
       </div>
 
-      <div *ngIf="pow.links?.length>0">
-        <small>Liens complémentaires:</small><br>
-        <div *ngFor="let link of pow.links" style="font-size: large;font-weight: lighter;">
+      <div *ngIf="pow.links?.length>0" style="height:20px;vertical-align:middle;width: 100%;text-align: left;">
+        <div *ngFor="let link of pow.links" style="font-size:small;font-weight: lighter;display: inline-block;">
+          <mat-icon style="font-size: medium;width:18px;height:12px;">link</mat-icon>
           <a href="{{link.url}}" target="_blank">{{link.text}}</a>
         </div>
         <br>
@@ -66,7 +70,6 @@
       <div *ngIf="pow.works?.length>0" style="line-height: 95%">
         <hr>
         <br>
-        <small>Casting FEMIS:</small><br><br>
         <table style="width: 80%;display: inline-block;text-align: left;">
           <tr *ngFor="let work of pow.works"
               style="cursor: pointer;"

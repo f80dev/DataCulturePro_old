@@ -106,9 +106,7 @@ export class SearchComponent implements OnInit {
     {field:"Promo inversé",value:"-promo"},
     ]
 
-
   advanced_search=[];
-
 
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);
@@ -159,7 +157,7 @@ export class SearchComponent implements OnInit {
 
 
   switch_motor() {
-if(this.advanced_search.length==0){
+    if(this.advanced_search.length==0){
       this.advanced_search=[
         {label:"Prénom",width:"100px",value:"",field:"firstname",title:"Paul, Pa*, Fr?d?ri*"},
         {label:"Nom",width:"100px",value:"",field:"lastname",title:"Un nom ou le début du nom et *"},

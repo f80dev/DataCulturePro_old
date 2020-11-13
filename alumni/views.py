@@ -36,8 +36,8 @@ from django.shortcuts import redirect
 from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
-from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
-    sendmail, extract_actor_from_wikipedia, extract_actor_from_unifrance, extract_film_from_unifrance
+from OpenAlumni.Batch import exec_batch
+from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file,sendmail
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
@@ -184,59 +184,7 @@ def search(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def batch(request):
-    for profil in Profil.objects.all():
-        transact = Profil.objects.filter(id=profil.id)
-        if profil.delay_update(0,True)>1000:
-            log("Traitement de "+profil.lastname)
-
-            # Recherche des films
-            infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
-            if infos is None:
-                advices=dict({"ref":"Vous devriez créer votre profil sur UniFrance"})
-                transact.update(advices=advices)
-            else:
-                if len(infos["photo"])>0 and not profil.photo.startswith("http"):transact.update(photo=infos["photo"])
-                transact.update(links=profil.add_link(infos["url"],"UniFrance"))
-
-                for l in infos["links"]:
-                    sleep(random()*2)
-                    film = extract_film_from_unifrance(l["url"],job_for=infos["url"])
-                    query_pow = PieceOfWork.objects.filter(title=film["title"])
-                    if not query_pow.exists():
-                        log("Ajout de " + film["title"]+" à l'adresse "+l["url"])
-                        pow = PieceOfWork(title=film["title"])
-                        pow.add_link(url=l["url"],title="UniFrance")
-                        if "synopsis" in film: pow.description = film["synopsis"]
-                        if "visual" in film:pow.visual=film["visual"]
-                        if "category" in film:pow.category=film["category"]
-                        if "year" in film:pow.year=film["year"]
-
-                        pow.save()
-                    else:
-                        pow=query_pow.get()
-
-                    job = profil.job
-                    if "job" in film: job = film["job"]
-
-                    if not Work.objects.filter(pow_id=pow.id,profil_id=profil.id).exists():
-                        log("Ajout de l'experience "+pow.title+" à "+profil.lastname)
-                        work = Work(pow=pow, profil=profil,job=job,source=l["url"])
-                        work.save()
-
-
-                try:
-                    infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
-                    sleep(random()*5)
-                    if not infos is None:
-                        if "photo" in infos:transact.update(photo=infos["photo"])
-                        if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
-                        if "links" in infos:
-                            transact.update(links=profil.add_link(infos["links"]["url"],infos["links"]["text"]))
-                except:
-                    pass
-
-            transact.update(auto_updates=profil.auto_updates)
-
+    exec_batch(Profil.objects.all())
 
 
 @api_view(["GET"])
@@ -577,7 +525,7 @@ class ProfilDocumentView(DocumentViewSet):
     ordering = ("name")
 
 
-
+#http://localhost:8000/api/powsdoc
 @permission_classes([AllowAny])
 class PowDocumentView(DocumentViewSet):
     document=PowDocument
@@ -591,7 +539,7 @@ class PowDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('title','description','category',"nature","year")
+    search_fields = ('title','category',"nature","year","works")
     filter_fields = {
         'id': {
             'field': 'id',

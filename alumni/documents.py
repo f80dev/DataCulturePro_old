@@ -44,11 +44,11 @@ class ProfilDocument(Document):
 
 @registry.register_document
 class PowDocument(Document):
-    works=fields.ObjectField(attr="works")
+    works=fields.NestedField(properties={"job":fields.TextField(),"lastname":fields.TextField()})
     class Index:
         name='pows'
         settings={"number_of_shards":1,"number_of_replicas":0}
 
     class Django(object):
         model=PieceOfWork
-        fields=["id","year","visual","title","nature","category","description"]
+        fields=["id","year","visual","title","nature","category"]

@@ -76,7 +76,9 @@
   <app-hourglass [message]="message"></app-hourglass>
 </div>
 
-<span *ngIf="profils?.length==0 && message.length==0 && (query.value?.length>0 || this.advanced_search.length>0)">Aucun profil ne correspond à cette recherche</span>
+<span *ngIf="profils?.length==0 && message.length==0 && (query.value?.length>0 || this.advanced_search.length>0)">
+  Aucun profil ne correspond à cette recherche
+</span>
 
 <div class="wrap-list" *ngIf="message.length==0 && config.ready">
   <app-profil
@@ -96,3 +98,6 @@
 
   </app-profil>
 </div>
+
+
+
