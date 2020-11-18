@@ -16,17 +16,18 @@
 
     <span>
     {{config.values?.appname}}
+      <div style="font-size: x-small;display: inline" routerLink="about">&nbsp;v{{appVersion}}</div>
   </span>
 
 
     &nbsp;
     <span class="fill-remaining-space"></span>
-    <div style="font-size: x-small;display: inline" routerLink="about">&nbsp;v{{appVersion}}</div>
 
-    <!--    <mat-icon -->
-    <!--              title="Se déconnecter de l'application"-->
-    <!--              (click)="logout()" style="cursor: pointer;">exit_to_app-->
-    <!--    </mat-icon>-->
+
+    <mat-icon style="font-size: x-large;cursor: pointer;"
+              title="Revenir à l'écran précédent"
+              (click)="_location.back()">navigate_before</mat-icon>
+
   </mat-toolbar>
 
   <mat-drawer-container class="container" autosize>

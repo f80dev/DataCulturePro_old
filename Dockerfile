@@ -30,6 +30,7 @@ RUN pip3 install PyPDF2
 RUN pip3 install wikipedia
 RUN pip3 install rsa
 RUN pip3 install html5lib
+RUN pip3 install pyimdb
 
 #Création des répertoires
 ENV APP_HOME=/home/app

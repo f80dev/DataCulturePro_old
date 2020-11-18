@@ -62,7 +62,7 @@ export class SearchComponent implements OnInit {
         }
         param=param.substr(0,param.length-1);
       }
-      debugger
+
 
 
       //Ajout du tri

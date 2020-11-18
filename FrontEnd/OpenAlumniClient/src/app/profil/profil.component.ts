@@ -82,9 +82,14 @@ export class ProfilComponent implements OnInit,OnChanges {
   }
 
   openLink(profil: any) {
-    debugger
-    this.isOpen=true;
-    open(profil.links[0].url);
+      this.isOpen=true;
+    if(profil.hasOwnProperty("value")){
+      open(profil.value);
+    }
+    else {
+      open(profil.links[0].url);
+    }
+
   }
 }
 

@@ -39,15 +39,17 @@
     </button>
 
     <button mat-button mat-icon-button
-            title="Références (liens web)"
             *ngIf="profil?.links?.length==1"
+            [title]="profil?.links[0].text"
             (click)="openLink(profil)">
       <mat-icon>link</mat-icon>
     </button>
 
-    <mat-select *ngIf="profil?.links?.length>1" style="width: 100px;">
+    <mat-select *ngIf="profil?.links?.length>1"
+                style="width: 100px;"
+                (selectionChange)="openLink($event)">
       <mat-option *ngFor="let link of profil?.links" [value]="link.url">
-        {{link.title}}
+        {{link.text}}
       </mat-option>
     </mat-select>
 

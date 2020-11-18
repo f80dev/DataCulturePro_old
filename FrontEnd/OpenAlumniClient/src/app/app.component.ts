@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ConfigService} from "./config.service";
 import {ApiService} from "./api.service";
-import {$$} from "./tools";
+import {Location} from "@angular/common";
 import {Router} from "@angular/router";
 import {environment} from "../environments/environment";
 import {MatSidenav} from "@angular/material/sidenav";
@@ -22,6 +22,7 @@ export class AppComponent {
 
   constructor(public config: ConfigService,
               public api:ApiService,
+              public _location:Location,
               public router:Router){
     this.appVersion=environment.appVersion;
     config.init(() => {

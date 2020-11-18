@@ -2,16 +2,10 @@ import base64
 import csv
 from datetime import datetime, timedelta
 from io import StringIO
-from random import random
-from threading import Thread
-from time import sleep
 from urllib.request import urlopen
-import html5lib
 import yaml
-from django.core.mail import send_mail
 from django.http import JsonResponse
 from django_elasticsearch_dsl import Index
-from django_elasticsearch_dsl.registries import registry
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
     LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
@@ -36,7 +30,7 @@ from django.shortcuts import redirect
 from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
-from OpenAlumni.Batch import exec_batch
+from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file,sendmail
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
 from alumni.documents import ProfilDocument, PowDocument
@@ -185,6 +179,7 @@ def search(request):
 @permission_classes([AllowAny])
 def batch(request):
     exec_batch(Profil.objects.all())
+    return Response({"message":"ok"})
 
 
 @api_view(["GET"])
@@ -261,7 +256,7 @@ def raz(request):
         PieceOfWork.objects.all().delete()
 
     log("Effacement de la base terminée")
-    return Response("Compte effacé")
+    return Response({"message":"Compte effacé"})
 
 
 
@@ -330,7 +325,7 @@ def movie_importer(request):
     i = 0
     record = 0
     for row in list(d):
-        if i>0:
+        if i>0 and len(row)>10:
 
             #dtEnd=str(datetime.fromtimestamp(dateToTimestamp(row[3]))),
 
