@@ -3,12 +3,12 @@
   <app-hourglass [message]="message"></app-hourglass>
   <div class="wrap-list">
     <div *ngFor="let wrk of works" style="max-width: 400px;margin:1%;">
-      <app-work [work]="wrk" height="200px" [showAction]="true">
-        <div style="display: flex;font-size: small;">
+      <app-work [work]="wrk" height="250px" [showAction]="true">
+        <div style="display: flex;font-size: small;margin: 0px;">
           <div *ngIf="wrk.pow.visual?.length>0" style="flex: 40%">
              <img [src]="wrk.pow.visual"
                    class="image-photo"
-                   style="width: 100px;margin:0px;"
+                   style="width: 80px;margin:0px;padding: 0px;"
               >
           </div>
           <div style="flex: 55%;height:80%;overflow: hidden;line-height: 95%;">
@@ -18,7 +18,6 @@
         </div>
 
         <small>{{wrk.comment}}</small>
-
       </app-work>
     </div>
   </div>
