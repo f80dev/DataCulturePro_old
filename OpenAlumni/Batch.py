@@ -128,15 +128,18 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                 infos["links"]=[]
                 for l in links:
                     if len(l.getText())>3:
-                        text=l.parent.parent.text
+                        texts=l.parent.parent.text.split("(")
+                        nature="long"
+                        job=""
+                        if len(texts)>1:
+                            nature = texts[1].split(")")[0]
+                            if len(texts)>2:
+                                job=texts[2].split(")")[0]
+
                         url="https://www.imdb.com"+l.get("href")
                         url=url.split("?")[0]
-                        job=""
-                        try:
-                            job=text.split("(")[1].split(")")[0]
-                        except:
-                            pass
-                        infos["links"].append({"url":url,"text":l.getText(),"job":job})
+
+                        infos["links"].append({"url":url,"text":l.getText(),"job":job,"nature":nature})
 
 
     return infos
@@ -162,7 +165,8 @@ def extract_film_from_imdb(url:str,title:str,name="",job=""):
 
     subtext=page.find("div",attrs={'class': "subtext"})
     if not subtext is None:
-        rc["category"]=subtext.findAll("a")[0].text
+        _links=subtext.findAll("a")
+        if len(_links)>0:rc["category"]=_links[0].text
 
     try:
         rc["year"]=re.search('[1-2][0-9][0-9][0-9]', page.title.text).group(0)
@@ -259,13 +263,15 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
             if "imdb" in l["url"]:
                 film=extract_film_from_imdb(l["url"],l["text"],name=profil.firstname+" "+profil.lastname,job=l["job"])
+                film["nature"]=l["nature"]
                 source="IMDB"
 
-            sleep(random() * 15)
+            sleep(random() * 5)
 
             log("Ajout de " + film["title"] + " à l'adresse " + l["url"])
             pow = PieceOfWork(title=film["title"])
             pow.add_link(url=l["url"], title=source)
+            if "nature" in film:pow.nature=film["nature"]
             if "synopsis" in film: pow.description = film["synopsis"]
             if "visual" in film: pow.visual = film["visual"]
             if "category" in film: pow.category = film["category"]
@@ -305,14 +311,15 @@ def exec_batch(profils):
         if profil.delay_update(0, True) > 1000:
             log("Hors délai ==> mise a jour")
 
-            log("Extraction d'imdb")
             infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname)
+            log("Extraction d'imdb " + str(infos))
             if "url" in infos:profil.add_link(infos["url"], "IMDB")
             if "photo" in infos and len(profil.photo)==0:profil.photo=infos["photo"]
             if "links" in infos: links=links+infos["links"]
 
-            # Recherche des films
+
             infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
+            log("Extraction d'un profil d'unifrance "+str(infos))
             if infos is None:
                 advices = dict({"ref": "Vous devriez créer votre profil sur UniFrance"})
                 transact.update(advices=advices)
@@ -328,18 +335,18 @@ def exec_batch(profils):
 
 
 
-            #Extraction de wikipedia
-            try:
-                infos = extract_actor_from_wikipedia(firstname=profil.firstname,lastname=profil.lastname)
-                sleep(random() * 5)
-                if not infos is None:
-                    if "photo" in infos and profil.photo is None: transact.update(photo=infos["photo"])
-                    if "summary" in infos and profil.biography is None: transact.update(biography=infos["summary"])
-                    if "links" in infos and len(infos["links"])>0:
-                        links=profil.add_link(url=infos["links"][0]["url"], title=infos["links"][0]["title"],description="")
-                        transact.update(links=links)
-            except:
-                pass
+            # log("Extraction de wikipedia")
+            # try:
+            #     infos = extract_actor_from_wikipedia(firstname=profil.firstname,lastname=profil.lastname)
+            #     sleep(random() * 5)
+            #     if not infos is None:
+            #         if "photo" in infos and profil.photo is None: transact.update(photo=infos["photo"])
+            #         if "summary" in infos and profil.biography is None: transact.update(biography=infos["summary"])
+            #         if "links" in infos and len(infos["links"])>0:
+            #             links=profil.add_link(url=infos["links"][0]["url"], title=infos["links"][0]["title"],description="")
+            #             transact.update(links=links)
+            # except:
+            #     pass
 
             transact.update(auto_updates=profil.auto_updates)
 

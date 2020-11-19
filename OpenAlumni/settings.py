@@ -155,7 +155,7 @@ DATABASES = {
             "NAME": "alumni_db",
             "USER": "hhoareau",
             "PASSWORD": DB_PASSWORD,
-            'HOST': '172.24.96.56',
+            'HOST': '172.28.54.22',
             'PORT': '5432',
             'OPTIONS': {
                 'options': '-c statement_timeout=5000'
@@ -169,7 +169,7 @@ ELASTICSEARCH_DSL = {
         'hosts': '161.97.75.165:9200'
     },
     'dev': {
-        'hosts': '172.24.96.56:9200'
+        'hosts': '172.28.54.22:9200'
     },
 }
 

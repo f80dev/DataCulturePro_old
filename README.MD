@@ -33,7 +33,10 @@ docker rm -f postgres & docker run --name postgres -p 5432:5432  -v /root/postgr
 </pre>
 ou avec podman
 <pre>
-podman rm -f postgres & podman run --name postgres -p 5432:5432  -v /root/postgres:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
+setenforce 0 
+mkdir /root/postgre
+podman rm -f postgre
+podman run --name postgre -p 5432:5432  -v /root/postgre:/var/lib/postgresql/data --restart=always  -e POSTGRES_PASSWORD=hh4271 -e POSTGRES_DB=alumni_db -e POSTGRES_USER=hhoareau -d postgres:13-alpine
 </pre>
 
 Si probléme d'accès au répertoire /root/postgres, il faut fixer avec su -c "setenforce 0"

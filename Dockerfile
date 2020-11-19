@@ -7,7 +7,7 @@ FROM f80hub/scientist_python_server_x86
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libxml2-dev libxslt-dev
 
 RUN pip3 install Django==3.0.8
 RUN pip3 install markdown
@@ -30,7 +30,8 @@ RUN pip3 install PyPDF2
 RUN pip3 install wikipedia
 RUN pip3 install rsa
 RUN pip3 install html5lib
-RUN pip3 install pyimdb
+RUN pip3 install wheel
+RUN pip3 install imdbpy
 
 #Création des répertoires
 ENV APP_HOME=/home/app

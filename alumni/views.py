@@ -294,6 +294,7 @@ def ask_for_update(request):
 @permission_classes([AllowAny])
 def send_to(request):
     text=str(request.body,"utf8")
+    text=text.replace("&#8217;","")
     log("Envoie du mail " + text)
 
     _from=ExtraUser.objects.get(id=request.query_params["from"])

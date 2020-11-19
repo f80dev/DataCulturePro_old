@@ -169,18 +169,12 @@ class PieceOfWork(models.Model):
     dtEnd=models.DateField(auto_now=True,null=False,help_text="Date de fin de la réalisation de l'oeuvre")
     title=models.CharField(null=False,max_length=300,unique=True,default="sans titre",help_text="Titre de l'oeuvre, même temporaire")
     year=models.CharField(null=True,max_length=4,help_text="Année de sortie")
-    nature=models.CharField(choices=[
-        ('MOVIE','Film long métrage'),
-        ('COURT','Court métrage'),
-        ('PUB','Publicité'),
-        ('CORP',"Film d'entreprise"),
-        ('SONG','Single/Album')
-    ],default='MOVIE',max_length=20,help_text="Classification de l'oeuvre")
+    nature=models.CharField(null=False,default='MOVIE',max_length=20,help_text="Classification de l'oeuvre")
 
     #Structure : "url" du document, "text" du lien
     links=JSONField(null=True,help_text="Liens vers des références externes à l'oeuvre")
     owner=models.CharField(max_length=150,default="public")
-    description=models.TextField(null=True,max_length=3000,help_text="Description/Resumer de l'oeuvre")
+    description=models.TextField(null=False,default="",max_length=3000,help_text="Description/Resumer de l'oeuvre")
     # Structure : "url" du document, "type" de document (str), "title" du document
     files=JSONField(null=True,help_text="Liens vers des documents attaché")
     category=models.TextField(null=True,max_length=200,help_text="Liste des categories auxquelles appartient le film")
