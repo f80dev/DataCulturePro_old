@@ -14,7 +14,7 @@ export class WorksComponent implements OnInit {
   works:any;
   message: any;
   categories: any[]=[];
-  cat_filter: any;
+  cat_filter="long";
   name: any;
 
   constructor(public _location:Location,public toast:MatSnackBar,
@@ -34,12 +34,11 @@ export class WorksComponent implements OnInit {
         this.works=[];
         for(let w of r.results){
           w.filter=w.pow.nature;
-          if(!this.cat_filter)this.cat_filter=w.filter;
           if(this.categories.indexOf(w.pow.nature)==-1)this.categories.push(w.pow.nature);
           w.pow.short_desc=w.pow.description.substr(0,Math.min(200,w.pow.description.length));
           this.works.push(w);
         }
-
+        if(this.works.length>0)this.cat_filter=this.works[0].filter;
       }
     },(err)=>{
       showError(this,err);
