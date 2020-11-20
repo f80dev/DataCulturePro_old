@@ -2,12 +2,12 @@
   <div class="h-zone">Expériences de {{name}}</div>
   <app-hourglass [message]="message"></app-hourglass>
 
-   <mat-form-field appearance="fill" class="app-field">
-      <mat-label>Oeuvre par catégorie</mat-label>
+<!--   <mat-form-field appearance="fill" class="app-field">-->
+<!--      <mat-label>Oeuvre par catégorie</mat-label>-->
       <mat-select *ngIf="works?.length>8 && categories?.length>1"  [(ngModel)]="cat_filter">
         <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
       </mat-select>
-   </mat-form-field>
+<!--   </mat-form-field>-->
 
 
   <div class="wrap-list" *ngIf="cat_filter">
