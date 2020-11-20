@@ -3,7 +3,7 @@
   <app-hourglass [message]="message"></app-hourglass>
 
    <mat-form-field appearance="fill" class="app-field">
-      <mat-label>Filtrer par nature</mat-label>
+      <mat-label>Oeuvre par catégorie</mat-label>
       <mat-select *ngIf="works?.length>8 && categories?.length>1"  [(ngModel)]="cat_filter">
         <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
       </mat-select>
