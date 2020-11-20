@@ -1,8 +1,18 @@
 <div class="mainform">
-  <div class="h-zone">Expériences</div>
+  <div class="h-zone">Expériences de {{name}}</div>
   <app-hourglass [message]="message"></app-hourglass>
-  <div class="wrap-list">
-    <div *ngFor="let wrk of works" style="max-width: 400px;margin:1%;">
+
+   <mat-form-field appearance="fill" class="app-field">
+      <mat-label>Filtrer par nature</mat-label>
+      <mat-select *ngIf="works?.length>8 && categories?.length>1"  [(ngModel)]="cat_filter">
+        <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
+      </mat-select>
+      <br>
+   </mat-form-field>
+
+
+  <div class="wrap-list" *ngIf="cat_filter">
+    <div *ngFor="let wrk of works | filter:['filter',cat_filter]" style="max-width: 400px;margin:1%;">
       <app-work [work]="wrk" height="250px" [showAction]="true">
         <div style="display: flex;font-size: small;margin: 0px;">
           <div *ngIf="wrk.pow.visual?.length>0" style="flex: 40%">

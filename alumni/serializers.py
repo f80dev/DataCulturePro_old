@@ -97,7 +97,7 @@ class POWSerializer(serializers.ModelSerializer):
     works = serializers.StringRelatedField(many=True,read_only=True)
     class Meta:
         model=PieceOfWork
-        fields=["id","title","url","works","links","owner","visual","category","year","description"]
+        fields=["id","title","url","works","links","owner","visual","category","year","description","nature"]
 
 
 

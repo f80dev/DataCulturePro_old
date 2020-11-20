@@ -59,7 +59,7 @@ export class ProfilComponent implements OnInit,OnChanges {
   }
 
   openWork(profil: any) {
-    this.router.navigate(['works'],{queryParams:{id:profil.id}});
+    this.router.navigate(['works'],{queryParams:{id:profil.id,name:profil.firstname+" "+profil.lastname}});
   }
 
   editProfil(profil:any) {

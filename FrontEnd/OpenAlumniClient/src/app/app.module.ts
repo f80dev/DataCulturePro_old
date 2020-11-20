@@ -64,6 +64,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import { PowsComponent } from './pows/pows.component';
 import {NgChatModule} from "ng-chat";
 import {OverlayModule} from "@angular/cdk/overlay";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -127,7 +128,8 @@ import {OverlayModule} from "@angular/cdk/overlay";
         MatListModule,
         MatCheckboxModule,
         MatExpansionModule,
-        OverlayModule
+        OverlayModule,
+        MatRadioModule
     ],
   providers: [
     ApiService,
