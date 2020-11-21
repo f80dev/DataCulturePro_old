@@ -1,4 +1,4 @@
-<mat-card [ngStyle]="{'backgroundColor':backgroundColor,'text-align':'left','min-width':'350px','height':height}">
+<mat-card [ngStyle]="{'backgroundColor':backgroundColor,'text-align':'left','min-width':'350px'}">
   <mat-card-header>
     <div mat-card-avatar>
       <img src="/assets/img/movie.png" class="icon-profil">
@@ -18,7 +18,7 @@
 
   </mat-card-header>
 
-  <mat-card-content style="margin: 0px">
+  <mat-card-content [ngStyle]="{margin: '0px',height:height}">
 
     <ng-content></ng-content>
 

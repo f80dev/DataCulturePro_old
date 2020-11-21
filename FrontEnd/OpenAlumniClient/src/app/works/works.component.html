@@ -4,11 +4,11 @@
 
 <!--   <mat-form-field appearance="fill" class="app-field">-->
 <!--      <mat-label>Oeuvre par catégorie</mat-label>-->
-    <div *ngIf="works?.length>8 && categories?.length>1">
+    <div *ngIf="works?.length>8 && categories?.length>1" style="max-width: 200px;">
       <mat-select  [(ngModel)]="cat_filter">
         <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
       </mat-select>
-      <br>
+      <br><br>
     </div>
 
 <!--   </mat-form-field>-->
@@ -17,17 +17,17 @@
   <div class="wrap-list" *ngIf="cat_filter && works?.length>0">
     <div *ngFor="let wrk of works | filter:['filter',cat_filter]" style="max-width: 400px;margin:1%;">
 
-      <app-work [work]="wrk" height="250px" [showAction]="true">
+      <app-work [work]="wrk" height="120px" [showAction]="true">
         <div style="display: flex;font-size: small;margin: 0px;">
-          <div *ngIf="wrk.pow.visual?.length>0" style="flex: 40%">
+          <div *ngIf="wrk.pow.visual?.length>0" style="flex: 15%">
              <img [src]="wrk.pow.visual"
                    class="image-photo"
-                   style="width: 80px;margin:0px;padding: 0px;"
+                   style="height: 120px;margin:0px;padding: 0px;"
               >
           </div>
-          <div style="flex: 55%;height:80%;overflow: hidden;line-height: 95%;">
+          <div style="flex: 65%;height:80%;overflow: hidden;line-height: 95%;">
             {{wrk.pow.short_desc}}<br><br>
-            Budget: {{wrk.pow.budget}}
+            <span *ngIf="wrk.pow?.budget>0">Budget: {{wrk.pow.budget}}</span>
           </div>
         </div>
 
