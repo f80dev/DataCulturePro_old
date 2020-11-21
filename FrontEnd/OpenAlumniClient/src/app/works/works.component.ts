@@ -33,12 +33,14 @@ export class WorksComponent implements OnInit {
       }else{
         this.works=[];
         for(let w of r.results){
-          w.filter=w.pow.nature;
-          if(this.categories.indexOf(w.pow.nature)==-1)this.categories.push(w.pow.nature);
-          w.pow.short_desc=w.pow.description.substr(0,Math.min(200,w.pow.description.length));
-          this.works.push(w);
+          if(w) {
+            w.filter=w.pow.nature;
+            if(this.categories.indexOf(w.pow.nature)==-1)this.categories.push(w.pow.nature);
+            w.pow.short_desc=w.pow.description.substr(0,Math.min(200,w.pow.description.length));
+            this.works.push(w);
+          }
         }
-        if(this.works.length>0)this.cat_filter=this.works[0].filter;
+        if(this.works.length>0 && this.works[0])this.cat_filter=this.works[0].filter;
       }
     },(err)=>{
       showError(this,err);
