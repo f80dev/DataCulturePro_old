@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Location} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api.service";
-import {showError, showMessage} from "../tools";
+import {$$, showError, showMessage} from "../tools";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -22,12 +22,14 @@ export class WorksComponent implements OnInit {
               public api:ApiService) { }
 
   ngOnInit(): void {
+    $$("Chargement des expériences");
     this.name=this.routes.snapshot.queryParamMap.get("name");
     let id=this.routes.snapshot.queryParamMap.get("id");
     this.message="Chargement des expériences ...";
     this.api.getworks(id).subscribe((r:any)=>{
       this.message="";
       if(r.results.length==0){
+        $$("Pas d'expérience pour "+this.name);
         showMessage(this,"Aucune production référencée pour ce profil");
         this._location.back();
       }else{
