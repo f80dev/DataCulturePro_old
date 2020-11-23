@@ -135,7 +135,7 @@ WSGI_APPLICATION = 'OpenAlumni.wsgi.application'
 #     'NAME': os.path.join(BASE_DIR, 'alumni_db'),
 # },
 
-
+LOCAL_FEDORA_SERVER='172.21.56.186'
 
 DATABASES = {
     "default": {
@@ -155,7 +155,7 @@ DATABASES = {
             "NAME": "alumni_db",
             "USER": "hhoareau",
             "PASSWORD": DB_PASSWORD,
-            'HOST': '172.28.54.22',
+            'HOST': LOCAL_FEDORA_SERVER,
             'PORT': '5432',
             'OPTIONS': {
                 'options': '-c statement_timeout=5000'
@@ -169,7 +169,7 @@ ELASTICSEARCH_DSL = {
         'hosts': '161.97.75.165:9200'
     },
     'dev': {
-        'hosts': '172.28.54.22:9200'
+        'hosts': LOCAL_FEDORA_SERVER+':9200'
     },
 }
 

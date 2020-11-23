@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
 from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.validators import UniqueValidator
+from rest_framework_csv.renderers import CSVRenderer
 from rsa import encrypt
 
 from OpenAlumni import settings
@@ -94,46 +95,60 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class POWSerializer(serializers.ModelSerializer):
-    works = serializers.StringRelatedField(many=True,read_only=True)
     class Meta:
         model=PieceOfWork
-        fields=["id","title","url","works","links","owner","visual","category","year","description","nature"]
+        fields=["id","title","url","links","owner","visual","category","year","description","nature"]
+
+
+class ExtraPOWSerializer(serializers.ModelSerializer):
+    works = serializers.StringRelatedField(many=True, read_only=True)
+    class Meta:
+        model=PieceOfWork
+        fields=["id","title","works","url","links","owner","visual","category","year","description","nature"]
 
 
 
 
 #http://localhost:8000/api/profils/?filter{firstname}=Adrien
 class ProfilSerializer(serializers.ModelSerializer):
-    works = serializers.StringRelatedField(many=True,read_only=True)
+    #works = serializers.StringRelatedField(many=True,read_only=True)
     class Meta:
         model=Profil
         fields=["id","lastname","firstname",
                 "mobile","email","photo","gender","job",
                 "linkedin","degree_year","department",
                 "dtLastUpdate","links","str_links",
-                "cp","public_url","fullname","works","cursus",
+                "cp","public_url","fullname","cursus",
+                "address","town","promo"]
+
+
+#http://localhost:8000/api/profils/?filter{firstname}=Adrien
+class ExtraProfilSerializer(serializers.ModelSerializer):
+    works = serializers.StringRelatedField(many=True,read_only=True)
+    class Meta:
+        model=Profil
+        fields=["id","lastname","firstname",
+                "mobile","email","photo","gender","job",
+                "linkedin","works","degree_year","department",
+                "dtLastUpdate","links","str_links",
+                "cp","public_url","fullname","cursus",
                 "address","town","promo"]
 
 
 
-class ExtraWorkSerializer(serializers.ModelSerializer):
-    pow= POWSerializer(many=False,read_only=True)
-    class Meta:
-        model=Work
-        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job","source"]
 
 
+#http://localhost:8000/api/works/
 class WorkSerializer(serializers.ModelSerializer):
     class Meta:
         model=Work
-        fields=["profil","pow","dtStart","dtEnd","duration","comment","job","title","source"]
+        fields=["profil","pow","dtStart","dtEnd","duration","comment","job","title","source","year","nature"]
 
 
-
-class ExtraPOWSerializer(HyperlinkedModelSerializer):
-    class Meta:
-        model = Work
-        fields = ['profil']
+class WorksCSVRenderer (CSVRenderer):
+    header = ["métier",
+               "nom", "prenom", "formation", "code_postal", "ville", "genre", "promotion",
+               "titre", "catégorie", "sortie", "genre"]
 
 
 #ProfilDocument utilisé par elasticsearch
@@ -153,3 +168,11 @@ class PowDocumentSerializer(DocumentSerializer):
     class Meta:
         document=PowDocument
         fields=("id","title","nature","description",'category','year','works')
+
+
+class ExtraWorkSerializer(serializers.ModelSerializer):
+    pow= POWSerializer(many=False,read_only=True)
+    profil=ProfilSerializer(many=False,read_only=True)
+    class Meta:
+        model=Work
+        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job","source"]

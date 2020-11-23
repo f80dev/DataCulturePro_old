@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from io import StringIO
 from urllib.request import urlopen
 import yaml
+from django.forms import model_to_dict
 from django.http import JsonResponse
 from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
@@ -14,10 +15,12 @@ from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
 from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-from rest_framework.decorators import api_view, action, permission_classes
+from pandas.io.json import json_normalize
+from rest_framework.decorators import api_view, action, permission_classes, renderer_classes
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_pandas import PandasView
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.proxy import ProxyType, Proxy
@@ -37,7 +40,7 @@ from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
     WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
-    PowDocumentSerializer
+    PowDocumentSerializer, WorksCSVRenderer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -96,7 +99,7 @@ class POWViewSet(viewsets.ModelViewSet):
     search_fields = ["title"]
 
 
-#http://localhost:8000/api/works
+#http://localhost:8000/api/extraworks/
 class ExtraWorkViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = ExtraWorkSerializer
@@ -111,7 +114,7 @@ class WorkViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
-
+#http://localhost:8000/api/extrapows
 class ExtraPOWViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = ExtraPOWSerializer
@@ -308,6 +311,31 @@ def send_to(request):
               recipient_list=[_profil.email])
     return Response("Message envoyé", status=200)
 
+
+
+#http://localhost:8000/api/export_all/
+@api_view(["GET"])
+@renderer_classes((WorksCSVRenderer,))
+@permission_classes([AllowAny])
+def export_all(request):
+    headers = ["métier",
+               "nom", "prenom", "formation", "code_postal", "ville", "genre", "promotion",
+               "titre", "catégorie", "sortie", "genre"]
+
+    content=list()
+    for work in Work.objects.all():
+        values=[work.job,
+           work.profil.lastname,work.profil.firstname,work.profil.department,work.profil.cp,work.profil.town,work.profil.gender,work.profil.degree_year,
+           work.pow.title,work.pow.nature,work.pow.year,work.pow.category]
+        values=['' if x is None else x for x in values]
+        d=dict()
+        for i in range(len(headers)):
+            if request.GET.get("string") is not None and type(values[i])==str:values[i]="\""+values[i]+"\""
+            d[headers[i]]=values[i]
+
+        content.append(d)
+
+    return Response(content,content_type="text/csv; charset=utf-8",headers={"Content-Disposition":'attachment; filename="works.csv"'})
 
 
 #http://localhost:8000/api/movie_importer/

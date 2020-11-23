@@ -139,6 +139,16 @@ class Work(models.Model):
     def title(self):
         return self.pow.title
 
+
+    @property
+    def year(self):
+        return self.pow.year
+
+    @property
+    def nature(self):
+        return self.pow.nature
+
+
     @property
     def lastname(self):
         return self.profil.lastname

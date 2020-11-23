@@ -44,7 +44,10 @@ class ProfilDocument(Document):
 
 @registry.register_document
 class PowDocument(Document):
-    works=fields.NestedField(properties={"job":fields.TextField(),"lastname":fields.TextField()})
+    works=fields.NestedField(properties={
+        "job":fields.TextField(),
+        "lastname":fields.TextField()
+    })
     class Index:
         name='pows'
         settings={"number_of_shards":1,"number_of_replicas":0}

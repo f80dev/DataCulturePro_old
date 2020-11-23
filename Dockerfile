@@ -32,6 +32,7 @@ RUN pip3 install rsa
 RUN pip3 install html5lib
 RUN pip3 install wheel
 RUN pip3 install imdbpy
+RUN pip3 install djangorestframework-csv
 
 #Création des répertoires
 ENV APP_HOME=/home/app
