@@ -47,6 +47,7 @@ urlpatterns = [
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),
     path('api/export_all/', views.export_all),
+    path('api/export_all/xml/', views.export_all),
     path('api/rebuild_index/', views.rebuild_index),
     path('api/ask_for_update/', views.ask_for_update),
     url(r'^api/movie_importer/$',views.movie_importer),

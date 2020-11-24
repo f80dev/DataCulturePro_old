@@ -4,6 +4,7 @@ import {api, checkLogin, showMessage} from "../tools";
 import {ConfigService} from "../config.service";
 import {Router} from "@angular/router";
 import {ApiService} from "../api.service";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-stats',
@@ -15,10 +16,13 @@ export class StatsComponent implements OnInit {
   reports: any[]=[];
   sel_report: any={}
   showGraphQL: boolean=false;
+  domain_server="";
 
   constructor(public _location:Location,
               public api:ApiService,
-              public router:Router,public config:ConfigService) { }
+              public router:Router,public config:ConfigService) {
+    this.domain_server=environment.domain_server;
+  }
 
   ngOnInit(): void {
     checkLogin(this);
@@ -40,5 +44,9 @@ export class StatsComponent implements OnInit {
 
   openCSV() {
     open(api("export_all","",true,""));
+  }
+
+  downloadExcel() {
+    open(environment.domain_appli+"/assets/Reporting.xlsx")
   }
 }

@@ -155,6 +155,7 @@ class WorksCSVRenderer (CSVRenderer):
     ]
 
 
+
 #ProfilDocument utilisé par elasticsearch
 class ProfilDocumentSerializer(DocumentSerializer):
     works=serializers.StringRelatedField(many=True, read_only=True)

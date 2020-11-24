@@ -5,7 +5,7 @@ from io import StringIO
 from urllib.request import urlopen
 import yaml
 from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
     LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
@@ -15,12 +15,10 @@ from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
 from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-from pandas.io.json import json_normalize
 from rest_framework.decorators import api_view, action, permission_classes, renderer_classes
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_pandas import PandasView
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.proxy import ProxyType, Proxy
@@ -312,7 +310,7 @@ def send_to(request):
     return Response("Message envoyé", status=200)
 
 
-
+from dict2xml import dict2xml as xmlify
 #http://localhost:8000/api/export_all/
 @api_view(["GET"])
 @renderer_classes((WorksCSVRenderer,))
@@ -334,7 +332,11 @@ def export_all(request):
 
         content.append(d)
 
-    return Response(content,content_type="text/csv; charset=utf-8",headers={"Content-Disposition":'attachment; filename="works.csv"'})
+    if "xml" in request.get_full_path():
+        d="<root>"+xmlify(content,wrap="list-items",indent="  ")+"</root>"
+        return HttpResponse(d,content_type="text/xml")
+    else:
+        return Response(content,content_type="text/csv; charset=utf-8",headers={"Content-Disposition":'attachment; filename="works.csv"'})
 
 
 #http://localhost:8000/api/movie_importer/
@@ -416,7 +418,9 @@ def importer(request,format=None):
         except:
             pass
 
-    d =csv.reader(StringIO(txt), delimiter=";")
+    txt=txt.replace("&#8217;","")
+
+    d=csv.reader(StringIO(txt), delimiter=";")
     i=0
     record=0
     for row in d:

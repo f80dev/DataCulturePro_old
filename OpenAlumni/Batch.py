@@ -212,6 +212,8 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
                         break
                     idx=idx+1
 
+    if "job" in rc:rc["job"]=rc["job"].split("-")[0]
+
     return rc
 
 
