@@ -318,15 +318,14 @@ def send_to(request):
 @renderer_classes((WorksCSVRenderer,))
 @permission_classes([AllowAny])
 def export_all(request):
-    headers = ["métier",
-               "nom", "prenom", "formation", "code_postal", "ville", "genre", "promotion",
-               "titre", "catégorie", "sortie", "genre"]
-
+    headers=WorksCSVRenderer.header
     content=list()
     for work in Work.objects.all():
-        values=[work.job,
-           work.profil.lastname,work.profil.firstname,work.profil.department,work.profil.cp,work.profil.town,work.profil.gender,work.profil.degree_year,
-           work.pow.title,work.pow.nature,work.pow.year,work.pow.category]
+        values=[
+            work.id,work.job,
+            work.profil.id,work.profil.lastname,work.profil.firstname,work.profil.department,work.profil.cp,work.profil.town,work.profil.gender,work.profil.degree_year,
+            work.pow.id,work.pow.title,work.pow.nature,work.pow.year,work.pow.category
+                ]
         values=['' if x is None else x for x in values]
         d=dict()
         for i in range(len(headers)):

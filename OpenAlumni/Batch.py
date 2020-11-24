@@ -5,6 +5,7 @@ from imdb import IMDb
 from wikipedia import wikipedia, random, re
 
 from OpenAlumni.Tools import log
+from OpenAlumni.settings import MOVIE_CATEGORIES, MOVIE_NATURE
 from alumni.models import Profil, Work, PieceOfWork
 
 
@@ -131,13 +132,21 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                         texts=l.parent.parent.text.split("(")
                         nature="long"
                         job=""
+
+                        url = "https://www.imdb.com" + l.get("href")
+                        url = url.split("?")[0]
+
                         if len(texts)>1:
-                            nature = texts[1].split(")")[0]
+                            nature = "inconnue"
+                            for nat in MOVIE_NATURE:
+                                if nat.lower() in texts[1].lower():
+                                    nature=nat
+                                    break
+                            if nature=="inconnue":
+                                log("Nature inconnue pour "+url)
+
                             if len(texts)>2:
                                 job=texts[2].split(")")[0]
-
-                        url="https://www.imdb.com"+l.get("href")
-                        url=url.split("?")[0]
 
                         infos["links"].append({"url":url,"text":l.getText(),"job":job,"nature":nature})
 
@@ -146,35 +155,45 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
 
 
 
-
-def extract_film_from_imdb(url:str,title:str,name="",job=""):
+#http://localhost:8000/api/batch
+def extract_film_from_imdb(url:str,title:str,name="",job="",):
     """
 
     :return:
     """
     page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
 
+
+
+    zone_info=page.find("div",{"class":"title_block"})
+
     if title.startswith("Episode"):
-        section_title=page.find("div",{"class":"titleParent"})
-        if not section_title is None:title=section_title.find("a").text+" "+title
+        section_title = page.find("div", {"class": "titleParent"})
+        if not section_title is None: title = section_title.find("a").text + " " + title
 
+    rc = dict({"title": title})
+    for cat in MOVIE_CATEGORIES:
+        if cat.lower() in zone_info.getText().lower():
+            rc["category"]=cat
+    if not "category" in rc:
+        rc["category"]="Inconnue"
+        log("Pas de categorie pour "+url)
 
-    rc=dict({"title":title})
-    affiche=page.find("div",attrs={"class":"poster"})
-    if not affiche is None:rc["visual"]=affiche.find("img").get("src")
-
-    subtext=page.find("div",attrs={'class': "subtext"})
-    if not subtext is None:
-        _links=subtext.findAll("a")
-        if len(_links)>0:rc["category"]=_links[0].text
+    affiche = page.find("div", attrs={"class": "poster"})
+    if not affiche is None and not affiche.find("img") is None: rc["visual"] = affiche.find("img").get("src")
 
     try:
         rc["year"]=re.search('[1-2][0-9][0-9][0-9]', page.title.text).group(0)
     except:
-        pass
+        try:
+            rc["year"] = re.search('[1-2][0-9][0-9][0-9]', zone_info.getText()).group(0)
+        except:
+            pass
+
 
     summary_section=page.find("div",attrs={"class":"summary_text"})
-    if not summary_section is None and not "Add a Plot" in summary_section.text:rc["synopsis"]=summary_section.text
+    if not summary_section is None and not "Add a Plot" in summary_section.text:
+        rc["synopsis"]=summary_section.text.replace("\n","").strip()
 
     if len(job)>0:
         rc["job"]=job

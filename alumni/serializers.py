@@ -145,10 +145,14 @@ class WorkSerializer(serializers.ModelSerializer):
         fields=["profil","pow","dtStart","dtEnd","duration","comment","job","title","source","year","nature"]
 
 
+
+
 class WorksCSVRenderer (CSVRenderer):
-    header = ["métier",
-               "nom", "prenom", "formation", "code_postal", "ville", "genre", "promotion",
-               "titre", "catégorie", "sortie", "genre"]
+    header = [
+        "work_id","work_job",
+        "profil_id","profil_nom", "profil_prenom", "profil_formation", "profil_code_postal", "profil_ville", "profil_genre", "profil_promotion",
+        "film_id","film_titre", "film_catégorie", "film_annee", "film_genre"
+    ]
 
 
 #ProfilDocument utilisé par elasticsearch

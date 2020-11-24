@@ -250,4 +250,7 @@ LINKEDIN_RETURN_URL="http://localhost:8000/api/oauth_callback"
 #SECURE_SSL_REDIRECT = True
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-
+MOVIE_CATEGORIES=[
+"Documentary","Action","Adventure","Sci-Fi","Mystery","Horror","Thriller","Animation","Comedy","Family","Fantasy","Drama","Music","Biography","Romance","History","Crime","Western","War","Musical","Sport"
+]
+MOVIE_NATURE=["TV","Short","Long","Documentary"]

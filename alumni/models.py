@@ -125,7 +125,7 @@ class Work(models.Model):
     """
     id = models.AutoField(primary_key=True)
     profil = models.ForeignKey('Profil', null=False, on_delete=models.CASCADE,related_name="works")
-    pow = models.ForeignKey('PieceOfWork', null=True, on_delete=models.CASCADE, related_name="works")
+    pow = models.ForeignKey('PieceOfWork', null=False, on_delete=models.CASCADE, related_name="works")
     dtStart=models.DateField(null=True)
     dtEnd=models.DateField(null=True)
     status=models.CharField(max_length=200,default="")
