@@ -42,11 +42,12 @@ export class StatsComponent implements OnInit {
     })
   }
 
-  openCSV() {
-    open(api("export_all","",true,""));
-  }
 
-  downloadExcel() {
-    open(environment.domain_appli+"/assets/Reporting.xlsx")
+
+  downloadReport(tools: string) {
+    if(tools=="excel")open(environment.domain_appli+"/assets/reporting.xlsx");
+    if(tools=="powerbi")open(environment.domain_appli+"/assets/reporting.pbix");
+    if(tools=="csv")open(api("export_all","",true,""));
+    if(tools=="xml")open(api("export_all/xml","",true,""));
   }
 }

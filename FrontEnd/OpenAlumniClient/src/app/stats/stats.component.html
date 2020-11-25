@@ -31,39 +31,47 @@
   <br>
 
 
-  <table style="display:inline-block;text-align: center;font-size: small;padding: 5px;" class="mat-elevation-z8">
-    <tr style="max-width:1000px;width: 90%;">
+  <table class="mat-elevation-z8">
+    <tr>
       <th style="width:50%">Procédure</th>
       <th>Commande</th>
     </tr>
+
     <tr>
-      <td>Importer les données au format CSV</td>
+      <td>Importer directement<br>les données</td>
       <td>
-        <button mat-button mat-raised-button
-          class="app-button"
-          (click)="openCSV()">
-            Données CSV
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td>Utiliser un lien pour votre reporting</td>
-      <td>
-        <small>{{domain_server}}/api/export_all/</small><br>
-        <small>{{domain_server}}/api/export_all/xml/</small>
+         <button mat-button mat-raised-button
+          (click)="downloadReport('csv')">
+            CSV
+          </button>
+          &nbsp;
+          <button mat-button mat-raised-button
+          (click)="downloadReport('xml')">
+            XML
+          </button>
       </td>
     </tr>
 
     <tr>
-      <td>Télécharger le fichier Excel connecter</td>
+      <td>Utiliser Excel pour analyser</td>
       <td>
-        <button mat-button mat-raised-button
-          class="app-button"
-          (click)="downloadExcel()">
-            Reporting
+        <button mat-button mat-raised-button mat-icon-button class="icon-button"
+          (click)="downloadReport('excel')">
+          <mat-icon>download</mat-icon>
         </button>
       </td>
     </tr>
+
+    <tr>
+      <td>Utiliser PowerBI pour analyser</td>
+      <td>
+        <button mat-button mat-raised-button mat-icon-button class="icon-button"
+          (click)="downloadReport('powerbi')">
+            <mat-icon>download</mat-icon>
+        </button>
+      </td>
+    </tr>
+
   </table>
 
 
