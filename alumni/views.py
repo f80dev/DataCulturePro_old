@@ -320,9 +320,9 @@ def export_all(request):
     content=list()
     for work in Work.objects.all():
         values=[
-            work.id,work.job,
-            work.profil.id,work.profil.lastname,work.profil.firstname,work.profil.department,work.profil.cp,work.profil.town,work.profil.gender,work.profil.degree_year,
-            work.pow.id,work.pow.title,work.pow.nature,work.pow.year,work.pow.category
+            work.profil.id,work.profil.fullname,work.profil.lastname,work.profil.firstname,work.profil.department,work.profil.cp,work.profil.town,work.profil.gender,work.profil.degree_year,
+            work.pow.id,work.pow.title,work.pow.nature,work.pow.category,work.pow.year,
+            work.id, work.job,work.comment,
                 ]
         values=['' if x is None else x for x in values]
         d=dict()

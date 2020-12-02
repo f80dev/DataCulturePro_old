@@ -214,10 +214,7 @@ export class LoginComponent implements OnInit {
     this.wait_message="Récupération de l'utilisateur";
     this.api.getuser(data.email).subscribe((result:any)=> {
       if (result.results.length > 0) {
-          // let _old_user = result.results[0];
-          // this.wait_message = "";
-          // this.messageCode = "Le compte " + _old_user.email + " existe déjà, veuillez saisir votre mot de passe";
-          // this.email = data.email;
+          this.email = data.email;
           this.updateCode(data.provider_id)
         } else {
           $$("Il n'y a pas de compte à cet email");

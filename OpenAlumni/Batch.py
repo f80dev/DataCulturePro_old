@@ -106,7 +106,7 @@ def extract_actor_from_unifrance(name="céline sciamma"):
     else:
         return None
 
-    return {"links":rc,"photo":photo,"url":url}
+    return {"links":rc,"photo":photo,"url":u}
 
 
 
@@ -163,15 +163,21 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
     """
     page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
 
-
+    rc = dict({"title": title})
 
     zone_info=page.find("div",{"class":"title_block"})
-
-    if title.startswith("Episode"):
+    if title.startswith("Episode") or "Episode" in zone_info.getText():
         section_title = page.find("div", {"class": "titleParent"})
         if not section_title is None: title = section_title.find("a").text + " " + title
+        #Recherche de l'épisode
+        rc["nature"]=MOVIE_NATURE[0]
+        zone_info_comp=page.find("div",{"class":"button_panel navigation_panel"})
+        if not zone_info_comp is None and "Season" in zone_info_comp.getText():
+            extract_text="S"+zone_info_comp.getText().split("Season")[1].replace("Episode ","E").replace(" | ","").replace(" ","")
+            rc["title"]=title+" "+extract_text.split("\n")[0]
 
-    rc = dict({"title": title})
+
+
     for cat in MOVIE_CATEGORIES:
         if cat.lower() in zone_info.getText().lower():
             rc["category"]=cat
@@ -284,10 +290,10 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
             if "imdb" in l["url"]:
                 film=extract_film_from_imdb(l["url"],l["text"],name=profil.firstname+" "+profil.lastname,job=l["job"])
-                film["nature"]=l["nature"]
+                if not "nature" in film: film["nature"]=l["nature"]
                 source="IMDB"
 
-            sleep(random() * 5)
+            sleep(random() * 1200)
 
             log("Ajout de " + film["title"] + " à l'adresse " + l["url"])
             pow = PieceOfWork(title=film["title"])
@@ -299,7 +305,12 @@ def add_pows_to_profil(profil,links,all_links,job_for):
             if "year" in film: pow.year = film["year"]
 
             try:
-                pow.save()
+                result=PieceOfWork.objects.filter(title=pow.title)
+                if len(result)==0:
+                    pow.save()
+                else:
+                    log("Le film existe déjà dans la base, on le récupére")
+                    pow=result.first()
 
                 # TODO: a réétudier car des mises a jour de fiche pourrait nous faire rater des films
                 # il faudrait désindenter le code ci-dessous mais du coup il faudrait retrouver le pow

@@ -149,9 +149,9 @@ class WorkSerializer(serializers.ModelSerializer):
 
 class WorksCSVRenderer (CSVRenderer):
     header = [
-        "work_id","work_job",
-        "profil_id","profil_nom", "profil_prenom", "profil_formation", "profil_code_postal", "profil_ville", "profil_genre", "profil_promotion",
-        "film_id","film_titre", "film_catégorie", "film_annee", "film_genre"
+        "profil_id","profil_prenomnom","profil_nom", "profil_prenom", "profil_formation", "profil_code_postal", "profil_ville", "profil_genre", "profil_promotion",
+        "film_id","film_titre", "film_catégorie", "film_genre","film_annee",
+        "work_id", "work_job","work_comment"
     ]
 
 

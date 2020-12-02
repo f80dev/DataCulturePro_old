@@ -31,7 +31,7 @@
   <br>
 
 
-  <table class="mat-elevation-z8">
+  <table class="mat-elevation-z8" *ngIf="!showGraphQL">
     <tr>
       <th style="width:50%">Procédure</th>
       <th>Commande</th>
@@ -77,8 +77,6 @@
 
 
   <br>
-
-
 
 
   <div *ngIf="showGraphQL">

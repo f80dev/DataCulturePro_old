@@ -1,5 +1,17 @@
 
 #Configuration de développpement
+
+##Installation d'un serveur
+Le projet repose pour sur un serveur virtuel sous Fedora.
+Depuis la connexion Root, on lance
+
+<pre>
+dnf install podman
+firewall-cmd --zone=public --add-port=9090/tcp
+</pre>
+
+
+
 ##Netoyage préalable
 Il peut être nécessaire de netoyer la base prélablement:
 <pre>

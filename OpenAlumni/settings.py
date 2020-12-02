@@ -26,6 +26,8 @@ EMAIL_TESTER = ["hhoareau@gmail.com",
                 "herve.hoareau@f80.fr",
                 "sophie.dudule@gmail.com"]
 
+LOCAL_FEDORA_SERVER='172.24.130.105'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -53,6 +55,7 @@ STATIC_ROOT=os.path.join(BASE_DIR, "static")
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'dbbackup',
     'oauth2_provider',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -80,6 +83,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/static/'}
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ['http://localhost:4200']
@@ -134,8 +139,6 @@ WSGI_APPLICATION = 'OpenAlumni.wsgi.application'
 #     'ENGINE': 'django.db.backends.sqlite3',
 #     'NAME': os.path.join(BASE_DIR, 'alumni_db'),
 # },
-
-LOCAL_FEDORA_SERVER='172.21.56.186'
 
 DATABASES = {
     "default": {
@@ -253,4 +256,4 @@ LINKEDIN_RETURN_URL="http://localhost:8000/api/oauth_callback"
 MOVIE_CATEGORIES=[
 "Documentary","Action","Adventure","Sci-Fi","Mystery","Horror","Thriller","Animation","Comedy","Family","Fantasy","Drama","Music","Biography","Romance","History","Crime","Western","War","Musical","Sport"
 ]
-MOVIE_NATURE=["TV","Short","Long","Documentary"]
+MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]

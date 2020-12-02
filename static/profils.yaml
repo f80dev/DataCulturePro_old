@@ -4,7 +4,7 @@ profils:
   - id: anonyme
     title: Anonyme
     description: Profil par défaut affecté au personne non connecté
-    perm: r_promo r_lastname r_firstname share r_department
+    perm: r_promo r_lastname r_firstname share r_department r_works
     price: 0
     subscription: offline
 
