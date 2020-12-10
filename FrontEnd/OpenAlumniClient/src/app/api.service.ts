@@ -52,6 +52,11 @@ export class ApiService {
     return this.http.put(url,body,this.getHttpOptions()).pipe(timeout(_timeoutInSec*1000));
   }
 
+  _patch(url,params="",body,_timeoutInSec=60){
+    url=api(url,params,true,"");
+    return this.http.patch(url,body,this.getHttpOptions()).pipe(timeout(_timeoutInSec*1000));
+  }
+
   resend(email: string) {
     return this._get("resend","email="+email);
   }
@@ -139,7 +144,7 @@ export class ApiService {
   getPOW(id=null) {
     let params="";
     if(id)params=id+"/";
-    return this._get("pows/"+params);
+    return this._get("extrapows/"+params);
   }
 
   addpow(pow: any) {

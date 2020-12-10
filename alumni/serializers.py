@@ -104,7 +104,7 @@ class ExtraPOWSerializer(serializers.ModelSerializer):
     works = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model=PieceOfWork
-        fields=["id","title","works","url","links","owner","visual","category","year","description","nature"]
+        fields=["id","title","url","works","links","owner","visual","category","year","description","nature"]
 
 
 
@@ -142,7 +142,10 @@ class ExtraProfilSerializer(serializers.ModelSerializer):
 class WorkSerializer(serializers.ModelSerializer):
     class Meta:
         model=Work
-        fields=["profil","pow","dtStart","dtEnd","duration","comment","job","title","source","year","nature"]
+        fields=["profil","pow","dtStart","dtEnd",
+                "duration","comment","job","title",
+                "public","creator","id"
+                "source","year","nature"]
 
 
 
@@ -175,9 +178,10 @@ class PowDocumentSerializer(DocumentSerializer):
         fields=("id","title","nature","description",'category','year','works')
 
 
+
 class ExtraWorkSerializer(serializers.ModelSerializer):
     pow= POWSerializer(many=False,read_only=True)
     profil=ProfilSerializer(many=False,read_only=True)
     class Meta:
         model=Work
-        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job","source"]
+        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job","source","public"]

@@ -218,5 +218,11 @@ export class EditComponent implements OnInit  {
     }
     this.api.setuser(this.config.user.user).subscribe(()=>{});
   }
+
+  _private(work: any) {
+    work.public=!work.public;
+    this.api._patch("works/"+work.id+"/","", {"public":work.public}).subscribe(()=>{
+    });
+  }
 }
 

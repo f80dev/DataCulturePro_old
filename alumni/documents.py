@@ -1,7 +1,7 @@
 #Document utilisé par elasticSearch
 
-from django.conf import settings
-from django_elasticsearch_dsl import Document, Index, fields
+
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from elasticsearch_dsl import analyzer
 from alumni.models import Profil, Work, PieceOfWork
@@ -46,8 +46,9 @@ class ProfilDocument(Document):
 class PowDocument(Document):
     works=fields.NestedField(properties={
         "job":fields.TextField(),
-        "lastname":fields.TextField()
+        "lastname":fields.TextField(),
     })
+
     class Index:
         name='pows'
         settings={"number_of_shards":1,"number_of_replicas":0}

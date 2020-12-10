@@ -2,7 +2,7 @@
 
   <app-tuto label="Vous pouvez également consulter la liste des élèves de la FEMIS (anciens et actuels), via le menu latéral"></app-tuto>
 
-  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: x-large;" autofocus>
+  <mat-form-field appearance="legacy" style="max-width:600px;width:96%;font-size: large;" autofocus>
     <mat-label>Rechercher un film</mat-label>
     <input matInput matNativeControl
            title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
@@ -12,6 +12,9 @@
               matSuffix style="cursor: pointer"
               (click)="clearQuery()">cancel</mat-icon>
   </mat-form-field>
+  &nbsp;&nbsp;
+  <mat-checkbox [(ngModel)]="all">Tout</mat-checkbox>
+
   <br>
 
   <div class="div-center" *ngIf="message.length==0">
@@ -35,10 +38,6 @@
           <span style="font-weight: bold">{{pow.title}}&nbsp;</span>
           <small>({{pow.nature}}/{{pow.category}} - {{pow.year}})</small>
         </mat-panel-title>
-        <mat-panel-description>
-
-        </mat-panel-description>
-
       </mat-expansion-panel-header>
 
       <div style="text-align: center;">

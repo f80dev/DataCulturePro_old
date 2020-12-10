@@ -129,11 +129,17 @@ class Work(models.Model):
     dtStart=models.DateField(null=True)
     dtEnd=models.DateField(null=True)
     status=models.CharField(max_length=200,default="")
+
+    #creator passera à user si l'utilisateur modifie l'enregistrement
+    creator=models.CharField(max_length=5,default="auto",help_text="Désigne qui est le dernier auteur de l'enregistrement")
+    public=models.BooleanField(default=True)
+
     job=models.CharField(max_length=200,default="")
     duration=models.IntegerField(default=0,null=False)
     comment=models.TextField(max_length=400,null=False,default="",blank=True)
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
     source=models.URLField(null=True)
+
 
     @property
     def title(self):
@@ -152,6 +158,7 @@ class Work(models.Model):
     @property
     def lastname(self):
         return self.profil.lastname
+
 
     def __str__(self):
         d:dict=dict({
@@ -183,6 +190,7 @@ class PieceOfWork(models.Model):
 
     #Structure : "url" du document, "text" du lien
     links=JSONField(null=True,help_text="Liens vers des références externes à l'oeuvre")
+
     owner=models.CharField(max_length=150,default="public")
     description=models.TextField(null=False,default="",max_length=3000,help_text="Description/Resumer de l'oeuvre")
     # Structure : "url" du document, "type" de document (str), "title" du document

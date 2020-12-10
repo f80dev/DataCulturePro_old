@@ -41,6 +41,7 @@ export class PowsComponent implements OnInit {
 
   handle:any;
   message: string ="";
+  all: any=true;
 
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);
@@ -52,7 +53,7 @@ export class PowsComponent implements OnInit {
 
 
   private refresh() {
-    let param=translateQuery(this.query.value);
+    let param=translateQuery(this.query.value,this.all);
     param=param.replace("works__title","title__terms");
     this.message="Recherche des films";
     this.api._get("powsdoc",param).subscribe((r:any)=>{
@@ -98,27 +99,24 @@ export class PowsComponent implements OnInit {
   }
 
   get_pow(pow: any) {
-    let index=this.pows.indexOf(pow);
-    //if(!this.pows[index].hasOwnProperty("links")){
-      this.api.getPOW(pow.id).subscribe((r:any)=>{
+      this.api._get("extraworks/","search="+pow.id).subscribe((r:any)=>{
         let rc=[];
-        if(r.hasOwnProperty("works")){
-          for(let w of r.works){
-            let json_str=w.replace(/\'/gi,"\"");
-            try {
-              rc.push(JSON.parse(json_str));
-            } catch (e) {
-              showError(this,e);
-              $$("Erreur de conversion de "+json_str,e);
+        if(r.results.length>0){
+          pow.visual=r.results[0].pow.visual;
+          pow.description=r.results[0].pow.description;
+          for(let item of r.results){
+            if(item.public){
+              rc.push({
+                job:item.job,
+                name:item.profil.firstname+" "+item.profil.lastname
+              })
             }
           }
+          pow.expanded=true;
+          pow.works=rc;
         }
-        r.works=rc;
-        r.expanded=true;
 
-        this.pows[index]=r;
       });
-   // }
   }
 
   deletePow(pow: any) {

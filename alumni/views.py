@@ -8,7 +8,8 @@ from django.forms import model_to_dict
 from django.http import JsonResponse, HttpResponse
 from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
-    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
+    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION, LOOKUP_FILTER_TERMS, \
+    LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE, LOOKUP_FILTER_TERM
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
@@ -103,13 +104,14 @@ class ExtraWorkViewSet(viewsets.ModelViewSet):
     serializer_class = ExtraWorkSerializer
     permission_classes = [AllowAny]
     filter_backends = (SearchFilter,)
-    search_fields = ["profil__id"]
+    search_fields = ["profil__id","pow__id"]
 
 
 class WorkViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = WorkSerializer
     permission_classes = [AllowAny]
+    search_fields=["id"]
 
 
 #http://localhost:8000/api/extrapows
@@ -559,6 +561,7 @@ class PowDocumentView(DocumentViewSet):
     serializer_class = PowDocumentSerializer
     pagination_class = PageNumberPagination
     lookup_field = "id"
+
     filter_backends = [
         FilteringFilterBackend,
         IdsFilterBackend,
@@ -566,14 +569,21 @@ class PowDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
+
     search_fields = ('title','category',"nature","year","works")
     filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE],
+        'title':{
+            'field':'title',
+            'lookups':[LOOKUP_FILTER_TERM,LOOKUP_FILTER_TERMS,LOOKUP_FILTER_PREFIX,LOOKUP_FILTER_WILDCARD,LOOKUP_QUERY_IN,LOOKUP_QUERY_EXCLUDE,]
+        },
+        'category': {
+            'field': 'category',
+            'lookups': [LOOKUP_FILTER_TERM, LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD,
+                        LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE, ]
         }
     }
     ordering_fields = {
+        'year':'year',
         'title': 'title'
     }
 

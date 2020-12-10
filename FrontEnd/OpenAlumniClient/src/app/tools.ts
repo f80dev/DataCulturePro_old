@@ -14,7 +14,7 @@ export function showError(vm:any,err:any){
 }
 
 
-export function translateQuery(text:string):string {
+export function translateQuery(text:string,all_term=false):string {
     if(text.length==0)return "";
     let dict={
       "nom":"lastname",
@@ -38,8 +38,12 @@ export function translateQuery(text:string):string {
       return rc.substr(0,rc.length-1);
     }
 
-    if(text.indexOf("&")>-1){
-      text="title__terms="+text.split("&")[0].trim()+"&title__terms="+text.split("&")[1].trim();
+    if(all_term){
+      let rc="";
+      for(let wrd of text.split(" ")){
+        rc=rc+"title__term="+wrd.toLowerCase().trim()+"&";
+      }
+      text=rc.substr(0,rc.length-1);
     }
     else
       text="search="+text;
@@ -363,12 +367,13 @@ export function showMessage(vm:any,s:string="",duration=2000,func=null,label_but
     //Affichage en mode toaster
     var toaster:MatSnackBar=vm.toast || vm.snackBar || vm.toaster;
     if(toaster!=null){
-      if(duration==0)
-        toaster.open(s,label_button).onAction().subscribe(()=>{
-          if(func!=null)func();
+      if(func!=null){
+        toaster.open(s,label_button,{duration:duration}).onAction().subscribe(()=>{
+          func();
         });
-      else
+      } else {
         toaster.open(s,"",{duration:duration});
+      }
     }
 
   }

@@ -35,7 +35,7 @@ export class WorksComponent implements OnInit {
       }else{
         this.works=[];
         for(let w of r.results){
-          if(w) {
+          if(w && w.public) {
             w.filter=w.pow.nature;
             if(this.categories.indexOf(w.pow.nature)==-1)this.categories.push(w.pow.nature);
             w.pow.short_desc=w.pow.description.substr(0,Math.min(200,w.pow.description.length));
