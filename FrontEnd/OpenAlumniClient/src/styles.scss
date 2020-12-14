@@ -1,5 +1,21 @@
-tml, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body { height: 100%; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html {
+  background-color: #545454;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
 
 
 .app-card {
@@ -186,6 +202,7 @@ h2 {
 }
 
 .mainform {
+  padding: 2px;
   width:96vw;
   margin-left:2vw;
   margin-top:5px;

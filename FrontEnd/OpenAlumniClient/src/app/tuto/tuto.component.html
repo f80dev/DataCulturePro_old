@@ -31,9 +31,9 @@
   </div>
 
   <div  *ngIf="background?.length>0 && _type=='title'"
-        style="background-color:black;cursor: none;pointer-events: none;position: fixed;top:0;left:0;height:100vh;width:100vw;z-index: 999;object-fit:cover;">
+        style="background-color:black;cursor: none;pointer-events: none;position: fixed;top:0;left:0;z-index: 999;">
     <img [src]="background" *ngIf="background?.startsWith('http') || background?.startsWith('./')"
-         style="min-width:100%;min-height:100%;">
+         style="width: 100vw;height:100vh;object-fit:cover;">
   </div>
 
   <div *ngIf="background?.length==0 && _type=='title'"
@@ -45,8 +45,9 @@
          style="z-index:1000;display:inline-block;position:fixed;top:0px;left:0px;width:100vw;height:100vh;text-align:center;">
 
       <div style="width:80%;text-align:center;font-size: 6vmin;margin-top:5vh;margin-bottom:5vh;margin-left:10%;"
-            [innerHTML]="text | safe:'html'">
+            [innerHTML]="text">
       </div>
+
       <img *ngIf="image?.length>0"
            [src]="image"
            style="max-width:400px;max-height:400px;width:60vmin;height:60vmin;margin-bottom:3vh;display: inline-block;">
@@ -55,7 +56,7 @@
            style="height:40vh"></div>
 
       <div style="width:90%;margin-left:5%;margin-top:4vh;text-align:center;font-size: large;margin-bottom: 5vh;"
-           [innerHTML]="subtitle | safe:'html'"></div>
+           [innerHTML]="subtitle"></div>
 
       <button class="app-button"
               (click)="onclick.emit()"

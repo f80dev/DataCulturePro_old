@@ -39,10 +39,11 @@ export class PowsComponent implements OnInit {
     this.refresh();
   }
 
-  handle:any;
+
   message: string ="";
   all: any=true;
 
+  handle:any;
   onQuery($event: KeyboardEvent) {
     clearTimeout(this.handle);
     this.handle=setTimeout(()=>{
