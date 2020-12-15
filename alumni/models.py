@@ -57,6 +57,7 @@ class Profil(models.Model):
 
         return rc
 
+
     def add_link(self,url,title,description=""):
         if self.links is None:self.links=[]
         obj={"url":url,"text":title,"update":now(),"desc":description}

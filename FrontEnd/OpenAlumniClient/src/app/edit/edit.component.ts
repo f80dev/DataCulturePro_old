@@ -67,6 +67,7 @@ export class EditComponent implements OnInit  {
   }
 
   refresh(){
+    $$("Rafraichir les expériences");
     this.loadMovies((data:any[])=>{
         this.dataSource = new MatTableDataSource<Movie>(data);
         this.autoAddMovie();
@@ -223,6 +224,22 @@ export class EditComponent implements OnInit  {
     work.public=!work.public;
     this.api._patch("works/"+work.id+"/","", {"public":work.public}).subscribe(()=>{
     });
+  }
+
+  analyse() {
+    this.api._get("batch/","filter="+this.profil.id).subscribe(()=>{
+      this.refresh();
+    });
+  }
+
+  reset_works() {
+    let total=this.works.length;
+    for(let w of this.works){
+      this.api._delete("works/"+w.id+"/").subscribe(()=>{
+        total=total-1;
+        if(total==0)this.works=[];
+      });
+    }
   }
 }
 

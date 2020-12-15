@@ -128,10 +128,11 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                 links = film_zone.findAll('a', attrs={'href': wikipedia.re.compile("^/title/tt")})
                 infos["links"]=[]
                 for l in links:
-                    if len(l.getText())>3:
+                    if len(l.getText())>3 and l.parent.parent.parent.parent and l.parent.parent.parent.parent["id"]=="filmography":
                         texts=l.parent.parent.text.split("(")
                         nature="long"
-                        job=""
+                        job:str=l.parent.parent.parent.parent.text.split("(")[0]
+                        job=job[job.rindex("\n"):].replace("\n","").strip()
 
                         url = "https://www.imdb.com" + l.get("href")
                         url = url.split("?")[0]
@@ -145,7 +146,7 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                             if nature=="inconnue":
                                 log("Nature inconnue pour "+url)
 
-                            if len(texts)>2:
+                            if len(texts)>2 and len(job)==0:
                                 job=texts[2].split(")")[0]
 
                         infos["links"].append({"url":url,"text":l.getText(),"job":job,"nature":nature})
@@ -280,22 +281,27 @@ def add_pows_to_profil(profil,links,all_links,job_for):
     :return:
     """
     for l in links:
-        if not l["url"] in all_links:
-            title = l["text"]
-            #already_exist=PieceOfWork.objects.filter({"title":title}).exists()
-            source=""
+        pow = None
+        for p in PieceOfWork.objects.filter(title=l["text"]):
+            for link in p.links:
+                if l["url"] == link["url"]:
+                    pow=p
+                    break
+
+        if not pow:
+            sleep(random() * 1200)
+            source = ""
             if "unifrance" in l["url"]:
                 film = extract_film_from_unifrance(l["url"], job_for=job_for)
-                source="unifrance"
+                source = "unifrance"
 
             if "imdb" in l["url"]:
-                film=extract_film_from_imdb(l["url"],l["text"],name=profil.firstname+" "+profil.lastname,job=l["job"])
-                if not "nature" in film: film["nature"]=l["nature"]
-                source="IMDB"
+                film = extract_film_from_imdb(l["url"], l["text"], name=profil.firstname + " " + profil.lastname,job=l["job"])
+                if not "nature" in film: film["nature"] = l["nature"]
+                source = "IMDB"
 
-            sleep(random() * 1200)
+            log("Traitement de " + film["title"] + " à l'adresse " + l["url"])
 
-            log("Ajout de " + film["title"] + " à l'adresse " + l["url"])
             pow = PieceOfWork(title=film["title"])
             pow.add_link(url=l["url"], title=source)
             if "nature" in film:pow.nature=film["nature"]
@@ -317,13 +323,15 @@ def add_pows_to_profil(profil,links,all_links,job_for):
                 job = profil.job
                 if "job" in film: job = film["job"]
 
-                if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id).exists():
-                    log("Ajout de l'experience " + pow.title + " à " + profil.lastname)
-                    work = Work(pow=pow, profil=profil, job=job, source=l["url"])
-                    work.save()
             except Exception as inst:
                 log("Impossible d'enregistrer le film: "+str(inst.args))
+        else:
+            job=l["job"]
 
+        if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id).exists():
+            log("Ajout de l'experience " + pow.title + " à " + profil.lastname)
+            work = Work(pow=pow, profil=profil, job=job, source=l["url"])
+            work.save()
 
 
 #http://localhost:8000/api/batch

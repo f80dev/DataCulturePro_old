@@ -102,10 +102,9 @@ export class SearchComponent implements OnInit {
   searchInTitle: boolean = false;
   fields=[
     {field:"Nom",value:"lastname"},
-    {field:"Formation",value:"formation"},
     {field:"Promo",value:"promo"},
     {field:"Promo inversé",value:"-promo"},
-    ]
+  ]
 
   advanced_search=[];
 

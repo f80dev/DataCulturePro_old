@@ -181,7 +181,12 @@ def search(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def batch(request):
-    exec_batch(Profil.objects.all())
+    filter= request.GET.get("filter", "*")
+    profils=Profil.objects.all()
+    if filter!="*":
+        profils=Profil.objects.filter(id=filter)
+        profils.update(auto_updates="0,0,0,0,0,0")
+    exec_batch(profils)
     return Response({"message":"ok"})
 
 
@@ -189,6 +194,10 @@ def batch(request):
 @permission_classes([AllowAny])
 def initdb(request):
     profils=yaml.load(DOMAIN_APPLI+"/assets/profils.yaml")
+
+
+
+
 
 
 

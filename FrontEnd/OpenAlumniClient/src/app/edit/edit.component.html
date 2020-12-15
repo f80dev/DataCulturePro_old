@@ -120,9 +120,19 @@
 
         <mat-action-row>
           <button class="app-button" mat-button mat-raised-button
+                  (click)="reset_works()">
+            <div class="bloc-bouton">Effacer les<br>expériences</div>
+          </button>
+
+          <button class="app-button" mat-button mat-raised-button
+                  (click)="analyse()">
+            <div class="bloc-bouton">Analyse<br>automatique</div>
+          </button>
+
+          <button class="app-button" mat-button mat-raised-button
                   color="primary"
                   (click)="add_pow()">
-            Ajouter une expérience
+            <div class="bloc-bouton">Ajouter une<br>expérience</div>
           </button>
         </mat-action-row>
 
@@ -262,12 +272,5 @@
 
   </div>
 
-  <div class="bottom-bar">
-    <hr>
-    <button class="app-button" mat-button mat-raised-button (click)="quit(false)">
-      Retour
-    </button>
-
-  </div>
 
 </div>
