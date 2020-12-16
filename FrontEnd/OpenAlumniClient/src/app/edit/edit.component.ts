@@ -82,7 +82,18 @@ export class EditComponent implements OnInit  {
     }
   }
 
+  refresh_works(){
+    let id=this.routes.snapshot.queryParamMap.get("id")
+    this.message="Récupération des expériences";
+    this.api._get("extraworks","profil__id="+id).subscribe((r:any)=>{
+        $$("Travaux chargés");
+        this.message="";
+        this.works=r.results;
+      });
+  }
+
   loadProfil(func=null){
+
       let id=this.routes.snapshot.queryParamMap.get("id")
       $$("Chargement du profil & des travaux");
       this.api._get("profils/"+id+"/","").subscribe((p:any)=>{
@@ -101,10 +112,7 @@ export class EditComponent implements OnInit  {
         if(func)func();
       });
 
-      this.api._get("extraworks","search="+id).subscribe((r:any)=>{
-        $$("Travaux chargés");
-        this.works=r.results;
-      });
+      this.refresh_works();
   }
 
   loadMovies(func) {
@@ -228,7 +236,7 @@ export class EditComponent implements OnInit  {
 
   analyse() {
     this.api._get("batch/","filter="+this.profil.id).subscribe(()=>{
-      this.refresh();
+      this.refresh_works();
     });
   }
 

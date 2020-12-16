@@ -14,6 +14,7 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
     OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
 from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 from rest_framework.decorators import api_view, action, permission_classes, renderer_classes
@@ -103,8 +104,7 @@ class ExtraWorkViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = ExtraWorkSerializer
     permission_classes = [AllowAny]
-    filter_backends = (SearchFilter,)
-    search_fields = ["profil__id","pow__id"]
+    filter_fields = ('job',"pow__id","profil__id","profil__email")
 
 
 class WorkViewSet(viewsets.ModelViewSet):
@@ -112,6 +112,7 @@ class WorkViewSet(viewsets.ModelViewSet):
     serializer_class = WorkSerializer
     permission_classes = [AllowAny]
     search_fields=["id"]
+    filter_fields=("profil","pow","job")
 
 
 #http://localhost:8000/api/extrapows

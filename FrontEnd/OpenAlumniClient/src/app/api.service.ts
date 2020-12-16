@@ -160,7 +160,7 @@ export class ApiService {
   }
 
   getworks(email: any) {
-    return this._get("extraworks","search="+email);
+    return this._get("extraworks","profil__email="+email);
   }
 
   setprofil(data:any) {

@@ -116,6 +116,7 @@ class ProfilSerializer(serializers.ModelSerializer):
         model=Profil
         fields=["id","lastname","firstname",
                 "mobile","email","photo","gender","job",
+                "facebook","youtube","tiktok","vimeo","instagram","telegram","twitter",
                 "linkedin","degree_year","department",
                 "dtLastUpdate","links","str_links",
                 "cp","public_url","fullname","cursus",
@@ -128,6 +129,7 @@ class ExtraProfilSerializer(serializers.ModelSerializer):
     class Meta:
         model=Profil
         fields=["id","lastname","firstname",
+                "facebook", "youtube", "tiktok", "vimeo", "instagram", "telegram", "twitter",
                 "mobile","email","photo","gender","job",
                 "linkedin","works","degree_year","department",
                 "dtLastUpdate","links","str_links",
@@ -144,7 +146,7 @@ class WorkSerializer(serializers.ModelSerializer):
         model=Work
         fields=["profil","pow","dtStart","dtEnd",
                 "duration","comment","job","title",
-                "public","creator","id"
+                "public","creator","id",
                 "source","year","nature"]
 
 
@@ -175,7 +177,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
 class PowDocumentSerializer(DocumentSerializer):
     class Meta:
         document=PowDocument
-        fields=("id","title","nature","description",'category','year','works')
+        fields=("id","title","nature","description",'category','year','works','links')
 
 
 

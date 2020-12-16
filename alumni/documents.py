@@ -48,7 +48,7 @@ class PowDocument(Document):
         "job":fields.TextField(),
         "lastname":fields.TextField(),
     })
-
+    links = fields.NestedField(properties={"url": fields.TextField(), "text": fields.TextField()})
     class Index:
         name='pows'
         settings={"number_of_shards":1,"number_of_replicas":0}

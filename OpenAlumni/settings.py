@@ -26,7 +26,7 @@ EMAIL_TESTER = ["hhoareau@gmail.com",
                 "herve.hoareau@f80.fr",
                 "sophie.dudule@gmail.com"]
 
-LOCAL_FEDORA_SERVER='172.24.130.105'
+LOCAL_FEDORA_SERVER='172.23.80.132'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'sslserver',
     'alumni.apps.AlumniConfig',
     'django_elasticsearch_dsl',
+    'django_filters',
     'django_elasticsearch_dsl_drf',
     'django.contrib.staticfiles',
     'graphene_django'

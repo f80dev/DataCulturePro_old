@@ -68,6 +68,59 @@
 
       </mat-expansion-panel>
 
+<!--      Réseau sociaux -->
+       <mat-expansion-panel class="app-panel" style="text-align: left;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Réseaux sociaux
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+       <mat-form-field appearance="fill" class="app-field">
+          <mat-label>facebook</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.facebook">
+        </mat-form-field><br>
+
+         <mat-form-field appearance="fill" class="app-field">
+          <mat-label>youtube</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.youtube">
+        </mat-form-field><br>
+
+          <mat-form-field appearance="fill" class="app-field">
+          <mat-label>vimeo</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.vimeo">
+        </mat-form-field><br>
+
+         <mat-form-field appearance="fill" class="app-field">
+          <mat-label>instagram</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.instagram">
+        </mat-form-field><br>
+
+         <mat-form-field appearance="fill" class="app-field">
+          <mat-label>telegram</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.telegram">
+        </mat-form-field><br>
+
+          <mat-form-field appearance="fill" class="app-field">
+          <mat-label>twitter</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.twitter">
+        </mat-form-field><br>
+
+          <mat-form-field appearance="fill" class="app-field">
+          <mat-label>tiktok</mat-label>
+          <input matInput type="text" max="50" [(ngModel)]="profil.tiktok" placeholder="https://www.tiktok.com/@">
+        </mat-form-field><br>
+
+          <mat-action-row>
+             <button color="primary" class="icon-button"
+                     mat-button mat-icon-button mat-raised-button (click)="quit(true)">
+            <mat-icon>save</mat-icon>
+          </button>
+          </mat-action-row>
+
+      </mat-expansion-panel>
+
+
       <!--      Mentorat-->
       <mat-expansion-panel class="app-panel" style="text-align: left;">
         <mat-expansion-panel-header>

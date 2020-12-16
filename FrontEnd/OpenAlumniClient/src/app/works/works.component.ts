@@ -26,7 +26,7 @@ export class WorksComponent implements OnInit {
     this.name=this.routes.snapshot.queryParamMap.get("name");
     let id=this.routes.snapshot.queryParamMap.get("id");
     this.message="Chargement des expériences ...";
-    this.api.getworks(id).subscribe((r:any)=>{
+    this.api._get("extraworks","profil__id="+id).subscribe((r:any)=>{
       this.message="";
       if(r.results.length==0){
         $$("Pas d'expérience pour "+this.name);

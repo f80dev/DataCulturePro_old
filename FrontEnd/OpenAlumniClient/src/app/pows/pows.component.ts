@@ -53,7 +53,7 @@ export class PowsComponent implements OnInit {
 
 
 
-  private refresh() {
+  refresh() {
     let param=translateQuery(this.query.value,this.all);
     param=param.replace("works__title","title__terms");
     this.message="Recherche des films";
@@ -100,7 +100,7 @@ export class PowsComponent implements OnInit {
   }
 
   get_pow(pow: any) {
-      this.api._get("extraworks/","search="+pow.id).subscribe((r:any)=>{
+      this.api._get("extraworks/","pow__id="+pow.id).subscribe((r:any)=>{
         let rc=[];
         if(r.results.length>0){
           pow.visual=r.results[0].pow.visual;

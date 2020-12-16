@@ -36,6 +36,7 @@ RUN pip3 install djangorestframework-csv
 RUN pip3 install djangorestframework-xml
 RUN pip3 install dict2xml
 RUN pip3 install django-dbbackup
+RUN pip3 install django-filter
 
 #Création des répertoires
 ENV APP_HOME=/home/app
