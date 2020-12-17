@@ -36,6 +36,7 @@ export class AddpowComponent implements OnInit {
     this.initPow();
   }
 
+
   initPow(){
     this.pow={title:"",links:[],description:"",visual:""};
     this.pow.owner=this.routes.snapshot.queryParamMap.get("owner");
@@ -85,7 +86,7 @@ export class AddpowComponent implements OnInit {
 
   changeTitle(evt: any) {
     if(evt.length>2){
-      this.api._get("powsdoc","search="+evt).subscribe((r:any)=>{
+      this.api._get("pows","search="+evt).subscribe((r:any)=>{
         this.pows=r.results;
       })
     } else {

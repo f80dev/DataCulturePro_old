@@ -26,7 +26,7 @@ EMAIL_TESTER = ["hhoareau@gmail.com",
                 "herve.hoareau@f80.fr",
                 "sophie.dudule@gmail.com"]
 
-LOCAL_FEDORA_SERVER='172.23.80.132'
+LOCAL_FEDORA_SERVER='172.30.11.56'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

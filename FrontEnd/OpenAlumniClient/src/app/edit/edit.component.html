@@ -78,41 +78,43 @@
 
        <mat-form-field appearance="fill" class="app-field">
           <mat-label>facebook</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.facebook">
+          <input matInput type="text" max="50" [(ngModel)]="profil.facebook" (keypress)="mustSave=true">
         </mat-form-field><br>
 
          <mat-form-field appearance="fill" class="app-field">
           <mat-label>youtube</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.youtube">
+          <input matInput type="text" max="50" [(ngModel)]="profil.youtube" (keypress)="mustSave=true">
         </mat-form-field><br>
 
           <mat-form-field appearance="fill" class="app-field">
           <mat-label>vimeo</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.vimeo">
+          <input matInput type="text" max="50" [(ngModel)]="profil.vimeo" (keypress)="mustSave=true">
         </mat-form-field><br>
 
          <mat-form-field appearance="fill" class="app-field">
           <mat-label>instagram</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.instagram">
+          <input matInput type="text" max="50" [(ngModel)]="profil.instagram" (keypress)="mustSave=true">
         </mat-form-field><br>
 
          <mat-form-field appearance="fill" class="app-field">
           <mat-label>telegram</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.telegram">
+          <input matInput type="text" max="50" [(ngModel)]="profil.telegram" (keypress)="mustSave=true">
         </mat-form-field><br>
 
-          <mat-form-field appearance="fill" class="app-field">
+          <mat-form-field appearance="fill" class="app-field" >
           <mat-label>twitter</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.twitter">
+          <input matInput type="text" max="50" [(ngModel)]="profil.twitter" (keypress)="mustSave=true">
         </mat-form-field><br>
 
           <mat-form-field appearance="fill" class="app-field">
           <mat-label>tiktok</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.tiktok" placeholder="https://www.tiktok.com/@">
+          <input matInput type="text" max="50" [(ngModel)]="profil.tiktok"
+                 placeholder="https://www.tiktok.com/@" (keypress)="mustSave=true">
         </mat-form-field><br>
 
           <mat-action-row>
              <button color="primary" class="icon-button"
+                     [disabled]="!mustSave"
                      mat-button mat-icon-button mat-raised-button (click)="quit(true)">
             <mat-icon>save</mat-icon>
           </button>
@@ -149,7 +151,9 @@
           <tr *ngFor="let work of works" style="width:100%;text-align: left;">
             <td>-</td>
             <td style="line-height: 100%;">
-              {{work.job}} sur <a href="./pows?filter={{work.pow?.title}}">"{{work.pow?.title}}"</a> <br>
+              {{work.job}} sur
+              <a [title]="work.source" href="./pows?filter={{work.pow?.title}}">"{{work.pow?.title}}"</a>
+              <br>
               <div *ngIf="work.dtEnd">
                 en {{work.dtEnd | date:'yyyy'}}
                 <br>
@@ -157,9 +161,10 @@
 
             </td>
              <td style="text-align: right;width:10%;">
-<!--              <mat-icon style="cursor: pointer;font-size: medium" (click)="del_work(work)">-->
-<!--                cancel-->
-<!--              </mat-icon>-->
+              <mat-icon style="cursor: pointer;font-size: medium" (click)="del_work(work)">
+                cancel
+              </mat-icon>
+
                <mat-icon *ngIf="work.public" style="cursor: pointer;font-size: medium" (click)="_private(work)">
                 visibility
                 </mat-icon>

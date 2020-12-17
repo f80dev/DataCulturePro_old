@@ -2,19 +2,18 @@
   <div class="h-zone">Expériences de {{name}}</div>
   <app-hourglass [message]="message"></app-hourglass>
 
-<!--   <mat-form-field appearance="fill" class="app-field">-->
-<!--      <mat-label>Oeuvre par catégorie</mat-label>-->
-    <div *ngIf="works?.length>8 && categories?.length>1" style="max-width: 200px;">
-      <mat-select  [(ngModel)]="cat_filter">
-        <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
-      </mat-select>
-      <br><br>
-    </div>
-
-<!--   </mat-form-field>-->
+  <div style="width:100%;text-align: center;">
+    <div *ngIf="works?.length>6 && categories?.length>1" style="max-width: 200px;font-size: large;display: inline-block;">
+        <mat-select  [(ngModel)]="cat_filter">
+          <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
+        </mat-select>
+        <br><br>
+      </div>
+  </div>
 
 
-  <div class="wrap-list" *ngIf="cat_filter && works?.length>0">
+
+  <div class="wrap-list" *ngIf="works?.length>0">
     <div *ngFor="let wrk of works | filter:['filter',cat_filter]" style="max-width: 400px;margin:1%;">
 
       <app-work [work]="wrk" height="120px" [showAction]="true">

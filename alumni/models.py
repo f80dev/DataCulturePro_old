@@ -127,7 +127,6 @@ class ExtraUser(models.Model):
     friends=ArrayField(base_field=models.IntegerField(null=False,default=0),null=True)
 
 
-
 class Work(models.Model):
     """
     Réalisation des etudiants
@@ -148,7 +147,7 @@ class Work(models.Model):
     duration=models.IntegerField(default=0,null=False)
     comment=models.TextField(max_length=400,null=False,default="",blank=True)
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
-    source=models.URLField(null=True)
+    source=models.CharField(max_length=100,null=False,default="")
 
 
     @property

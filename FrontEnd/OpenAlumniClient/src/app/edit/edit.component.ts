@@ -25,6 +25,7 @@ export class EditComponent implements OnInit  {
   profil: any=null;
   works: any[]=[];
   add_work:any;
+  mustSave=false;
   showAddWork=-1;
   private projects: any[];
 
@@ -145,7 +146,8 @@ export class EditComponent implements OnInit  {
       comment:this.comment,
       dtStart:this.dtStart.toISOString().split("T")[0],
       dtEnd:this.dtEnd.toISOString().split("T")[0],
-      duration:this.duration
+      duration:this.duration,
+      source:"man_"+this.config.user.id,
     };
     $$("Insertion de ",this.add_work);
     this.api._post("works/","",this.add_work).subscribe((rany)=>{
@@ -235,7 +237,9 @@ export class EditComponent implements OnInit  {
   }
 
   analyse() {
+    this.message="Analyse en cours";
     this.api._get("batch/","filter="+this.profil.id).subscribe(()=>{
+      this.message="";
       this.refresh_works();
     });
   }
@@ -243,11 +247,15 @@ export class EditComponent implements OnInit  {
   reset_works() {
     let total=this.works.length;
     for(let w of this.works){
-      this.api._delete("works/"+w.id+"/").subscribe(()=>{
-        total=total-1;
-        if(total==0)this.works=[];
-      });
+      if(!w.source.startsWith("man")){
+        this.api._delete("works/"+w.id+"/").subscribe(()=>{
+          total=total-1;
+          this.works.splice(this.works.indexOf(w),1);
+        });
+      }
     }
   }
+
+
 }
 

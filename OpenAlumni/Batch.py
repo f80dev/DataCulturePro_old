@@ -281,6 +281,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
     :return:
     """
     for l in links:
+        source = "auto"
         pow = None
         for p in PieceOfWork.objects.filter(title=l["text"]):
             for link in p.links:
@@ -290,15 +291,14 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
         if not pow:
             sleep(random() * 1200)
-            source = ""
             if "unifrance" in l["url"]:
                 film = extract_film_from_unifrance(l["url"], job_for=job_for)
-                source = "unifrance"
+                source = "auto:unifrance"
 
             if "imdb" in l["url"]:
                 film = extract_film_from_imdb(l["url"], l["text"], name=profil.firstname + " " + profil.lastname,job=l["job"])
                 if not "nature" in film: film["nature"] = l["nature"]
-                source = "IMDB"
+                source = "auto:IMDB"
 
             log("Traitement de " + film["title"] + " à l'adresse " + l["url"])
 
@@ -330,7 +330,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
         if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id).exists():
             log("Ajout de l'experience " + pow.title + " à " + profil.lastname)
-            work = Work(pow=pow, profil=profil, job=job, source=l["url"])
+            work = Work(pow=pow, profil=profil, job=job, source=source)
             work.save()
 
 

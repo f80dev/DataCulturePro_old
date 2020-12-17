@@ -95,8 +95,9 @@ class POWViewSet(viewsets.ModelViewSet):
     queryset = PieceOfWork.objects.all()
     serializer_class = POWSerializer
     permission_classes = [AllowAny]
-    filter_backends = (SearchFilter,)
-    search_fields = ["title"]
+    filter_backends = (SearchFilter,DjangoFilterBackend,)
+    search_fields=["title","category","nature","year"]
+    filter_fields = ("id", "title","owner", "category", "year","nature",)
 
 
 #http://localhost:8000/api/extraworks/

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ConfigService} from "./config.service";
 import {ApiService} from "./api.service";
 import {Location} from "@angular/common";
@@ -13,12 +13,14 @@ import { MyAdapter } from './MyAdapter';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'OpenAlumniClient';
   message: string="";
   appVersion: any;
   @ViewChild('drawer', {static: false}) drawer: MatSidenav;
   public adapter: ChatAdapter = new MyAdapter();
+  innerWidth: number=400;
+  sidemenu_mode: string="over";
 
   constructor(public config: ConfigService,
               public api:ApiService,
@@ -36,6 +38,7 @@ export class AppComponent {
 
 
     closeMenu() {
+     if (this.innerWidth < 800)
       this.drawer.close();
     }
 
@@ -44,6 +47,27 @@ export class AppComponent {
       this.config.raz_user();
       window.location.reload();
     }
+
+    @HostListener('window:resize', ['$event'])
+    onResize($event: any) {
+      this.innerWidth = $event.currentTarget.innerWidth;
+      if (this.innerWidth >= 800 && this.drawer){
+        this.sidemenu_mode="side";
+        this.drawer.open();
+      }
+      else{
+        this.closeMenu();
+        this.sidemenu_mode="over";
+      }
+
+  }
+
+  ngOnInit(): void {
+    setTimeout(()=>{
+      this.onResize({currentTarget:{innerWidth:window.innerWidth}});
+    },1000);
+  }
+
 
 
 }

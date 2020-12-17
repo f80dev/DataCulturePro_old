@@ -42,7 +42,10 @@ export class WorksComponent implements OnInit {
             this.works.push(w);
           }
         }
-        if(this.works.length>0 && this.works[0])this.cat_filter=this.works[0].filter;
+        if(this.works.length>6 && this.works[0])
+          this.cat_filter=this.works[0].filter;
+        else
+          this.cat_filter="";
       }
     },(err)=>{
       showError(this,err);

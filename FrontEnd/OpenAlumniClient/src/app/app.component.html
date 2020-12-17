@@ -39,7 +39,7 @@
   </mat-toolbar>
 
   <mat-drawer-container class="container" autosize>
-    <mat-drawer #drawer class="sidenav" mode="over">
+    <mat-drawer #drawer class="sidenav" [mode]="sidemenu_mode">
       <app-loginbar (click)="closeMenu()" (logout)="logout()">
       </app-loginbar>
     </mat-drawer>
