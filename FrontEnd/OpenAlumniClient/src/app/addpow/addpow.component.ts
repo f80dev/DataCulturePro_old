@@ -154,4 +154,11 @@ export class AddpowComponent implements OnInit {
       };
       reader.readAsDataURL(fileInputEvent.target.files[0]);
   }
+
+  analyse() {
+    this.message="Analyse global en cours";
+    this.api._get("batch").subscribe(()=>{
+      this.message="";
+    })
+  }
 }
