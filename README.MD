@@ -20,7 +20,7 @@ python manage.py search_index --rebuild
 </pre>
 
 ##Installation
-Après avoir récupérer le code, on installe une version locale de postgre
+Après avoir récupérer le code, on installe une version locale de postgres
 puis on execute
 <pre>python manage.py makemigrations</pre>
 <pre>python manage.py flush</pre>
