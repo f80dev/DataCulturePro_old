@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from io import StringIO
 from urllib.request import urlopen
 import yaml
-from django.forms import model_to_dict
+import pandas as pd
 from django.http import JsonResponse, HttpResponse
 from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
@@ -34,7 +34,8 @@ from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
 from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
-from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file,sendmail
+from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
+    sendmail, to_xml
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
@@ -201,13 +202,13 @@ def initdb(request):
 
 
 
-
-
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def helloworld(request):
     return Response({"message": "Hello world"})
+
+
+
 
 
 @api_view(["GET"])
@@ -323,6 +324,9 @@ def send_to(request):
     return Response("Message envoyé", status=200)
 
 
+
+
+
 from dict2xml import dict2xml as xmlify
 #http://localhost:8000/api/export_all/
 @api_view(["GET"])
@@ -331,25 +335,23 @@ from dict2xml import dict2xml as xmlify
 def export_all(request):
     headers=WorksCSVRenderer.header
     content=list()
-    for work in Work.objects.all():
-        values=[
-            work.profil.id,work.profil.fullname,work.profil.lastname,work.profil.firstname,work.profil.department,work.profil.cp,work.profil.town,work.profil.gender,work.profil.degree_year,
-            work.pow.id,work.pow.title,work.pow.nature,work.pow.category,work.pow.year,
-            work.id, work.job,work.comment,
-                ]
-        values=['' if x is None else x for x in values]
-        d=dict()
-        for i in range(len(headers)):
-            if request.GET.get("string") is not None and type(values[i])==str:values[i]="\""+values[i]+"\""
-            d[headers[i]]=values[i]
-
-        content.append(d)
+    works=Work.objects.all()
+    df:pd.DataFrame = pd.DataFrame.from_records(list(works.values(
+        "profil__id","profil__gender","profil__lastname","profil__firstname","profil__department","profil__cursus","profil__degree_year","profil__cp","profil__town",
+        "pow__id","pow__title","pow__nature","pow__category","pow__year",
+        "id","job","comment"
+    )))
+    df.columns=headers
 
     if "xml" in request.get_full_path():
-        d="<root>"+xmlify(content,wrap="list-items",indent="  ")+"</root>"
+        d=to_xml(df)
+        #d="<root>"+xmlify(df.to_,wrap="list-items",indent="  ")+"</root>"
         return HttpResponse(d,content_type="text/xml")
     else:
-        return Response(content,content_type="text/csv; charset=utf-8",headers={"Content-Disposition":'attachment; filename="works.csv"'})
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response["Content-Disposition"]='attachment; filename="works.csv"'
+        df.to_csv(response,sep=";",encoding="utf-8")
+        return response
 
 
 #http://localhost:8000/api/movie_importer/

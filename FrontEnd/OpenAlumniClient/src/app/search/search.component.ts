@@ -9,7 +9,6 @@ import {PromptComponent} from "../prompt/prompt.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSelect} from "@angular/material/select";
 
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',

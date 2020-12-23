@@ -27,6 +27,16 @@ print(authentication.authorization_url)
 LinkedInApplication(authentication)
 
 
+def to_xml(df):
+    def row_to_xml(row):
+        xml = ['<root>']
+        for i, col_name in enumerate(row.index):
+            xml.append('  <field name="{0}">{1}</field>'.format(col_name, row.iloc[i]))
+        xml.append('</root>')
+        return '\n'.join(xml)
+    res = '\n'.join(df.apply(row_to_xml, axis=1))
+    return res
+
 def stringToUrl(txt:str):
     if txt is None:return None
     if txt=="http://":return ""
