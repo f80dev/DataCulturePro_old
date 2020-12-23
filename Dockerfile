@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python
 
 #fabrication: docker build -t f80hub/openalumni . & docker push f80hub/openalumni:latest
 #installation: docker rm -f openalumni && docker pull f80hub/openalumni:latest && docker run --restart=always -v /root/certs:/certs -p 8000:8000 --name openalumni -ti f80hub/openalumni:latest
@@ -8,6 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 #RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libxml2-dev libxslt-dev
+
+RUN apt-get install libpq-dev
 
 RUN pip3 install Django==3.0.8
 RUN pip3 install markdown
@@ -37,6 +39,7 @@ RUN pip3 install djangorestframework-xml
 RUN pip3 install dict2xml
 RUN pip3 install django-dbbackup
 RUN pip3 install django-filter
+RUN pip3 install numpy
 RUN pip3 install pandas
 
 #Création des répertoires
