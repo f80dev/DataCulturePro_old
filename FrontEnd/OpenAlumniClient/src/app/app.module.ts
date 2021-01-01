@@ -65,6 +65,7 @@ import { PowsComponent } from './pows/pows.component';
 import {NgChatModule} from "ng-chat";
 import {OverlayModule} from "@angular/cdk/overlay";
 import {MatRadioModule} from "@angular/material/radio";
+import { DevComponent } from './dev/dev.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import {MatRadioModule} from "@angular/material/radio";
     SplashComponent,
     WriteComponent,
     StatsComponent,
-    PowsComponent
+    PowsComponent,
+    DevComponent
   ],
     imports: [
         BrowserModule,

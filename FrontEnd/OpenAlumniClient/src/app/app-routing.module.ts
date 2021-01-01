@@ -16,6 +16,7 @@ import {StatsComponent} from "./stats/stats.component";
 import {FaqsComponent} from "./faqs/faqs.component";
 import {AboutComponent} from "./about/about.component";
 import {PowsComponent} from "./pows/pows.component";
+import {DevComponent} from "./dev/dev.component";
 
 const routes: Routes = [
   { path: 'public', component: PublicComponent},
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'pows', component: PowsComponent},
   { path: 'addpow', component: AddpowComponent},
   { path: 'admin', component: AdminComponent},
+  { path: 'dev', component: DevComponent},
   { path: 'stats', component: StatsComponent},
   { path: 'write', component: WriteComponent},
   { path: '', component: SplashComponent}

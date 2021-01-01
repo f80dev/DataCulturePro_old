@@ -76,3 +76,12 @@ profils:
     price: 0
     subscription: online
 
+  - id: dev
+    title: Developpeur
+    level: 0
+    presentation: Vous souhaitez vous interfacer avec DataCulturePro via les API
+    description: Profil destiné aux anciens élève
+    perm: r_promo r_photo r_cp r_address r_lastname r_firstname r_linkedin prof r_works write_email r_department advanced_search dev
+    price: 0
+    subscription: online
+

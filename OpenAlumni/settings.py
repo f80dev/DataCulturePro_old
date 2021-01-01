@@ -55,7 +55,6 @@ STATIC_ROOT=os.path.join(BASE_DIR, "static")
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'dbbackup',
     'oauth2_provider',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -85,7 +84,7 @@ MIDDLEWARE = [
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/static/'}
+DBBACKUP_STORAGE_OPTIONS = {'location': './static/'}
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ['http://localhost:4200']

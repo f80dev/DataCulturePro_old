@@ -60,6 +60,15 @@
     &nbsp;&nbsp;Statistiques
   </a>
 
+ <a title="Accèder à la console developper"
+     *ngIf="config.hasPerm('dev') || isLocal"
+     routerLink="dev"
+     mat-list-item
+     id="cmdOpenDev">
+    <mat-icon>build</mat-icon>
+    &nbsp;&nbsp;Developpeurs
+  </a>
+
 
   <a title="Changer vos permissions"
      *ngIf="config.user?.user?.email?.length>0"

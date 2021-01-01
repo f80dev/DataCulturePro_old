@@ -51,3 +51,6 @@ perms:
 
   - tag: add_movies
     description: à l'ajout de nouvelles productions
+
+  - tag: dev
+    description: a la documentation des API et l'obtention d'une clé developpeur

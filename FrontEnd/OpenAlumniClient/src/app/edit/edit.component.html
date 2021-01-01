@@ -160,12 +160,12 @@
               </div>
 
             </td>
-             <td style="text-align: right;width:10%;">
-              <mat-icon style="cursor: pointer;font-size: medium" (click)="del_work(work)">
+             <td style="text-align: right;width:30px;">
+              <mat-icon style="cursor: pointer;font-size: medium;display: inline;" (click)="del_work(work)">
                 cancel
               </mat-icon>
 
-               <mat-icon *ngIf="work.public" style="cursor: pointer;font-size: medium" (click)="_private(work)">
+               <mat-icon *ngIf="work.public" style="cursor: pointer;font-size: medium;display: inline;" (click)="_private(work)">
                 visibility
                 </mat-icon>
                <mat-icon *ngIf="!work.public" style="cursor: pointer;font-size: medium" (click)="_private(work)">

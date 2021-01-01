@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1608628181841,
+  "timestamp": 1609519031504,
   "index": "https://dcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -56,7 +56,36 @@
       "patterns": []
     }
   ],
-  "dataGroups": [],
+  "dataGroups": [
+    {
+      "name": "api-performance",
+      "patterns": [
+        "\\/assets\\/i18n\\/.*",
+        "\\/api\\/profilsdoc\\/.*"
+      ],
+      "strategy": "performance",
+      "maxSize": 500,
+      "maxAge": 259200000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    },
+    {
+      "name": "api-freshness",
+      "patterns": [
+        "\\/api-token-auth\\/"
+      ],
+      "strategy": "freshness",
+      "maxSize": 100,
+      "maxAge": 259200000,
+      "timeoutMs": 10000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
   "hashTable": {
     "https://dcp.f80.fr/4.js": "d193ebdb11607479c9d2ba878c3d30b94597a83c",
     "https://dcp.f80.fr/assets/default_jobs.json": "2c564458c2e15d101fadf154cbb3171407ed39c2",
@@ -80,10 +109,10 @@
     "https://dcp.f80.fr/assets/img/tips.png": "b7832ac8a831f94cd9b656f48bc0d75a5cd587ca",
     "https://dcp.f80.fr/assets/jobs.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://dcp.f80.fr/assets/reporting.pbix": "2b95ac35c6fee4fa408666be84d70943d4604ae8",
-    "https://dcp.f80.fr/assets/reporting.xlsx": "60decc2be70b115ac6a27c1aea894bb39c17287c",
+    "https://dcp.f80.fr/assets/reporting.xlsx": "31c2d420d240f1d711e65a521668369219b8e17f",
     "https://dcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://dcp.f80.fr/index.html": "57e54a7ce8810f4d6ff623ae5c0db52fd6be12cf",
-    "https://dcp.f80.fr/main.js": "2641b3560fc889fd0b25b183fad8262a9d281335",
+    "https://dcp.f80.fr/main.js": "475e8b4fa28803077fbfd4cf338a598988dab652",
     "https://dcp.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
     "https://dcp.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "https://dcp.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",
