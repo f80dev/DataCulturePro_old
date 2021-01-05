@@ -133,7 +133,6 @@ export class ApiService {
 
 
   setuser(fields:any) {
-    //if(fields["acceptSponsor"])fields["acceptSponsor"]="True"; else fields["acceptSponsor"]="False";
     return this._put("extrausers/"+fields.id+"/","",fields);
   }
 

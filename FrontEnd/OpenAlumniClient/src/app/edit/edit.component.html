@@ -43,7 +43,7 @@
         <br>
         <br>
 
-         <mat-form-field appearance="fill" class="app-field">
+        <mat-form-field appearance="fill" class="app-field">
           <mat-label>Adresse</mat-label>
           <input matInput type="text"  [(ngModel)]="profil.address">
         </mat-form-field>
@@ -68,8 +68,8 @@
 
       </mat-expansion-panel>
 
-<!--      Réseau sociaux -->
-       <mat-expansion-panel class="app-panel" style="text-align: left;">
+      <!--      Réseau sociaux -->
+      <mat-expansion-panel class="app-panel" style="text-align: left;">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Réseaux sociaux
@@ -77,24 +77,37 @@
         </mat-expansion-panel-header>
 
 
-         <div *ngFor="let social of socials">
-         <mat-form-field appearance="fill" class="app-field">
-          <mat-label>{{social.name}}</mat-label>
-          <input matInput type="text"
-                 [placeholder]="social.description"
-                 max="50" [(ngModel)]="profil[social]"
-                 (keypress)="mustSave=true">
-          </mat-form-field><br>
-         </div>
+
+        <table style="width: 100%;vertical-align: text-top;">
+          <tr *ngFor="let social of socials">
+            <td style="width:60%">
+              <mat-form-field appearance="fill" class="app-field">
+                <mat-label>{{social.name}}</mat-label>
+                <input matInput type="text"
+                       [placeholder]="social.input"
+                       max="50" [(ngModel)]="profil[social.name]"
+                       (focusout)="check_format(social)"
+                       (keypress)="mustSave=true">
+                <mat-hint>Visible de {{social.profils}}</mat-hint>
+
+              </mat-form-field><br>
+            </td>
+            <td style="font-size: small;vertical-align: text-top;text-align: center;line-height: 90%;">
+              <br>
+              {{social.message}}
+            </td>
+          </tr>
+        </table>
 
 
-          <mat-action-row>
-             <button color="primary" class="icon-button"
-                     [disabled]="!mustSave"
-                     mat-button mat-icon-button mat-raised-button (click)="quit(true)">
+
+        <mat-action-row>
+          <button color="primary" class="icon-button"
+                  [disabled]="!mustSave"
+                  mat-button mat-icon-button mat-raised-button (click)="quit(true)">
             <mat-icon>save</mat-icon>
           </button>
-          </mat-action-row>
+        </mat-action-row>
 
       </mat-expansion-panel>
 
@@ -116,7 +129,7 @@
         </mat-checkbox>
       </mat-expansion-panel>
 
-<!--      Expérience -->
+      <!--      Expérience -->
       <mat-expansion-panel class="app-panel" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -136,17 +149,17 @@
               </div>
 
             </td>
-             <td style="text-align: right;width:30px;">
+            <td style="text-align: right;width:30px;">
               <mat-icon style="cursor: pointer;font-size: medium;display: inline;" (click)="del_work(work)">
                 cancel
               </mat-icon>
 
-               <mat-icon *ngIf="work.public" style="cursor: pointer;font-size: medium;display: inline;" (click)="_private(work)">
+              <mat-icon *ngIf="work.public" style="cursor: pointer;font-size: medium;display: inline;" (click)="_private(work)">
                 visibility
-                </mat-icon>
-               <mat-icon *ngIf="!work.public" style="cursor: pointer;font-size: medium" (click)="_private(work)">
+              </mat-icon>
+              <mat-icon *ngIf="!work.public" style="cursor: pointer;font-size: medium" (click)="_private(work)">
                 visibility_off
-                </mat-icon>
+              </mat-icon>
             </td>
 
           </tr>

@@ -81,7 +81,7 @@ class ExtraUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = ExtraUser
-        fields  = ['id','user','perm','acceptSponsor','sponsorOf','profil',"ask","friends"]
+        fields  = ['id','user','perm','acceptSponsor','sponsorOf','profil',"ask","friends","profil_name"]
 
 
 

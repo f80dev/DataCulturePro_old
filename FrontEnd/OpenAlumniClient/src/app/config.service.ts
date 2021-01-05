@@ -106,6 +106,7 @@ export class ConfigService {
           this.raz_user();
           this.api.logout();
           this.user.perm=this.profils[this.values.anonymousOffer].perm;
+          this.user.profil=this.values.anonymousOffer;
           if(func_anonyme)func_anonyme();
         }
      });

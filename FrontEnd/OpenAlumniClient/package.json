@@ -1,6 +1,6 @@
 {
   "name": "DataCulturePro",
-  "version": "0.0.127",
+  "version": "0.0.128",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

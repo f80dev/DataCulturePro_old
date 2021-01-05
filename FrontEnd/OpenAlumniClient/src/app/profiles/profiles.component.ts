@@ -14,6 +14,7 @@ import {Location} from "@angular/common";
 export class ProfilesComponent implements OnInit {
   showPerm: boolean=false;
   perms:any;
+  profil:string;
 
   constructor(public api:ApiService,
               public toast:MatSnackBar,
@@ -25,6 +26,7 @@ export class ProfilesComponent implements OnInit {
     if(checkLogin(this)){
       this.api.getyaml("","perms").subscribe((r:any)=>{
         this.perms=r.perms;
+        this.profil=r.id;
       })
     }
   }
@@ -53,6 +55,7 @@ export class ProfilesComponent implements OnInit {
 
   sel_profil(p) {
     this.config.user.perm=p.perm;
+    this.config.user.profil_name=p.id;
     this.api.setuser(this.config.user).subscribe(()=>{
       showMessage(this,"Profil modifié");
       this._location.back();

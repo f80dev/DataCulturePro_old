@@ -5,10 +5,10 @@ import {ApiService} from "../api.service";
 import {ConfigService} from "../config.service";
 import {$$, checkLogin, extract_id, showError, showMessage, stringDistance} from "../tools";
 import {MatTableDataSource} from "@angular/material/table";
-import {environment} from "../../environments/environment";
 import {MatDialog} from "@angular/material/dialog";
 import {PromptComponent} from "../prompt/prompt.component";
 import {ImageSelectorComponent} from "../image-selector/image-selector.component";
+import {FormControl} from "@angular/forms";
 
 export interface Movie {
     title: string;
@@ -27,7 +27,7 @@ export class EditComponent implements OnInit  {
   add_work:any;
   mustSave=false;
   showAddWork=-1;
-  socials:any[];
+  socials:any[]=[];
   projects: any[];
 
    constructor(public _location:Location,
@@ -37,8 +37,7 @@ export class EditComponent implements OnInit  {
               public router:Router,
               public api:ApiService) {
      this.api.getyaml("","social").subscribe((r:any)=>{
-       debugger
-       this.socials=r.socials;
+       this.socials=r.services;
      })
    }
 
@@ -100,8 +99,9 @@ export class EditComponent implements OnInit  {
       });
   }
 
-  loadProfil(func=null){
 
+
+  loadProfil(func=null){
       let id=this.routes.snapshot.queryParamMap.get("id")
       $$("Chargement du profil & des travaux");
       this.api._get("profils/"+id+"/","").subscribe((p:any)=>{
@@ -123,6 +123,8 @@ export class EditComponent implements OnInit  {
       this.refresh_works();
   }
 
+
+
   loadMovies(func) {
     let rc=[];
     this.api.getPOW().subscribe((r:any)=>{
@@ -136,6 +138,8 @@ export class EditComponent implements OnInit  {
       });
   }
 
+
+
   select(element: any) {
     this.add_work={
       movie:element.title,
@@ -143,6 +147,7 @@ export class EditComponent implements OnInit  {
     };
     this.showAddWork=2;
   }
+
 
   save_newwork() {
     this.add_work={
@@ -167,6 +172,10 @@ export class EditComponent implements OnInit  {
 
   quit(bSave=true) {
     if(bSave){
+      // for(let soc of this.socials){
+      //   this.profil[soc.name]=soc.value;
+      // }
+
       this.profil.dtLastUpdate=new Date().toISOString();
       this.api.setprofil(this.profil).subscribe(()=>{
         showMessage(this,"Profil enregistré");
@@ -264,5 +273,15 @@ export class EditComponent implements OnInit  {
   }
 
 
+  check_format(social: any) {
+    if(this.profil[social.name].length>0){
+      if(!this.profil[social.name].startsWith("http"))this.profil[social.name]="https://"+this.profil[social.name];
+      if(!this.profil[social.name].startsWith(social.format))
+        social.message="Format incorrect, l'url doit commencer par "+social.format;
+      else
+        social.message="";
+    } else
+      social.message="";
+  }
 }
 

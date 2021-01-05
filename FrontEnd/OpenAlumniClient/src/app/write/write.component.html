@@ -3,7 +3,7 @@
   <app-profil [profil]="profil" [showAction]="false" width="90vw" style="display: inline-block">
 
     <table>
-      <tr *ngIf="config.hasPerm('r_address r_cp')">
+      <tr *ngIf="config.hasPerm('r_address r_cp') && profil?.address?.length>0">
         <td>
           Adresse postale:
         </td>
@@ -28,22 +28,27 @@
   </mat-form-field>
   <br>
 
-  <button mat-button mat-raised-button
+  <div>
+    <button mat-button mat-raised-button
             class="app-button"
+            [disabled]="!text || text?.length==0"
             *ngIf="config.hasPerm('write_email')"
             (click)="send()">
       Envoyer
    </button>
 
-</app-profil>
-<div class="bottom-bar">
-  <hr>
-  <button mat-button mat-raised-button
+    <button mat-button mat-raised-button
+            *ngFor="let button of buttons"
             class="app-button"
-            (click)="_location.back()">
-      Retour
+            (click)="open_social(button.url)">
+      {{button.caption}}
    </button>
-</div>
 
+
+
+  </div>
+
+
+</app-profil>
 
 </div>

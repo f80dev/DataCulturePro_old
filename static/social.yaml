@@ -1,18 +1,18 @@
 version: 1.0
 services:
   - name: linkedin
-      input: Votre page Linkedin
-      format: https://www.facebook.com
-      description: consultable depuis votre profil
-      profils:
-        - student
-        - school
-        - employeur
-        - standard
+    input: Votre page Linkedin
+    format: https://www.linkedin.com/in/
+    description: consultable depuis votre profil
+    profils:
+      - student
+      - school
+      - employeur
+      - standard
 
   - name: facebook
     input: Votre page facebook
-    format: https://www.facebook.com
+    format: https://facebook.com
     description: consultable depuis votre profil
     profils:
       - student
@@ -21,7 +21,7 @@ services:
 
   - name: youtube
     input: Votre chaine youtube
-    format: https://www.youtube.com
+    format: https://youtube.com
     description: consultable depuis votre profil public
     profils:
       - student
@@ -30,7 +30,7 @@ services:
 
   - name: vimeo
     input: Votre chaine vimeo
-    format: https://www.facebook.com
+    format: https://vimeo.com
     description: consultable depuis votre profil
     profils:
       - student
@@ -48,7 +48,7 @@ services:
 
   - name: telegram
     input: L'adresse de votre messagerie télégram
-    format: https://www.facebook.com
+    format: https://t.me/
     description: consultable depuis votre profil
     profils:
       - student
@@ -56,7 +56,7 @@ services:
 
   - name: twitter
     input: Votre fil d'actualité twitter
-    format: https://www.twitter
+    format: https://twitter.com/
     description: consultable depuis votre profil
     profils:
       - student
