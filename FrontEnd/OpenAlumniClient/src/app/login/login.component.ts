@@ -181,6 +181,7 @@ export class LoginComponent implements OnInit {
 
 
   updateCode(code:any){
+    debugger
     if(typeof(code)=="object")code=code.target.value;
     $$("Vérification du code");
     this.wait_message="Vérification du code";

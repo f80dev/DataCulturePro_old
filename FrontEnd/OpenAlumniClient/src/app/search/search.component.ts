@@ -151,7 +151,10 @@ export class SearchComponent implements OnInit {
     this.router.navigate(
       ['search'],
       {queryParams:{filter:q},skipLocationChange:false}
-      );
+      ).then(()=>{
+        window.location.reload();
+    });
+
   }
 
 

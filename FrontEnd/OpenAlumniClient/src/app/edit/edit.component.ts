@@ -27,14 +27,21 @@ export class EditComponent implements OnInit  {
   add_work:any;
   mustSave=false;
   showAddWork=-1;
-  private projects: any[];
+  socials:any[];
+  projects: any[];
 
    constructor(public _location:Location,
               public routes:ActivatedRoute,
                public dialog:MatDialog,
               public config:ConfigService,
               public router:Router,
-              public api:ApiService) { }
+              public api:ApiService) {
+     this.api.getyaml("","social").subscribe((r:any)=>{
+       debugger
+       this.socials=r.socials;
+     })
+   }
+
 
   displayedColumns: string[] = ["title","dtStart","sel"];
   dataSource: MatTableDataSource<Movie>=null;

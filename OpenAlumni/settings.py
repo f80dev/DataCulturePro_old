@@ -24,7 +24,8 @@ EMAIL_TESTER = ["hhoareau@gmail.com",
                 "j.lecanu@femis.fr",
                 "rv@f80.fr",
                 "herve.hoareau@f80.fr",
-                "sophie.dudule@gmail.com"]
+                "sophie.dudule@gmail.com"
+                ]
 
 LOCAL_FEDORA_SERVER='172.30.11.56'
 
@@ -44,8 +45,6 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "dcp.f80.fr"
 ]
-
-
 
 STATIC_URL  = "/static/"
 STATIC_ROOT=os.path.join(BASE_DIR, "static")
@@ -254,6 +253,27 @@ LINKEDIN_RETURN_URL="http://localhost:8000/api/oauth_callback"
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 MOVIE_CATEGORIES=[
-"Documentary","Action","Adventure","Sci-Fi","Mystery","Horror","Thriller","Animation","Comedy","Family","Fantasy","Drama","Music","Biography","Romance","History","Crime","Western","War","Musical","Sport"
+    "Documentary",
+    "Action",
+    "Adventure",
+    "Sci-Fi",
+    "Mystery",
+    "Horror",
+    "Thriller",
+    "Animation",
+    "Comedy",
+    "Family",
+    "Fantasy",
+    "Drama",
+    "Music",
+    "Biography",
+    "Romance",
+    "History",
+    "Crime",
+    "Western",
+    "War",
+    "Musical",
+    "Sport"
 ]
+
 MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]

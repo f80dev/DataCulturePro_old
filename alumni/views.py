@@ -37,7 +37,7 @@ from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
     sendmail, to_xml
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
-from alumni.documents import ProfilDocument, PowDocument
+from alumni.documents import ProfilDocument, PowDocument, html_strip
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
     WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
@@ -178,6 +178,17 @@ def search(request):
 
 
 
+#http://localhost:8000/api/reindex/
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def rebuild_index(request):
+    p=ProfilDocument()
+    p.init(index="profils")
+    return JsonResponse({"message":"Re-indexage terminé"})
+
+
+
+
 
 #http://localhost:8000/api/batch
 #https://server.f80.fr:8000/api/batch
@@ -213,10 +224,8 @@ def helloworld(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def rebuild_index(request):
-
+def rebuild_index_old(request):
     index_name=request.GET.get("name","profils")
-
     es = Index(index_name,using="default")
     if es.exists():es.delete()
     es.create("default")

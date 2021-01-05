@@ -76,41 +76,17 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-       <mat-form-field appearance="fill" class="app-field">
-          <mat-label>facebook</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.facebook" (keypress)="mustSave=true">
-        </mat-form-field><br>
 
+         <div *ngFor="let social of socials">
          <mat-form-field appearance="fill" class="app-field">
-          <mat-label>youtube</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.youtube" (keypress)="mustSave=true">
-        </mat-form-field><br>
+          <mat-label>{{social.name}}</mat-label>
+          <input matInput type="text"
+                 [placeholder]="social.description"
+                 max="50" [(ngModel)]="profil[social]"
+                 (keypress)="mustSave=true">
+          </mat-form-field><br>
+         </div>
 
-          <mat-form-field appearance="fill" class="app-field">
-          <mat-label>vimeo</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.vimeo" (keypress)="mustSave=true">
-        </mat-form-field><br>
-
-         <mat-form-field appearance="fill" class="app-field">
-          <mat-label>instagram</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.instagram" (keypress)="mustSave=true">
-        </mat-form-field><br>
-
-         <mat-form-field appearance="fill" class="app-field">
-          <mat-label>telegram</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.telegram" (keypress)="mustSave=true">
-        </mat-form-field><br>
-
-          <mat-form-field appearance="fill" class="app-field" >
-          <mat-label>twitter</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.twitter" (keypress)="mustSave=true">
-        </mat-form-field><br>
-
-          <mat-form-field appearance="fill" class="app-field">
-          <mat-label>tiktok</mat-label>
-          <input matInput type="text" max="50" [(ngModel)]="profil.tiktok"
-                 placeholder="https://www.tiktok.com/@" (keypress)="mustSave=true">
-        </mat-form-field><br>
 
           <mat-action-row>
              <button color="primary" class="icon-button"
@@ -266,19 +242,19 @@
     <br>
     <br>
 
-    <mat-wform-field class="app-field">
-      <mat-label>Fonction</mat-label>
+    <mat-form-field class="app-field" style="font-size: large;">
+      <mat-label>Poste occupé</mat-label>
       <mat-select  [(ngModel)]="job">
         <mat-option *ngFor="let job of config.jobs" [value]="job.value">{{job.label}}</mat-option>
       </mat-select>
-      <mat-hint>Sélectionner le poste que vous aviez sur le projet</mat-hint>
-    </mat-wform-field>
+      <mat-hint style="font-size: x-small;">Sélectionner le poste que vous aviez sur le projet</mat-hint>
+    </mat-form-field>
     <br>
 
     <br>
 
     <mat-form-field appearance="fill" class="app-field" style="max-width: 200px">
-      <mat-label>Date de début</mat-label>
+      <mat-label>Du</mat-label>
       <input matInput [matDatepicker]="picker" [(ngModel)]="dtStart">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
@@ -286,7 +262,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="app-field" style="max-width: 200px">
-      <mat-label>Date de fin</mat-label>
+      <mat-label>... Au</mat-label>
       <input matInput [matDatepicker]="picker2" [(ngModel)]="dtEnd">
       <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
       <mat-datepicker #picker2></mat-datepicker>
@@ -310,18 +286,19 @@
         <mat-icon title="Donnée anonymisée uniquement utilisée sous forme de moyenne pour les statistiques">help</mat-icon>
       </mat-hint>
     </mat-form-field>
-    <br><br>
+    <br><br><br>
 
 
     <mat-form-field appearance="fill" class="app-field" style="width:100%;">
       <mat-label>Commentaires</mat-label>
       <input matInput max="200" type="text"
-             title="Détailler l'expérience, difficultés rencontrées, bénéfices"
              value="Décrire l'expérience" [(ngModel)]="comment">
+      <mat-hint>Détailler l'expérience, difficultés rencontrées, bénéfices</mat-hint>
     </mat-form-field>
-    <br>
 
-    <button class="app-button"
+    <br><br>
+
+    <button class="app-button" color="primary"
             mat-button mat-raised-button
             title="Ajouter ce projet à votre expérience"
             (click)="save_newwork()">
