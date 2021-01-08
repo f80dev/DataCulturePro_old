@@ -3,11 +3,14 @@
   <app-hourglass [message]="message"></app-hourglass>
 
   <div style="width:100%;text-align: center;">
-    <div *ngIf="works?.length>6 && categories?.length>1" style="max-width: 200px;font-size: large;display: inline-block;">
-        <mat-select  [(ngModel)]="cat_filter">
+    <div *ngIf="works?.length>6 && categories?.length>1" style="max-width: 250px;font-size: large;display: inline-block;">
+      <mat-form-field appearance="fill">
+        <mat-label>Catégorie</mat-label>
+        <mat-select  [(ngModel)]="cat_filter" placeholder="Catégorie">
           <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
         </mat-select>
-        <br><br>
+      </mat-form-field>
+      <br><br>
       </div>
   </div>
 

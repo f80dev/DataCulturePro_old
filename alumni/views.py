@@ -1,7 +1,7 @@
 import base64
 import csv
 from datetime import datetime, timedelta
-from io import StringIO
+from io import StringIO, BytesIO
 from urllib.request import urlopen
 import yaml
 import pandas as pd
@@ -42,6 +42,7 @@ from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
     WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
     PowDocumentSerializer, WorksCSVRenderer
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -337,7 +338,9 @@ def send_to(request):
 
 
 from dict2xml import dict2xml as xmlify
-#http://localhost:8000/api/export_all/
+#http://localhost:8000/api/export_all/csv/
+#http://localhost:8000/api/export_all/xls/
+#http://localhost:8000/api/export_all/xml/
 @api_view(["GET"])
 @renderer_classes((WorksCSVRenderer,))
 @permission_classes([AllowAny])
@@ -353,13 +356,25 @@ def export_all(request):
     df.columns=headers
 
     if "xml" in request.get_full_path():
-        d=to_xml(df)
+        d="<root>"+to_xml(df,"record")+"</root>"
         #d="<root>"+xmlify(df.to_,wrap="list-items",indent="  ")+"</root>"
         return HttpResponse(d,content_type="text/xml")
-    else:
+
+    if "csv" in request.get_full_path():
         response = HttpResponse(content_type='text/csv; charset=utf-8')
         response["Content-Disposition"]='attachment; filename="works.csv"'
         df.to_csv(response,sep=";",encoding="utf-8")
+        return response
+
+    if "json" in request.get_full_path():
+        return HttpResponse(content=df.to_json(orient="index"),content_type='application/json')
+
+    if "xls" in request.get_full_path():
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        df.to_excel(writer,sheet_name="FEMIS")
+        response = HttpResponse(content=writer,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response["Content-Disposition"] = 'attachment; filename="femis.xlsx"'
         return response
 
 

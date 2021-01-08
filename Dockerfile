@@ -41,6 +41,7 @@ RUN pip3 install django-dbbackup
 RUN pip3 install django-filter
 RUN pip3 install numpy
 RUN pip3 install pandas
+RUN pip3 install xlsxwriter
 
 #Création des répertoires
 ENV APP_HOME=/home/app

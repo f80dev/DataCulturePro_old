@@ -42,6 +42,9 @@ export class WorksComponent implements OnInit {
             this.works.push(w);
           }
         }
+
+        //TODO mettre en place un tri des catégories
+
         if(this.works.length>6 && this.works[0])
           this.cat_filter=this.works[0].filter;
         else

@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from imdb import IMDb
 from wikipedia import wikipedia, random, re
 
-from OpenAlumni.Tools import log
+from OpenAlumni.Tools import log, translate
 from OpenAlumni.settings import MOVIE_CATEGORIES, MOVIE_NATURE
 from alumni.models import Profil, Work, PieceOfWork
 
@@ -304,10 +304,10 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
             pow = PieceOfWork(title=film["title"])
             pow.add_link(url=l["url"], title=source)
-            if "nature" in film:pow.nature=film["nature"]
+            if "nature" in film:pow.nature=translate(film["nature"])
             if "synopsis" in film: pow.description = film["synopsis"]
             if "visual" in film: pow.visual = film["visual"]
-            if "category" in film: pow.category = film["category"]
+            if "category" in film: pow.category = translate(film["category"])
             if "year" in film: pow.year = film["year"]
 
             try:
@@ -330,7 +330,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
         if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id).exists():
             log("Ajout de l'experience " + pow.title + " à " + profil.lastname)
-            work = Work(pow=pow, profil=profil, job=job, source=source)
+            work = Work(pow=pow, profil=profil, job=translate(job), source=source)
             work.save()
 
 

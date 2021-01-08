@@ -1,4 +1,4 @@
-
+import html
 from urllib import parse
 from urllib.parse import urlparse
 
@@ -15,7 +15,7 @@ from linkedin_v2.linkedin import LinkedInApplication
 
 from OpenAlumni import settings
 from OpenAlumni.settings import LINKEDIN_API_KEY, LINKEDIN_RETURN_URL, LINKEDIN_API_SECRET, DOMAIN_APPLI, DOMAIN_SERVER, \
-    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER
+    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER,MYDICT
 
 authentication = linkedin.LinkedInAuthentication(
     LINKEDIN_API_KEY,
@@ -27,15 +27,24 @@ print(authentication.authorization_url)
 LinkedInApplication(authentication)
 
 
-def to_xml(df):
+def to_xml(df,row_separator="row"):
     def row_to_xml(row):
-        xml = ['<root>']
+        xml = ['<'+row_separator+'>']
+
         for i, col_name in enumerate(row.index):
-            xml.append('  <field name="{0}">{1}</field>'.format(col_name, row.iloc[i]))
-        xml.append('</root>')
+            val=html.escape(str(row.iloc[i]))
+            if len(col_name)>0:
+                xml.append('<field name="{0}">{1}</field>'.format(col_name, val))
+            else:
+                log("Un champs vide")
+
+        xml.append('</'+row_separator+'>')
+
         return '\n'.join(xml)
+
     res = '\n'.join(df.apply(row_to_xml, axis=1))
     return res
+
 
 def stringToUrl(txt:str):
     if txt is None:return None
@@ -322,3 +331,26 @@ def dateToTimestamp(txt):
 
     log("Probleme de conversion de " + str(txt) + " en date")
     return None
+
+
+
+def translate(wrd:str,dictionnary=None):
+    """
+    Remplacement de certains termes
+    :param wrd:
+    :param dictionnary:
+    :return:
+    """
+    global MYDICT
+    if MYDICT is None:
+        with open("./static/dictionnary.yaml", 'r', encoding='utf8') as f:
+            body = f.read()
+        MYDICT=yaml.load(body)
+    try:
+        rc=MYDICT[wrd.lower()]
+    except:
+        rc=wrd
+
+    return rc[0].upper()+rc[1:].lower()
+
+

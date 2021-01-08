@@ -277,3 +277,4 @@ MOVIE_CATEGORIES=[
 ]
 
 MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]
+MYDICT=None
