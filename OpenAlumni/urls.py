@@ -35,6 +35,7 @@ router.register(r'profilsdoc', views.ProfilDocumentView,basename="profilsdoc")
 router.register(r'powsdoc', views.PowDocumentView,basename="powsdoc")
 
 urlpatterns = [
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('api/',include('alumni.urls')),
     path('api/users/register/', views.UserCreate.as_view()),

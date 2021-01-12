@@ -42,6 +42,7 @@ RUN pip3 install django-filter
 RUN pip3 install numpy
 RUN pip3 install pandas
 RUN pip3 install xlsxwriter
+RUN pip3 install docutils
 
 #Création des répertoires
 ENV APP_HOME=/home/app

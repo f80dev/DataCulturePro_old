@@ -16,40 +16,43 @@ from OpenAlumni.settings import DOMAIN_APPLI
 
 
 class Profil(models.Model):
+    """
+    Le profil stocke l'ensemble des informations sur les anciens étudiants, issue du cursus standard ou pro
+    """
     id=models.AutoField(primary_key=True)
-    firstname=models.CharField(max_length=40, null=False, default='')
-    lastname=models.CharField(max_length=70, null=False, default='')
-    birthdate=models.DateField(null=True)
-    mobile=models.CharField(blank=True,max_length=20,null=True,default="06")
+    firstname=models.CharField(max_length=40, null=False, default='',help_text="Prénom du profil")
+    lastname=models.CharField(max_length=70, null=False, default='',help_text="Nom du profil")
+    birthdate=models.DateField(null=True,help_text="Date de naissance")
+    mobile=models.CharField(blank=True,max_length=20,null=True,default="06",help_text="Numéro de mobile")
     nationality=models.CharField(blank=True,max_length=30,null=False,default="Française")
-    department=models.CharField(blank=True,max_length=60,null=True,default="")
-    job=models.CharField(max_length=60,null=True,default="",blank=True)
-    degree_year=models.IntegerField(null=True)
+    department=models.CharField(blank=True,max_length=60,null=True,default="",help_text="Cursus suivi pendant les études")
+    job=models.CharField(max_length=60,null=True,default="",blank=True,help_text="Profession actuelle")
+    degree_year=models.IntegerField(null=True,help_text="Année de sortie de l'école")
 
-    linkedin = models.URLField(blank=True, null=True)
-    email=models.EmailField(null=False,unique=True)
+    linkedin = models.URLField(blank=True, null=True,help_text="Adresse de la page public linkedin du profil")
+    email=models.EmailField(null=False,unique=True,help_text="email du profil")
     instagram=models.URLField(blank=True, null=True,help_text="Adresse du compte instagram")
     telegram=models.URLField(blank=True, null=True,help_text="Adresse public du compte telegram")
-    facebook=models.URLField(blank=True, null=True)
-    twitter=models.URLField(blank=True, null=True)
+    facebook=models.URLField(blank=True, null=True,help_text="Adresse de la page facebook du profil")
+    twitter=models.URLField(blank=True, null=True,help_text="Adresse de la page twitter du profil")
     tiktok=models.URLField(blank=True, null=True)
     youtube = models.URLField(blank=True, null=True)
     vimeo=models.URLField(blank=True, null=True)
 
-    photo=models.TextField(blank=True)
-    gender=models.CharField(max_length=1,blank=False,default="M",choices=(('M','Male'),('F','Female')))
-    cursus=models.CharField(max_length=1,blank=False,default="S",choices=(('S','Standard'),('P','Professionnel')))
-    address=models.CharField(null=True,blank=True,max_length=200,help_text="Adresse postale, rue")
-    town = models.CharField(null=True,blank=True,max_length=50, help_text="Adresse postale, ville")
-    cp=models.CharField(null=True,blank=True,max_length=5,help_text="Adresse postale, code postal")
+    photo=models.TextField(blank=True,help_text="Photo du profil au format Base64")
+    gender=models.CharField(max_length=1,blank=False,default="M",choices=(('M','Male'),('F','Female'),('N','Non précisé')))
+    cursus=models.CharField(max_length=1,blank=False,default="S",choices=(('S','Standard'),('P','Professionnel')),help_text="Type de formation")
+    address=models.CharField(null=True,blank=True,max_length=200,help_text="Adresse postale au format numéro / rue / batiment")
+    town = models.CharField(null=True,blank=True,max_length=50, help_text="Ville de l'adresse postale")
+    cp=models.CharField(null=True,blank=True,max_length=5,help_text="code postal de l'adresse postale")
     website=models.URLField(null=True)
     dtLastUpdate=models.DateField(null=False,auto_now=True,help_text="Date de la dernière modification du profil")
     dtLastNotif=models.DateField(null=False,auto_now=True,help_text="Date de la dernière notification envoyé")
     obsolescenceScore=models.IntegerField(default=0,help_text="Indique le degré d'obsolescence probable")
-    biography=models.TextField(null=True,max_length=2000)
+    biography=models.TextField(null=True,max_length=2000,help_text="Biographie du profil")
     links = JSONField(null=True, help_text="Liens vers des références externes au profil")
     auto_updates=models.CharField(max_length=300,null=False, default="0,0,0,0,0,0",help_text="Date de mise a jour")
-    advices=JSONField(null=True,help_text="Le système fourni des conseils pour augmenter le rayonnement d'une personne")
+    advices=JSONField(null=True,help_text="Liste de conseils alimenter par l'outil pour augmenter le rayonnement d'une personne")
 
     class Meta(object):
         ordering=["lastname"]
@@ -130,25 +133,26 @@ class ExtraUser(models.Model):
 
 class Work(models.Model):
     """
-    Réalisation des etudiants
-    status=role dans la réalisation de l'oeuvre
+    Réalisation / projets des profils
+    Cet objet permet de faire le lien entre les oeuvres et les profils
+    Il peut être alimenté en automatique (par scrapping des sources) ou en manuel par le profil
     """
-    id = models.AutoField(primary_key=True)
-    profil = models.ForeignKey('Profil', null=False, on_delete=models.CASCADE,related_name="works")
-    pow = models.ForeignKey('PieceOfWork', null=False, on_delete=models.CASCADE, related_name="works")
-    dtStart=models.DateField(null=True)
-    dtEnd=models.DateField(null=True)
+    id = models.AutoField(primary_key=True,help_text="Clé primaire interne des projets")
+    profil = models.ForeignKey('Profil', null=False, on_delete=models.CASCADE,related_name="works",help_text="Profil concerné par le projet")
+    pow = models.ForeignKey('PieceOfWork', null=False, on_delete=models.CASCADE, related_name="works",help_text="oeuvre concerné par le projet")
+    dtStart=models.DateField(null=True,help_text="Date de début du projet")
+    dtEnd=models.DateField(null=True,help_text="Date de fin du projet")
     status=models.CharField(max_length=200,default="")
 
     #creator passera à user si l'utilisateur modifie l'enregistrement
-    creator=models.CharField(max_length=5,default="auto",help_text="Désigne qui est le dernier auteur de l'enregistrement")
-    public=models.BooleanField(default=True)
+    creator=models.CharField(max_length=5,default="auto",help_text="Désigne qui est le dernier auteur de l'enregistrement dans la base de données")
+    public=models.BooleanField(default=True,help_text="Indique si le projet est publique (visible de ceux qui ont les droits) ou privé")
 
-    job=models.CharField(max_length=200,default="")
-    duration=models.IntegerField(default=0,null=False)
-    comment=models.TextField(max_length=400,null=False,default="",blank=True)
+    job=models.CharField(max_length=200,default="",help_text="Rôle dans le projet")
+    duration=models.IntegerField(default=0,null=False,help_text="Durée du projet en heure")
+    comment=models.TextField(max_length=400,null=False,default="",blank=True,help_text="Commentaire sur la façon dont s'est passé le projet")
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
-    source=models.CharField(max_length=100,null=False,default="")
+    source=models.CharField(max_length=100,null=False,default="",help_text="source ayant permis d'identifier le projet : imdb, unifrance, bellefaye")
 
 
     @property
@@ -201,12 +205,12 @@ class PieceOfWork(models.Model):
     #Structure : "url" du document, "text" du lien
     links=JSONField(null=True,help_text="Liens vers des références externes à l'oeuvre")
 
-    owner=models.CharField(max_length=150,default="public")
+    owner=models.CharField(max_length=150,default="public",help_text="Auteur de l'oeuvre")
     description=models.TextField(null=False,default="",max_length=3000,help_text="Description/Resumer de l'oeuvre")
     # Structure : "url" du document, "type" de document (str), "title" du document
     files=JSONField(null=True,help_text="Liens vers des documents attaché")
     category=models.TextField(null=True,max_length=200,help_text="Liste des categories auxquelles appartient le film")
-    lang=models.CharField(max_length=50,null=True)
+    lang=models.CharField(max_length=50,null=True,help_text="Langue originale de l'oeuvre")
 
     def __str__(self):
         return self.title
