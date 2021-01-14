@@ -1,7 +1,8 @@
+docker build -t f80hub/openalumni .
+
 cd frontend/openalumniclient
 start npm run prod
+cd ..
+cd ..
 
-cd ..
-cd ..
-docker build -t f80hub/openalumni .
 docker push f80hub/openalumni:latest

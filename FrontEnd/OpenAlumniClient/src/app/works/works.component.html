@@ -10,26 +10,34 @@
           <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <br><br>
-      </div>
+    </div>
+    &nbsp;
+    <div style="max-width: 250px;font-size: large;display: inline-block;">
+      <mat-form-field appearance="fill">
+        <mat-label>Poste occupé</mat-label>
+        <mat-select [(ngModel)]="job_filter" placeholder="Catégorie">
+          <mat-option *ngFor="let job of jobs" [value]="job">{{job}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
 
-
+<!-- Affichage de la liste -->
   <div class="wrap-list" *ngIf="works?.length>0">
-    <div *ngFor="let wrk of works | filter:['filter',cat_filter]" style="max-width: 400px;margin:1%;">
+    <div *ngFor="let wrk of works | filter:['filter',cat_filter] | filter:['job',job_filter]" style="max-width: 400px;margin:1%;">
 
       <app-work [work]="wrk" height="120px" [showAction]="true">
         <div style="display: flex;font-size: small;margin: 0px;">
-          <div *ngIf="wrk.pow.visual?.length>0" style="flex: 15%">
-             <img [src]="wrk.pow.visual"
+          <div *ngIf="wrk.pow?.visual?.length>0" style="flex: 15%">
+             <img [src]="wrk.pow?.visual"
                    class="image-photo"
                    style="height: 120px;margin:0px;padding: 0px;"
               >
           </div>
           <div style="flex: 65%;height:80%;overflow: hidden;line-height: 95%;">
-            {{wrk.pow.short_desc}}<br><br>
-            <span *ngIf="wrk.pow?.budget>0">Budget: {{wrk.pow.budget}}</span>
+            {{wrk.pow?.short_desc}}<br><br>
+            <span *ngIf="wrk.pow?.budget>0">Budget: {{wrk.pow?.budget}}</span>
           </div>
         </div>
 

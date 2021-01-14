@@ -35,7 +35,7 @@ class ProfilDocument(Document):
                 "email","department",
                 "cp","cursus",
                 "mobile","photo","address",
-                "town","degree_year"]
+                "town","degree_year","dtLastUpdate"]
 
     def get_queryset(self):
         return super().get_queryset().select_related('extrauser')

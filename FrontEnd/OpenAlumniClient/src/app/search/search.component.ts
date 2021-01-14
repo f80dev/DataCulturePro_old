@@ -103,6 +103,8 @@ export class SearchComponent implements OnInit {
     {field:"Nom",value:"lastname"},
     {field:"Promo",value:"promo"},
     {field:"Promo inversé",value:"-promo"},
+    {field:"Récent",value:"-dtLastUpdate"},
+    {field:"Ancien",value:"dtLastUpdate"},
   ]
 
   advanced_search=[];

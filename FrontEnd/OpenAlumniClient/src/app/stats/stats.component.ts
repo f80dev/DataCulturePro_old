@@ -20,7 +20,8 @@ export class StatsComponent implements OnInit {
 
   constructor(public _location:Location,
               public api:ApiService,
-              public router:Router,public config:ConfigService) {
+              public router:Router,
+              public config:ConfigService) {
     this.domain_server=environment.domain_server;
   }
 
@@ -36,18 +37,18 @@ export class StatsComponent implements OnInit {
   }
 
 
-  export_stats() {
-    this.api._post("export","",this.config.query_cache).subscribe(()=>{
-      showMessage(this,"Consulter votre boite mail");
-    })
-  }
+  // export_stats() {
+  //   this.api._post("export","",this.config.query_cache).subscribe(()=>{
+  //     showMessage(this,"Consulter votre boite mail");
+  //   })
+  // }
 
 
 
   downloadReport(tools: string) {
     if(tools=="excel")open(environment.domain_appli+"/assets/reporting.xlsx");
     if(tools=="powerbi")open(environment.domain_appli+"/assets/reporting.pbix");
-    if(tools=="csv")open(api("export_all","",true,""));
+    if(tools=="csv")open(api("export_all/csv","",true,""));
     if(tools=="xml")open(api("export_all/xml","",true,""));
   }
 }

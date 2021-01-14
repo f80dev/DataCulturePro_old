@@ -1,3 +1,4 @@
+#Normalisation des categories
 documentary: documentaire
 movie: film
 short: court-métrage
@@ -15,3 +16,20 @@ family: comédie familliale
 fantasy: héroïque fantaisie
 writer: scénariste
 serie: série
+
+
+#Normalisation des métiers
+Sound department: Son
+Second unit director or assistant director: Assistant réalisateur
+Editor: Editeur
+Scénaristes: Scénariste
+Director: Réalisateur
+Writer: Scénariste
+production assistant: Assistant de production
+second assistant director: Second assistant réalisateur
+Cinematographer: Directeur de la photo
+Composer: Compositeur
+Assistante à la réalisation: Assistant Réalisation
+Assistants à la réalisation: Assistant Réalisation
+
+

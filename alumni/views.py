@@ -580,6 +580,7 @@ class ProfilDocumentView(DocumentViewSet):
         'lastname':'lastname',
         'promo':'degree_year',
         'formation':'department',
+        'dtLastUpdate':'dtLastUpdate'
     }
 
     suggester_fields = {

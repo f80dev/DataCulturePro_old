@@ -241,7 +241,7 @@ export class LoginComponent implements OnInit {
 
 
 
-
+  n_try=0;
   public socialSignIn(socialPlatform : string) {
     let servicePlatform=GoogleLoginProvider.PROVIDER_ID;
     if(socialPlatform=="facebook")servicePlatform=FacebookLoginProvider.PROVIDER_ID;
@@ -263,9 +263,15 @@ export class LoginComponent implements OnInit {
         },false);
       },
       (err)=>{
-      this.wait_message="";
-      showError(this,err);
-    }
+          this.n_try=this.n_try+1;
+          if(this.n_try<2) {
+            setTimeout(() => {this.socialSignIn(socialPlatform);}, 500);
+          } else {
+            this.wait_message="";
+            showError(this,err);
+
+          }
+      }
     );
   }
 }

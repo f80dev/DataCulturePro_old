@@ -8,13 +8,21 @@
 <div class="mainform">
 
   <br>
-  <mat-form-field class="app-field" style="font-size: medium">
+  <mat-form-field class="app-field" style="font-size: medium;max-width: 300px;">
     <mat-label>Rapports statistiques disponibles</mat-label>
     <mat-select [(ngModel)]="sel_report">
       <mat-option *ngFor="let report of reports" [value]="report.url">{{report.title}}</mat-option>
     </mat-select>
     <mat-hint>Sélectionner le rapport que vous souhaitez consulter</mat-hint>
   </mat-form-field>
+
+  <button mat-button mat-raised-button
+          class="app-button"
+          *ngIf="sel_report?.length>0 && sel_report!='building'"
+          (click)="openStats()">
+    Ouvrir
+  </button>
+
   <br>
 
 
@@ -24,12 +32,7 @@
   </div>
 
 
-  <button mat-button mat-raised-button
-          class="app-button"
-          *ngIf="sel_report?.length>0 && sel_report!='building'"
-          (click)="openStats()">
-    Ouvrir le rapport
-  </button>
+
   <br>
 
   <br>
@@ -37,44 +40,37 @@
 
   <table class="mat-elevation-z8" *ngIf="!showGraphQL">
     <tr>
-      <th style="width:50%">Procédure</th>
-      <th>Commande</th>
-    </tr>
-
-    <tr>
-      <td>Importer directement<br>les données</td>
+      <td>Données brutes</td>
       <td>
-         <button mat-button mat-raised-button
+         <button mat-button mat-raised-button class="app-button"
           (click)="downloadReport('csv')">
-            CSV
+            <mat-icon>download</mat-icon>&nbsp;CSV
           </button>
           &nbsp;
-          <button mat-button mat-raised-button
+          <button mat-button mat-raised-button class="app-button"
           (click)="downloadReport('xml')">
-            XML
+            <mat-icon>download</mat-icon>&nbsp;XML
           </button>
       </td>
     </tr>
 
     <tr>
-      <td>Utiliser Excel pour analyser</td>
+      <td>Modèle d'analyse</td>
       <td>
-        <button mat-button mat-raised-button mat-icon-button class="icon-button"
+        <button mat-button mat-raised-button class="app-button"
           (click)="downloadReport('excel')">
           <mat-icon>download</mat-icon>
+          Excel
+        </button>
+        &nbsp;
+          <button mat-button mat-raised-button class="app-button"
+          (click)="downloadReport('powerbi')">
+          <mat-icon>download</mat-icon>
+          PowerBI
         </button>
       </td>
     </tr>
 
-    <tr>
-      <td>Utiliser PowerBI pour analyser</td>
-      <td>
-        <button mat-button mat-raised-button mat-icon-button class="icon-button"
-          (click)="downloadReport('powerbi')">
-            <mat-icon>download</mat-icon>
-        </button>
-      </td>
-    </tr>
 
   </table>
 
@@ -97,13 +93,13 @@
   <div class="bottom-bar">
     <hr>
 
-    <button mat-button mat-raised-button
-            *ngIf="config.query_cache?.length>0"
-            title="Exporter le résultat de votre dernière recherche"
-            class="app-button"
-            (click)="export_stats()">
-      Export
-    </button>
+<!--    <button mat-button mat-raised-button-->
+<!--            *ngIf="config.query_cache?.length>0"-->
+<!--            title="Exporter le résultat de votre dernière recherche"-->
+<!--            class="app-button"-->
+<!--            (click)="export_stats()">-->
+<!--      Export-->
+<!--    </button>-->
 
 
     <button mat-button mat-raised-button

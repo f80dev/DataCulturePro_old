@@ -138,13 +138,13 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                         url = url.split("?")[0]
 
                         if len(texts)>1:
-                            nature = "inconnue"
+                            nature = ""
                             for nat in MOVIE_NATURE:
                                 if nat.lower() in texts[1].lower():
                                     nature=nat
                                     break
-                            if nature=="inconnue":
-                                log("Nature inconnue pour "+url)
+                            if nature=="":
+                                log("Nature inconnue depuis "+texts[1]+" pour "+url)
 
                             if len(texts)>2 and len(job)==0:
                                 job=texts[2].split(")")[0]
@@ -329,8 +329,9 @@ def add_pows_to_profil(profil,links,all_links,job_for):
             job=l["job"]
 
         if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id).exists():
-            log("Ajout de l'experience " + pow.title + " à " + profil.lastname)
-            work = Work(pow=pow, profil=profil, job=translate(job), source=source)
+            job=translate(job)
+            log("Ajout de l'experience "+job+" sur "+pow.title+" à "+profil.lastname)
+            work = Work(pow=pow, profil=profil, job=job, source=source)
             work.save()
 
 

@@ -13,9 +13,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class WorksComponent implements OnInit {
   works:any;
   message: any;
-  categories: any[]=[];
-  cat_filter="long";
+  categories: any[]=["Tous"];
+  jobs: any[]=["Tous"];
+  cat_filter="Tous";
   name: any;
+  job_filter="Tous";
 
   constructor(public _location:Location,public toast:MatSnackBar,
               public routes:ActivatedRoute,
@@ -38,6 +40,7 @@ export class WorksComponent implements OnInit {
           if(w && w.public) {
             w.filter=w.pow.nature;
             if(this.categories.indexOf(w.pow.nature)==-1)this.categories.push(w.pow.nature);
+            if(this.jobs.indexOf(w.job)==-1)this.jobs.push(w.job);
             w.pow.short_desc=w.pow.description.substr(0,Math.min(200,w.pow.description.length));
             this.works.push(w);
           }

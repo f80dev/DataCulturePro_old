@@ -345,12 +345,15 @@ def translate(wrd:str,dictionnary=None):
     if MYDICT is None:
         with open("./static/dictionnary.yaml", 'r', encoding='utf8') as f:
             body = f.read()
-        MYDICT=yaml.load(body)
+        MYDICT=yaml.load(body.lower())
     try:
         rc=MYDICT[wrd.lower()]
     except:
         rc=wrd
 
-    return rc[0].upper()+rc[1:].lower()
+    if len(rc)>1:
+        return rc[0].upper()+rc[1:].lower()
+    else:
+        return rc
 
 
