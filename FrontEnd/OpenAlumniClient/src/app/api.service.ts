@@ -167,8 +167,16 @@ export class ApiService {
   }
 
 
-  send(id: string, _from:string,text: any) {
-    return this._post("send_to","profil="+id+"&from="+_from,text);
+  send(id: string, _from:string,text:string,social:string,send_copy:boolean,fullname:string) {
+    let obj={
+      _to:id,
+      text:text,
+      fullname:fullname,
+      social:social,
+      send_copy:send_copy,
+      _from:_from
+    }
+    return this._post("send_to/","",obj);
   }
 
 

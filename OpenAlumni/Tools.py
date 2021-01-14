@@ -80,7 +80,7 @@ def reset_password(email,username):
     """
     password = str(tirage(999999, 100000))
 
-    sendmail("Voici votre code",email,"welcome",dict({
+    sendmail("Voici votre code",[email],"welcome",dict({
         "email": email,
         "url_appli":settings.DOMAIN_APPLI+"/?email="+email,
         "username": username,
@@ -161,10 +161,14 @@ def sendmail(subject, _to, template, field):
     field["email"]=_to
     html=open_html_file(template,field)
     log("Envoi de "+html)
-    if _to in EMAIL_TESTER or len(EMAIL_TESTER)==0:
-        send_mail(subject,message="",from_email=EMAIL_HOST_USER,recipient_list=[_to],
-                  auth_user=settings.EMAIL_HOST_USER,html_message=html,
-                  auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
+    _dest=[]
+    for c in _to:
+        if c in EMAIL_TESTER or len(EMAIL_TESTER) == 0:
+            _dest.append(c)
+
+    send_mail(subject,message="",from_email=EMAIL_HOST_USER,recipient_list=_dest,
+              auth_user=settings.EMAIL_HOST_USER,html_message=html,
+              auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
 
 
 def open_html_file(name:str,replace=dict(),domain_appli=DOMAIN_APPLI):

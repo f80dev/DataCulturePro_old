@@ -301,7 +301,7 @@ def ask_for_update(request):
 
         if profil.obsolescenceScore>obso_max and days_notif>delay_notif:
             Profil.objects.filter(id=profil.id).update(dtLastNotif=datetime.now(),obsolescenceScore=profil.obsolescenceScore)
-            sendmail("Mettre a jour votre profil",profil.email,"update",{
+            sendmail("Mettre a jour votre profil",[profil.email],"update",{
                 "name":profil.firstname,
                 "appname":APPNAME,
                 "url":DOMAIN_APPLI+"/edit?id="+str(profil.id)+"&email="+profil.email,
@@ -318,19 +318,30 @@ def ask_for_update(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def send_to(request):
-    text=str(request.body,"utf8")
-    text=text.replace("&#8217;","")
+    body=request.data
+    text=body["text"].replace("&#8217;","")
+
+    social_link=""
+    if "social" in body and "value" in body["social"] and len(body["social"]["value"])>0:
+        social_link="<br>Vous pouvez répondre directement via <a href='"+body["social"]["value"]+"'>"+body["social"]["label"]+"</a>"
+
     log("Envoie du mail " + text)
 
-    _from=ExtraUser.objects.get(id=request.query_params["from"])
-    _profil=Profil.objects.get(id=request.query_params['profil'])
+    _from=User.objects.get(id=body["_from"])
+    _profil=Profil.objects.get(id=body['_to'])
 
     #TODO vérifier la black liste
 
-    sendmail("["+APPNAME+"] Message de "+_from.profil.fullname,
-              from_email=settings.EMAIL_HOST_USER,
-              message=text,
-              recipient_list=[_profil.email])
+    cc=""
+    if "send_copy" in body and body["send_copy"]: cc = _from["email"]
+    fullname=_from.first_name+" "+_from.last_name
+    sendmail(
+        subject="["+APPNAME+"] Message de "+fullname,
+        template="contact.html",
+        field={"text":text,"social_link":social_link,"fullname":fullname},
+        _to=[_profil.email,cc]
+    )
+
     return Response("Message envoyé", status=200)
 
 
@@ -346,7 +357,6 @@ from dict2xml import dict2xml as xmlify
 @permission_classes([AllowAny])
 def export_all(request):
     headers=WorksCSVRenderer.header
-    content=list()
     works=Work.objects.all()
     df:pd.DataFrame = pd.DataFrame.from_records(list(works.values(
         "profil__id","profil__gender","profil__lastname","profil__firstname","profil__department","profil__cursus","profil__degree_year","profil__cp","profil__town",
