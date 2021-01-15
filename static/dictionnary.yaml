@@ -21,17 +21,29 @@ serie: série
 #Normalisation des métiers
 Sound department: Son
 Second unit director or assistant director: Assistant réalisateur
-Editor: Editeur
-Scénaristes: Scénariste
-Director: Réalisateur
-Writer: Scénariste
+Editor: Montage
+Monteur: Montage
+Scénaristes: Scénario
+Director: Réalisation
+Réalisateur: Réalisation
+Réalisatrice: Réalisation
+Writer: Scénario
 production assistant: Assistant de production
 second assistant director: Second assistant réalisateur
 Cinematographer: Directeur de la photo
-Composer: Compositeur
+Composer: Composition musicale
+Auteur de la musique: Composition musicale
 Assistante à la réalisation: Assistant Réalisation
-Assistants à la réalisation: Assistant Réalisation
+Assistant à la réalisation: Assistant Réalisation
+Auteurs de la musique: Composition musicale
+Attaché de presse (film): Relations presse
+Assistant réalisateur: Assistant réalisation
+Directeur de production: Direction de la production
 Actress: Actrice
 Attachée de presse (film): Relations presse
-Producer: Producteur
+Producer: Production
+Directeur de la photo: Direction Photo
+Directrice de la photo: Direction Photo
+Ingénieur du son , monteur son , sound designer , mixeur: Son
+
 
