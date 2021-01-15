@@ -153,7 +153,7 @@ class Work(models.Model):
     comment=models.TextField(max_length=400,null=False,default="",blank=True,help_text="Commentaire sur la façon dont s'est passé le projet")
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
     source=models.CharField(max_length=100,null=False,default="",help_text="source ayant permis d'identifier le projet : imdb, unifrance, bellefaye")
-
+    validate=models.BooleanField(default=False,help_text="Indique si l'expérience est validé ou pas")
 
     @property
     def title(self):

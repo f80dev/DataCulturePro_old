@@ -13,7 +13,6 @@ from rsa import encrypt
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import reset_password, log, sendmail
-from OpenAlumni.passwords import DB_PASSWORD
 from OpenAlumni.settings import APPNAME
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
@@ -146,7 +145,7 @@ class WorkSerializer(serializers.ModelSerializer):
         model=Work
         fields=["profil","pow","dtStart","dtEnd",
                 "duration","comment","job","title",
-                "public","creator","id",
+                "public","creator","id","validate",
                 "source","year","nature"]
 
 
@@ -156,7 +155,7 @@ class WorksCSVRenderer (CSVRenderer):
     header = [
         "profil_id", "profil_genre","profil_nom", "profil_prenom", "profil_formation", "profil_cursus","profil_promotion","profil_code_postal", "profil_ville",
         "film_id","film_titre", "film_catégorie", "film_genre","film_annee",
-        "work_id", "work_job","work_comment"
+        "work_id", "work_job","work_comment","work_validate"
     ]
 
 
