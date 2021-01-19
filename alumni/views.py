@@ -35,9 +35,9 @@ from rest_framework import viewsets, generics
 from OpenAlumni import settings
 from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
-    sendmail, to_xml
-from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
-from alumni.documents import ProfilDocument, PowDocument, html_strip
+    sendmail, to_xml, translate
+from OpenAlumni.settings import APPNAME, DOMAIN_APPLI
+from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
     WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
@@ -169,6 +169,25 @@ def askfriend(request):
     return JsonResponse(u)
 
 
+#http://localhost:8000/api/update_dictionnary/
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def update_dictionnary(request):
+    for w in Work.objects.all():
+        job=translate(w.job)
+        if job!=w.job:
+            w.job=job
+            w.save()
+
+    for p in PieceOfWork.objects.all():
+        category=translate(p.category)
+        if category!=p.category:
+            p.category=category
+            p.save()
+
+    return Response({"message":"ok"})
+
+
 #http://localhost:8000/api/search?q=hoareau
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -208,7 +227,7 @@ def batch(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def initdb(request):
-    profils=yaml.load(DOMAIN_APPLI+"/assets/profils.yaml")
+    return Response({"message": "Base initialisée"})
 
 
 
@@ -361,7 +380,7 @@ def export_all(request):
     df:pd.DataFrame = pd.DataFrame.from_records(list(works.values(
         "profil__id","profil__gender","profil__lastname","profil__firstname","profil__department","profil__cursus","profil__degree_year","profil__cp","profil__town",
         "pow__id","pow__title","pow__nature","pow__category","pow__year",
-        "id","job","comment"
+        "id","job","comment","source","state"
     )))
     df.columns=headers
 

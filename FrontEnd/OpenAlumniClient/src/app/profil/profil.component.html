@@ -11,6 +11,7 @@
       <span *ngIf="profil?.cursus=='P'">Cursus Pro - </span>
       <span *ngIf="profil?.cursus=='S'">Promotion </span>
       <span style='cursor: pointer'
+            title="Rechercher par promotion"
             (click)="onclick.emit(profil?.degree_year)">
         {{profil?.degree_year}}
       </span>

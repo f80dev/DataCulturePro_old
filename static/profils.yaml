@@ -40,7 +40,7 @@ profils:
     level: 5
     description: Profil destiné aux administrateurs
     perm:
-        r_photo r_cpr_firstname r_works r_linkedin w_cp w_firstname advanced_search
+        r_photo r_cpr_firstname r_works r_linkedin w_cp w_firstname advanced_search r_promo
         w_production w_email w_linkedin admin write_email r_mobile r_address r_lastname
         r_department stats delete_profil delete_pow ask_friend edit_profil
     price: 0

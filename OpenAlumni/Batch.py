@@ -53,27 +53,36 @@ def extract_film_from_unifrance(url:str,job_for=None):
                     rc["visual"]=src
                     log("Enregistrement de l'affiche "+src)
 
+    _real=page.find("div",attrs={"itemprop":"director"})
+    if not _real is None:
+        rc["real"]=_real.find("a",attrs={"itemprop":"name"}).get("href")
+
+
     for div in page.findAll("div",attrs={'class': "details_bloc"}):
         if "Année de production : " in div.text:
             rc["year"]=div.text.replace("Année de production : ","")
         if "Genre(s) : " in div.text:
-            rc["category"]=div.text.replace("Genre(s) : ","")
+            rc["category"]=translate(div.text.replace("Genre(s) : ",""))
 
+    if "category" in rc and len(rc["category"])==0:rc["category"]="inconnue"
 
 
     if not job_for is None:
-        page.find("h2")
-        for div in page.findAll("div",{"class":"col-sm-5 col-xs-10"}):
-            if len(div.findAll("a",{"href":job_for}))>0:
-                jobs=div.findAll("h2")
-                talents=div.findAll("a")
-                idx=0
-                for t in talents:
-                    if t.get("href")==job_for:
-                        if len(jobs)>idx:
-                            rc["job"]=jobs[idx].text.replace(" : ","")
-                            break
-                    idx=idx+1
+        if rc["real"]==job_for:
+            rc["job"]="Réalisation"
+        else:
+            page.find("h2")
+            for div in page.findAll("div",{"class":"col-sm-5 col-xs-10"}):
+                if len(div.findAll("a",{"href":job_for}))>0:
+                    jobs=div.findAll("h2")
+                    talents=div.findAll("a")
+                    idx=0
+                    for t in talents:
+                        if t.get("href")==job_for:
+                            if len(jobs)>idx:
+                                rc["job"]=jobs[idx].text.replace(" : ","")
+                                break
+                        idx=idx+1
 
 
     _synopsis = page.find("div", attrs={"itemprop": "description"})
@@ -304,7 +313,11 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
             pow = PieceOfWork(title=film["title"])
             pow.add_link(url=l["url"], title=source)
-            if "nature" in film:pow.nature=translate(film["nature"])
+            if "nature" in film:
+                pow.nature=translate(film["nature"])
+            else:
+                pow.nature="Film"
+
             if "synopsis" in film: pow.description = film["synopsis"]
             if "visual" in film: pow.visual = film["visual"]
             if "category" in film: pow.category = translate(film["category"])

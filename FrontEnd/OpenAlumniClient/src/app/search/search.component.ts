@@ -8,6 +8,7 @@ import {Location} from "@angular/common"
 import {PromptComponent} from "../prompt/prompt.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSelect} from "@angular/material/select";
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-search',
@@ -21,6 +22,7 @@ export class SearchComponent implements OnInit {
   perm: string="";
   dtLastSearch: number=0;
   @ViewChild('order', {static: false}) order: MatSelect;
+  filter_with_pro: boolean=false;
 
   constructor(public api:ApiService,
               public dialog:MatDialog,
@@ -63,7 +65,6 @@ export class SearchComponent implements OnInit {
       }
 
 
-
       //Ajout du tri
       if(this.order)param=param+"&ordering="+this.order.value;
 
@@ -76,7 +77,9 @@ export class SearchComponent implements OnInit {
           for(let _work of item.works){
             item.filter_tag=normaliser(item.filter_tag+"titre:"+_work.title+" ");
           }
-          this.profils.push(item);
+          if(this.filter_with_pro || item.cursus=="S")
+            this.profils.push(item);
+
         }
         if(this.profils.length==0){
           if(this.query.value.length==0 && this.advanced_search.length==0){
@@ -170,5 +173,10 @@ export class SearchComponent implements OnInit {
       ]
     }
     else this.advanced_search=[];
+  }
+
+  with_pro($event: MatCheckboxChange) {
+    this.filter_with_pro=$event.checked;
+    this.refresh();
   }
 }

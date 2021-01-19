@@ -67,7 +67,13 @@
     {{profils.length}} profils &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
   </div>
 
-  <mat-checkbox (change)="switch_motor()" labelPosition="Before">Recherche Avancée</mat-checkbox>
+  <mat-checkbox (change)="switch_motor()" labelPosition="Before">
+    Recherche Avancée
+  </mat-checkbox>
+  &nbsp;
+   <mat-checkbox (change)="with_pro($event)" labelPosition="Before">
+    Profils Pro
+  </mat-checkbox>
 
 </div>
 

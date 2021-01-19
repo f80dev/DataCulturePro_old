@@ -143,6 +143,7 @@ class Work(models.Model):
     dtStart=models.DateField(null=True,help_text="Date de début du projet")
     dtEnd=models.DateField(null=True,help_text="Date de fin du projet")
     status=models.CharField(max_length=200,default="")
+    state=models.CharField(max_length=1,default="A",help_text="etat du travail entre A=automatiquement creer,E=editer par le profil, D=supprimé par le profil")
 
     #creator passera à user si l'utilisateur modifie l'enregistrement
     creator=models.CharField(max_length=5,default="auto",help_text="Désigne qui est le dernier auteur de l'enregistrement dans la base de données")
@@ -152,7 +153,7 @@ class Work(models.Model):
     duration=models.IntegerField(default=0,null=False,help_text="Durée du projet en heure")
     comment=models.TextField(max_length=400,null=False,default="",blank=True,help_text="Commentaire sur la façon dont s'est passé le projet")
     earning=models.IntegerField(default=None,null=True,help_text="Revenu percu brut pour la durée annoncée")
-    source=models.CharField(max_length=100,null=False,default="",help_text="source ayant permis d'identifier le projet : imdb, unifrance, bellefaye")
+    source=models.CharField(max_length=100,null=False,default="",help_text="source ayant permis d'identifier le projet : imdb, unifrance, bellefaye, manuel")
     validate=models.BooleanField(default=False,help_text="Indique si l'expérience est validé ou pas")
 
     @property

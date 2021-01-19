@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1610729463944,
+  "timestamp": 1611074286422,
   "index": "https://dcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -52,21 +52,35 @@
         "https://dcp.f80.fr/assets/img/tips.png",
         "https://dcp.f80.fr/assets/jobs.json",
         "https://dcp.f80.fr/assets/reporting.pbix",
-        "https://dcp.f80.fr/assets/reporting.xlsx"
+        "https://dcp.f80.fr/assets/reporting.xlsx",
+        "https://dcp.f80.fr/assets/~$reporting.xlsx"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [
     {
-      "name": "api-performance",
+      "name": "static",
       "patterns": [
-        "\\/assets\\/i18n\\/.*",
-        "\\/api\\/profilsdoc\\/.*"
+        "\\/assets\\/i18n\\/.*"
       ],
       "strategy": "performance",
       "maxSize": 500,
       "maxAge": 259200000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    },
+    {
+      "name": "api-perf",
+      "patterns": [
+        "\\/api\\/profilsdoc\\/.*"
+      ],
+      "strategy": "performance",
+      "maxSize": 5000,
+      "maxAge": 3600000,
+      "timeoutMs": 50000,
       "cacheQueryOptions": {
         "ignoreVary": true
       },
@@ -111,10 +125,11 @@
     "https://dcp.f80.fr/assets/img/tips.png": "b7832ac8a831f94cd9b656f48bc0d75a5cd587ca",
     "https://dcp.f80.fr/assets/jobs.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://dcp.f80.fr/assets/reporting.pbix": "2b95ac35c6fee4fa408666be84d70943d4604ae8",
-    "https://dcp.f80.fr/assets/reporting.xlsx": "31c2d420d240f1d711e65a521668369219b8e17f",
+    "https://dcp.f80.fr/assets/reporting.xlsx": "60c5d7f840150345eba8c0fa226bec089990d187",
+    "https://dcp.f80.fr/assets/~$reporting.xlsx": "df650bbb6b1bc0776d7434e056f9c4d6885eb19d",
     "https://dcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://dcp.f80.fr/index.html": "57e54a7ce8810f4d6ff623ae5c0db52fd6be12cf",
-    "https://dcp.f80.fr/main.js": "71cb99c42aee76771ad108930850235d9262cb29",
+    "https://dcp.f80.fr/main.js": "ff4775d8fb6fe613976b9b81ddc94dbbe924e48a",
     "https://dcp.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
     "https://dcp.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "https://dcp.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",

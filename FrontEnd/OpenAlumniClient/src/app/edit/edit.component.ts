@@ -9,6 +9,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {PromptComponent} from "../prompt/prompt.component";
 import {ImageSelectorComponent} from "../image-selector/image-selector.component";
 import {FormControl} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 export interface Movie {
     title: string;
@@ -33,6 +34,7 @@ export class EditComponent implements OnInit  {
    constructor(public _location:Location,
               public routes:ActivatedRoute,
                public dialog:MatDialog,
+              public toast:MatSnackBar,
               public config:ConfigService,
               public router:Router,
               public api:ApiService) {
@@ -89,13 +91,18 @@ export class EditComponent implements OnInit  {
     }
   }
 
+
+
   refresh_works(){
     let id=this.routes.snapshot.queryParamMap.get("id")
     this.message="Récupération des expériences";
     this.api._get("extraworks","profil__id="+id).subscribe((r:any)=>{
         $$("Travaux chargés");
         this.message="";
-        this.works=r.results;
+        this.works=[];
+        for(let w of r.results){
+          if(w.state!="D")this.works.push(w);
+        }
       });
   }
 
@@ -170,6 +177,8 @@ export class EditComponent implements OnInit  {
     })
   }
 
+
+
   quit(bSave=true) {
     if(bSave){
       // for(let soc of this.socials){
@@ -223,8 +232,8 @@ export class EditComponent implements OnInit  {
         this.profil.photo= result;
       }
     });
-
   }
+
 
   add_pow() {
     if(this.config.user.user){
@@ -235,7 +244,6 @@ export class EditComponent implements OnInit  {
           owner:this.config.user.user.id}
       })
     }
-
   }
 
   save_user(evt=null) {
@@ -246,11 +254,13 @@ export class EditComponent implements OnInit  {
     this.api.setuser(this.config.user.user).subscribe(()=>{});
   }
 
+
   _private(work: any) {
     work.public=!work.public;
     this.api._patch("works/"+work.id+"/","", {"public":work.public}).subscribe(()=>{
     });
   }
+
 
   analyse() {
     this.message="Analyse en cours";
@@ -260,11 +270,12 @@ export class EditComponent implements OnInit  {
     });
   }
 
+
   reset_works() {
     let total=this.works.length;
     for(let w of this.works){
       if(!w.source.startsWith("man")){
-        this.api._delete("works/"+w.id+"/").subscribe(()=>{
+        this.api._patch("works/"+w.id+"/","",{state:"D",public:false}).subscribe(()=>{
           total=total-1;
           this.works.splice(this.works.indexOf(w),1);
         });
@@ -283,5 +294,16 @@ export class EditComponent implements OnInit  {
     } else
       social.message="";
   }
+
+
+
+  edit_work(work: any) {
+    this.api._patch("works/"+work.id+"/","",{state:"E"}).subscribe(()=>{
+      showMessage(this,"Mode édition");
+      work.state="E";
+    });
+  }
+
+
 }
 

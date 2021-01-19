@@ -3,15 +3,26 @@
   "index": "/index.html",
  "dataGroups": [
     {
-      "name": "api-performance",
+      "name": "static",
       "urls": [
-        "/assets/i18n/**",
-        "/api/profilsdoc/**"
+        "/assets/i18n/**"
       ],
       "cacheConfig": {
         "strategy": "performance",
         "maxSize": 500,
         "maxAge": "3d"
+      }
+    },
+   {
+      "name": "api-perf",
+      "urls": [
+        "/api/profilsdoc/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 5000,
+        "maxAge": "1h",
+        "timeout": "50s"
       }
     },
     {
