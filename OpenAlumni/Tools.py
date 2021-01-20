@@ -350,12 +350,16 @@ def translate(wrd:str,dictionnary=None):
         with open("./static/dictionnary.yaml", 'r', encoding='utf8') as f:
             body = f.read()
         MYDICT=yaml.load(body.lower())
-    try:
-        rc=MYDICT[wrd.lower()]
-    except:
-        rc=wrd
 
-    if len(rc)>1:
+    if wrd is None:
+        return None
+
+    key=wrd.lower().replace(",","")
+    rc = key
+    if key in MYDICT.keys():
+        rc = MYDICT[key]
+
+    if not rc is None and len(rc)>1:
         return rc[0].upper()+rc[1:].lower()
     else:
         return rc

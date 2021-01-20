@@ -1,3 +1,8 @@
+#install docker : sudo curl -sSL get.docker.com | sh
+#effacer toutes les images : docker rmi $(docker images -a -q)
+#effacer tous les containers : docker rm  $(docker ps -a -f status=exited -q) / podman rm  $(podman ps -a -f status=exited -q)
+
+
 FROM python
 
 #fabrication: docker build -t f80hub/openalumni . & docker push f80hub/openalumni:latest
@@ -51,10 +56,11 @@ RUN mkdir $APP_HOME/staticfiles
 RUN mkdir $APP_HOME/mediafiles
 
 WORKDIR $APP_HOME
+COPY ./static $APP_HOME/static
 COPY ./OpenAlumni $APP_HOME/OpenAlumni
 COPY ./alumni $APP_HOME/alumni
 COPY ./manage.py $APP_HOME
-COPY ./static $APP_HOME/static
+
 
 
 # chown all the files to the app user

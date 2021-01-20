@@ -176,6 +176,7 @@ def update_dictionnary(request):
     for w in Work.objects.all():
         job=translate(w.job)
         if job!=w.job:
+            log("Traitement de "+str(w))
             w.job=job
             w.save()
 
