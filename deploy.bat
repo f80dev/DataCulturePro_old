@@ -1,3 +1,5 @@
+c:
+cd C:\Users\hhoareau\PycharmProjects\OpenAlumni
 docker build -t f80hub/openalumni .
 
 cd frontend/openalumniclient

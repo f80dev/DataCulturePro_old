@@ -381,7 +381,7 @@ def export_all(request):
     df:pd.DataFrame = pd.DataFrame.from_records(list(works.values(
         "profil__id","profil__gender","profil__lastname","profil__firstname","profil__department","profil__cursus","profil__degree_year","profil__cp","profil__town",
         "pow__id","pow__title","pow__nature","pow__category","pow__year",
-        "id","job","comment","source","state"
+        "id","job","comment","validate","source","state"
     )))
     df.columns=headers
 

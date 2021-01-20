@@ -1,0 +1,4 @@
+#Fichier à ne pas traiter
+*/venv*
+*/node_modules*
+*/docs

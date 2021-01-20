@@ -1,3 +1,5 @@
+#La syntaxe du dictionnaire est A:B, signifiant qu'il remplace systématique A par B
+
 #Normalisation des categories
 documentary: documentaire
 movie: film
@@ -23,6 +25,8 @@ Crime: policier
 Documentaire, fiction: documentaire
 Expérimental, documentaire: documentaire
 
+
+
 #Normalisation des métiers
 Sound department: Son
 Second unit director or assistant director: Assistant réalisateur
@@ -35,7 +39,6 @@ Réalisatrice: Réalisation
 Writer: Scénario
 production assistant: Assistant de production
 second assistant director: Second assistant réalisateur
-
 Composer: Composition musicale
 Auteur de la musique: Composition musicale
 Assistante à la réalisation: Assistant Réalisation
@@ -47,29 +50,24 @@ Directeur de production: Direction de production
 Actress: Acteur(trice)
 Attachée de presse (film): Relations presse
 Producer: Production
-
 Directeur de la photo: Direction Photo
 Directrice de la photo: Direction Photo
 Directeurs de la photo: Direction Photo
 Cinematographer: Direction Photo
-
 Ingénieur du son  monteur son  sound designer  mixeur: son
 Ingénieur du son monteur son mixeur: son
 Ingénieurs du son: son
 Monteur son: son
-
 Art department: Département artistique
 Décorateur: Décorateur/trice
 Décoratrice: Décorateur/trice
 Décoratrices: Décorateur/trice
 Additional crew: Equipe Supplémentaire
 Scénariste: Scénario
-
 Mixeur monteur son: Mixeur
 Attachées de presse (film): Relations presse
 Attachés de presse (film): Relations presse
 Chef opérateur du son et monteur son: Chef(fe) op son
-
 Directrice de production: Direction de production
 Production designer: Production
 Responsable de la post-production: Post-production
@@ -99,6 +97,5 @@ Scénariste réalisateur: Réalsateur(trice) / Scénariste
 Producteur associé: Production
 Editorial department: Montage
 Assistante monteuse: Assistant(e) montage
-
 Actor: Acteur(trice)
 Chef opérateur et réalisateur: Chef(fe) op
