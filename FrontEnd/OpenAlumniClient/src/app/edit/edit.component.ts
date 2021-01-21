@@ -199,7 +199,7 @@ export class EditComponent implements OnInit  {
   del_work(wrk:any) {
     this.dialog.open(PromptComponent,{data: {
         title: 'Confirmation',
-        question: 'Supprimer cette expérience',
+        question: "Supprimer l'expérience sur '"+wrk.pow.title+"'",
         onlyConfirm: true,
         canEmoji: false,
         lbl_ok: 'Oui',

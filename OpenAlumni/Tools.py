@@ -356,7 +356,7 @@ def translate(wrd:str,dictionnary=None):
 
     key=wrd.lower().replace(",","")
     rc = key
-    for section in ["jobs","categorie"]:
+    for section in ["jobs","categories"]:
         if key in MYDICT[section].keys():
             rc = MYDICT[section][key]
             break

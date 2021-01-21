@@ -62,7 +62,6 @@ COPY ./alumni $APP_HOME/alumni
 COPY ./manage.py $APP_HOME
 
 
-
 # chown all the files to the app user
 #RUN addgroup -S app && adduser -S app -G app
 #RUN chown -R app:app $APP_HOME

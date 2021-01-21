@@ -73,18 +73,21 @@ def extract_film_from_unifrance(url:str,job_for=None):
         if rc["real"]==job_for:
             rc["job"]="Réalisation"
         else:
-            page.find("h2")
-            for div in page.findAll("div",{"class":"col-sm-5 col-xs-10"}):
-                if len(div.findAll("a",{"href":job_for}))>0:
-                    jobs=div.findAll("h2")
-                    talents=div.findAll("a")
-                    idx=0
-                    for t in talents:
-                        if t.get("href")==job_for:
-                            if len(jobs)>idx:
-                                rc["job"]=jobs[idx].text.replace(" : ","")
-                                break
-                        idx=idx+1
+            section=page.find("section",{"id":"casting"})
+
+            if not section is None:
+                jobs = section.findAll("h2")
+                links = section.findAll("a")
+                #if not "personne" in links[0].href:links.remove(0)
+                k=0
+                for idx in range(len(links)):
+                    if "/personne" in links[idx].get("href"):
+                        k = k + 1
+                        if links[idx].get("href")==job_for:
+                            rc["job"]=jobs[k].text.replace(" : ","")
+                            break
+
+
 
 
     _synopsis = page.find("div", attrs={"itemprop": "description"})
