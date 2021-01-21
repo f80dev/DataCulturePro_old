@@ -3,17 +3,12 @@
     <div mat-card-avatar>
       <img src="/assets/img/movie.png" class="icon-profil">
     </div>
-    <mat-card-title>{{work?.pow?.title}} ({{work?.pow?.year}})</mat-card-title>
+    <mat-card-title>
+      {{work?.pow?.title}}
+      <span *ngIf="work?.pow?.year">({{work?.pow?.year}})</span>
+    </mat-card-title>
     <mat-card-subtitle >
-      <div *ngIf="work.dtStart && work.dtEnd">
-      {{work.job}} du {{work.dtStart | date:'dd/MM'}}
-      au
-      {{work.dtStart | date:'dd/MM/yy'}}
-      </div>
-
-      <div *ngIf="!work.dtStart || !work.dtEnd">
         <small>{{work.job}}</small>
-      </div>
     </mat-card-subtitle>
 
   </mat-card-header>

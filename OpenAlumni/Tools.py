@@ -356,8 +356,10 @@ def translate(wrd:str,dictionnary=None):
 
     key=wrd.lower().replace(",","")
     rc = key
-    if key in MYDICT.keys():
-        rc = MYDICT[key]
+    for section in ["jobs","categorie"]:
+        if key in MYDICT[section].keys():
+            rc = MYDICT[section][key]
+            break
 
     if not rc is None and len(rc)>1:
         return rc[0].upper()+rc[1:].lower()

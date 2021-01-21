@@ -1,11 +1,13 @@
 from asyncio import sleep
 from urllib import parse
 from urllib.parse import urlparse
+
+from django.utils.datetime_safe import datetime
 from imdb import IMDb
 from wikipedia import wikipedia, random, re
 
 from OpenAlumni.Tools import log, translate
-from OpenAlumni.settings import MOVIE_CATEGORIES, MOVIE_NATURE
+from OpenAlumni.settings import MOVIE_CATEGORIES, MOVIE_NATURE, DELAY_TO_AUTOSEARCH
 from alumni.models import Profil, Work, PieceOfWork
 
 
@@ -324,7 +326,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
             if "year" in film: pow.year = film["year"]
 
             try:
-                result=PieceOfWork.objects.filter(title=pow.title)
+                result=PieceOfWork.objects.filter(title__iexact=pow.title)
                 if len(result)==0:
                     pow.save()
                 else:
@@ -362,8 +364,9 @@ def exec_batch(profils):
 
         log("Traitement de " + profil.firstname+" "+profil.lastname)
         transact = Profil.objects.filter(id=profil.id)
-        if profil.delay_update(0, True) > 1000:
+        if profil.delay_lastsearch() > DELAY_TO_AUTOSEARCH or len(profils)==1:
             log("Hors délai ==> mise a jour")
+            profil.dtLastSearch=datetime.now()
 
             infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname)
             log("Extraction d'imdb " + str(infos))
@@ -402,6 +405,6 @@ def exec_batch(profils):
             # except:
             #     pass
 
-            transact.update(auto_updates=profil.auto_updates)
+            transact.update(dtLastSearch=profil.dtLastSearch)
 
     return True

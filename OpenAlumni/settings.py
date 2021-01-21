@@ -281,3 +281,5 @@ MOVIE_CATEGORIES=[
 
 MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]
 MYDICT=None
+
+DELAY_TO_AUTOSEARCH=24*10 #10 jours

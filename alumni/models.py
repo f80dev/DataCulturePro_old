@@ -46,8 +46,9 @@ class Profil(models.Model):
     town = models.CharField(null=True,blank=True,max_length=50, help_text="Ville de l'adresse postale")
     cp=models.CharField(null=True,blank=True,max_length=5,help_text="code postal de l'adresse postale")
     website=models.URLField(null=True)
-    dtLastUpdate=models.DateField(null=False,auto_now=True,help_text="Date de la dernière modification du profil")
-    dtLastNotif=models.DateField(null=False,auto_now=True,help_text="Date de la dernière notification envoyé")
+    dtLastUpdate=models.DateTimeField(null=False,auto_now=True,help_text="Date de la dernière modification du profil")
+    dtLastSearch=models.DateTimeField(null=False,auto_now=True,help_text="Date de la dernière recherche d'expérience pour le profil")
+    dtLastNotif=models.DateTimeField(null=False,auto_now=True,help_text="Date de la dernière notification envoyé")
     obsolescenceScore=models.IntegerField(default=0,help_text="Indique le degré d'obsolescence probable")
     biography=models.TextField(null=True,max_length=2000,help_text="Biographie du profil")
     links = JSONField(null=True, help_text="Liens vers des références externes au profil")
@@ -67,6 +68,13 @@ class Profil(models.Model):
             lastUpdates[_type]=str(datetime.datetime.now().timestamp())
             self.auto_updates=",".join(lastUpdates)
 
+        return rc
+
+    def delay_lastsearch(self):
+        """
+        :return: delay de mise a jour en heure
+        """
+        rc=(datetime.datetime.now().timestamp() - self.dtLastSearch.timestamp())/3600
         return rc
 
 
@@ -140,8 +148,6 @@ class Work(models.Model):
     id = models.AutoField(primary_key=True,help_text="Clé primaire interne des projets")
     profil = models.ForeignKey('Profil', null=False, on_delete=models.CASCADE,related_name="works",help_text="Profil concerné par le projet")
     pow = models.ForeignKey('PieceOfWork', null=False, on_delete=models.CASCADE, related_name="works",help_text="oeuvre concerné par le projet")
-    dtStart=models.DateField(null=True,help_text="Date de début du projet")
-    dtEnd=models.DateField(null=True,help_text="Date de fin du projet")
     status=models.CharField(max_length=200,default="")
     state=models.CharField(max_length=1,default="A",help_text="etat du travail entre A=automatiquement creer,E=editer par le profil, D=supprimé par le profil")
 

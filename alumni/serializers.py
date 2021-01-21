@@ -119,7 +119,7 @@ class ProfilSerializer(serializers.ModelSerializer):
                 "linkedin","degree_year","department",
                 "dtLastUpdate","links","str_links",
                 "cp","public_url","fullname","cursus",
-                "address","town","promo"]
+                "address","town","promo","dtLastSearch"]
 
 
 #http://localhost:8000/api/profils/?filter{firstname}=Adrien
@@ -143,7 +143,7 @@ class ExtraProfilSerializer(serializers.ModelSerializer):
 class WorkSerializer(serializers.ModelSerializer):
     class Meta:
         model=Work
-        fields=["profil","pow","dtStart","dtEnd",
+        fields=["profil","pow",
                 "duration","comment","job","title",
                 "public","creator","id","validate",
                 "source","year","nature","state"]
@@ -170,7 +170,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
                 "degree_year","public_url",
                 "photo","cp","department",
                 "address","town","promo",
-                "dtLastUpdate")
+                "dtLastUpdate","dtLastSearch")
 
 
 class PowDocumentSerializer(DocumentSerializer):
@@ -185,4 +185,4 @@ class ExtraWorkSerializer(serializers.ModelSerializer):
     profil=ProfilSerializer(many=False,read_only=True)
     class Meta:
         model=Work
-        fields=["id","profil","pow","dtStart","dtEnd","duration","comment","job","source","public"]
+        fields=["id","profil","pow","duration","comment","job","source","public"]

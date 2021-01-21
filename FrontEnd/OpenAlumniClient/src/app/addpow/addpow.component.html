@@ -154,12 +154,14 @@
 
     <button class="app-button login-button"
             mat-button mat-raised-button
+            *ngIf="pow?.owner=='public'"
             (click)="csvInput.click()">
       Importer
     </button>
 
      <button class="app-button login-button"
             mat-button mat-raised-button
+             *ngIf="pow?.owner=='public'"
             (click)="analyse()">
       Analyse
     </button>

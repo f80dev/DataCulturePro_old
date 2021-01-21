@@ -136,10 +136,10 @@
             Vos expériences
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <table style="width: 100%">
+        <table style="width: 100%;font-size: small;">
           <tr *ngFor="let work of works" style="width:100%;text-align: left;">
             <td>-</td>
-            <td style="line-height: 100%;">
+            <td style="line-height: 100%;width: fit-content;">
               {{work.job}} sur
               <a [title]="work.source" href="./pows?filter={{work.pow?.title}}">"{{work.pow?.title}}"</a>
               <br>
@@ -149,7 +149,7 @@
               </div>
 
             </td>
-            <td style="text-align: right;width:30px;">
+            <td style="text-align: right;width:70px;">
 
               <mat-icon style="cursor: pointer;font-size: medium;display: inline;" (click)="edit_work(work)" *ngIf="work.state!='E'">
                 edit
