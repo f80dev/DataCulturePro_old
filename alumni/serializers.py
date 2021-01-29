@@ -2,6 +2,7 @@ from hashlib import sha256
 from urllib.request import urlopen
 
 import yaml
+from django.utils.timezone import now
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
@@ -120,6 +121,7 @@ class ProfilSerializer(serializers.ModelSerializer):
                 "dtLastUpdate","links","str_links",
                 "cp","public_url","fullname","cursus",
                 "address","town","promo","dtLastSearch"]
+
 
 
 #http://localhost:8000/api/profils/?filter{firstname}=Adrien

@@ -65,6 +65,9 @@ class ExtraUserViewSet(viewsets.ModelViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ["user__email","id","user__username"]
 
+    def partial_update(self, request, pk=None):
+        pass
+
 
 
 class UserCreate(generics.CreateAPIView):
@@ -90,6 +93,9 @@ class ProfilViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = (SearchFilter,)
     search_fields = ["email"]
+
+
+
 
 
 #http://localhost:8000/api/pow
@@ -610,7 +616,7 @@ class ProfilDocumentView(DocumentViewSet):
         'lastname':'lastname',
         'promo':'degree_year',
         'formation':'department',
-        'dtLastUpdate':'dtLastUpdate'
+        'update':'dtLastUpdate'
     }
 
     suggester_fields = {

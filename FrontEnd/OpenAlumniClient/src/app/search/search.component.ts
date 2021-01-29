@@ -18,10 +18,11 @@ import {MatCheckboxChange} from "@angular/material/checkbox";
 export class SearchComponent implements OnInit {
   profils:any[]=[];
   query:any={value:""};
+  order:any;
   message: string="";
   perm: string="";
   dtLastSearch: number=0;
-  @ViewChild('order', {static: false}) order: MatSelect;
+  //@ViewChild('order', {static: false}) order: MatSelect;
   filter_with_pro: boolean=false;
 
   constructor(public api:ApiService,
@@ -36,6 +37,9 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     if(this.query.value=="")
       this.query.value=this.routes.snapshot.queryParamMap.get("filter") || this.routes.snapshot.queryParamMap.get("query") || "";
+
+    if(localStorage.getItem("ordering"))this.order=localStorage.getItem("ordering");
+
     this.refresh();
   }
 
@@ -64,10 +68,10 @@ export class SearchComponent implements OnInit {
         param=param.substr(0,param.length-1);
       }
 
-
       //Ajout du tri
-      if(this.order)param=param+"&ordering="+this.order.value;
-
+      if(this.order)localStorage.setItem("ordering",this.order);
+      if(this.order)param=param+"&ordering="+this.order;
+      $$("Appel de la recherche avec param="+param);
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";
         this.profils=[];
@@ -104,10 +108,9 @@ export class SearchComponent implements OnInit {
   searchInTitle: boolean = false;
   fields=[
     {field:"Nom",value:"lastname"},
-    {field:"Promo",value:"promo"},
-    {field:"Promo inversé",value:"-promo"},
-    {field:"Récent",value:"-dtLastUpdate"},
-    {field:"Ancien",value:"dtLastUpdate"},
+    {field:"Anciennes Promo",value:"promo"},
+    {field:"Nouvelles Promos",value:"-promo"},
+    {field:"Mise a jour",value:"-update"}
   ]
 
   advanced_search=[];

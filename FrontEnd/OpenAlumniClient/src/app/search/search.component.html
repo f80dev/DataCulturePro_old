@@ -40,9 +40,9 @@
 
   <div *ngIf="profils?.length>3" style="display: inline-block" autofocus>
     <mat-form-field appearance="legacy"
-                    style="max-width:100px;font-size: large;">
+                    style="max-width:150px;font-size: medium;">
       <mat-label>Trier par</mat-label>
-      <mat-select #order (selectionChange)="refresh()">
+      <mat-select [(ngModel)]="order" (selectionChange)="refresh()">
         <mat-option *ngFor="let f of fields" [value]="f.value">
           {{f.field}}
         </mat-option>

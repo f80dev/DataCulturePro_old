@@ -181,10 +181,6 @@ export class EditComponent implements OnInit  {
 
   quit(bSave=true) {
     if(bSave){
-      // for(let soc of this.socials){
-      //   this.profil[soc.name]=soc.value;
-      // }
-
       this.profil.dtLastUpdate=new Date().toISOString();
       this.api.setprofil(this.profil).subscribe(()=>{
         showMessage(this,"Profil enregistré");
@@ -208,6 +204,7 @@ export class EditComponent implements OnInit  {
       if (result_code != 'no') {
         this.api._delete("works/" + wrk.id + "/").subscribe(() => {
           this.loadProfil();
+          this.api.setprofil(this.profil).subscribe(()=>{});
         });
       }
     });

@@ -96,7 +96,29 @@ def extract_film_from_unifrance(url:str,job_for=None):
     return rc
 
 
+def extract_profil_from_bellefaye(firstname,lastname):
+    page = wikipedia.BeautifulSoup(wikipedia.requests.post(
+        "https://www.bellefaye.com/fr/login_check",
+        data="_csrf_token=c8FvlHO5q-f0XpbhG2lQJifHlmhei_qpGO3WcaLgPqE&_username=h.hoareau%40femis.fr&_password=Femis2021&_submit=",
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
+            'Accept': 'text/html', 'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    ).text, "html5lib")
 
+    url="https://www.bellefaye.com/fr/search"
+    data="name=%name%&firstName=%firstname%&searchCity=&searchZipCode=&searchEmail=&searchGender=&findPerson=&searchName=&searchCity2=&searchZipCode2=&searchEmail2="
+    data=data.replace("%name%",lastname).replace("%firstname%",firstname)
+    page = wikipedia.BeautifulSoup(wikipedia.requests.post(
+        url,
+        data=data,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
+            'Accept':'text/html','Content-Type':'application/x-www-form-urlencoded'
+        }
+    ).text, "html5lib")
+    print(page.text)
+    pass
 
 
 
@@ -370,6 +392,11 @@ def exec_batch(profils):
         if profil.delay_lastsearch() > DELAY_TO_AUTOSEARCH or len(profils)==1:
             log("Hors délai ==> mise a jour")
             profil.dtLastSearch=datetime.now()
+
+            infos = extract_profil_from_bellefaye(firstname=profil.firstname, lastname=profil.lastname)
+            log("Extraction bellefaye " + str(infos))
+
+
 
             infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname)
             log("Extraction d'imdb " + str(infos))

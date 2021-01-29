@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {$$, api, showError} from "./tools";
+import {$$, api, now, showError} from "./tools";
 import {timeout} from "rxjs/operators";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environment";
@@ -162,7 +162,9 @@ export class ApiService {
     return this._get("extraworks","profil__email="+email);
   }
 
+  //Mise a jour du profil du user
   setprofil(data:any) {
+    data.dtLastUpdate=now()
     return this._put("profils/"+data.id+"/","",data);
   }
 
