@@ -33,7 +33,7 @@ profils:
     description: Profil destiné aux personnes en charge du catalogue des films
     perm: r_photo r_address r_lastname r_firstname r_promo add_movies advanced_search delete_pow
     price: 0
-    subscription: online
+    subscription: email
 
   - id: admin
     title: Administrateur
@@ -53,7 +53,7 @@ profils:
     description: profil destiné aux organisme en charge de statistique
     perm: r_cp r_firstname r_works stats r_promo r_department share
     price: 10
-    subscription: online
+    subscription: email
 
   - id: school
     title: Personnel de l'école
@@ -74,7 +74,7 @@ profils:
     description: Profil destiné aux anciens élève
     perm: r_promo r_photo r_cp r_address r_lastname r_firstname r_linkedin prof r_works write_email r_department advanced_search ask_friend
     price: 0
-    subscription: online
+    subscription: email
 
   - id: dev
     title: Developpeur
@@ -83,5 +83,5 @@ profils:
     description: Profil destiné aux anciens élève
     perm: r_promo r_photo r_cp r_address r_lastname r_firstname r_linkedin prof r_works write_email r_department advanced_search dev
     price: 0
-    subscription: online
+    subscription: email
 

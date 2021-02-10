@@ -162,6 +162,7 @@ def sendmail(subject, _to, template, field):
     html=open_html_file(template,field)
     log("Envoi de "+html)
     _dest=[]
+    if type(_to)==str:_to=[_to]
     for c in _to:
         if c in EMAIL_TESTER or len(EMAIL_TESTER) == 0:
             _dest.append(c)

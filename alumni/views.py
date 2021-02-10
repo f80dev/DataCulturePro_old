@@ -36,7 +36,7 @@ from OpenAlumni import settings
 from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
     sendmail, to_xml, translate
-from OpenAlumni.settings import APPNAME, DOMAIN_APPLI
+from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
@@ -243,6 +243,71 @@ def initdb(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def helloworld(request):
+    return Response({"message": "Hello world"})
+
+
+#test: http://localhost:8000/api/set_perms/?user=6&perm=statistique&response=accept
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def set_perms(request):
+    profil_id = request.GET.get("perm")
+    response = request.GET.get("response")
+    ext_users = ExtraUser.objects.filter(user__id=int(request.GET.get("user")))
+    if len(ext_users.values())>0:
+        ext_user=ext_users.first()
+        if response=="accept":
+            perms = yaml.safe_load(open(settings.STATIC_ROOT + "/profils.yaml", "r", encoding="utf-8").read())
+            for p in perms["profils"]:
+                if p["id"]==profil_id:
+                    ext_user.perms=p["perm"]
+                    ext_user.save()
+                    sendmail("Acces à '" + profil_id + "'", ext_user.user.email,"accept_perm",
+                             dict(
+                                 {
+                                     "ask_user": ext_user.user.email,
+                                     "ask_perm": profil_id,
+                                 }
+                             ))
+                    break
+
+            return Response({"message": "perm Accepted"})
+        else:
+            sendmail("Refus d'acces à '"+ profil_id + "'",ext_user.user.email,"refuse_perm",
+                     dict(
+                         {
+                             "ask_user": ext_user.user.email,
+                            "ask_perm": profil_id,
+                        }
+                     ))
+            return Response({"message": "perm rejected"})
+
+
+
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def ask_perms(request):
+    perm_id=request.GET.get("perm")
+    ext_user = ExtraUser.objects.filter(id=request.GET.get("user")).first()
+
+    detail_perm=""
+    profils = yaml.safe_load(open(settings.STATIC_ROOT + "/profils.yaml", "r", encoding="utf-8").read())
+    for p in profils["profils"]:
+        if p["id"]==perm_id:
+            detail_perm=p["perm"]
+
+    sendmail("Demande d'acces '"+perm_id+"' pour "+ext_user.user.email,EMAIL_PERM_VALIDATOR,"ask_perm",dict(
+                             {
+                                "ask_user":ext_user.user.email,
+                                "ask_perm":perm_id,
+                                 "detail_perm":detail_perm,
+                                "url_ok":settings.DOMAIN_SERVER+"/api/set_perms/?user="+str(ext_user.user.id)+"&perm="+perm_id+"&response=accept",
+                                "url_cancel": settings.DOMAIN_SERVER + "/api/set_perms/?user=" + str(ext_user.user.id) + "&perm=" + perm_id + "&response=refuse"
+                              })
+             )
+
     return Response({"message": "Hello world"})
 
 

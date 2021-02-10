@@ -195,4 +195,8 @@ export class ApiService {
   getfaqs() {
     return this.http.get(api('getyaml',"name=faqs"));
   }
+
+  ask_perm(user: any, id: string) {
+    return this.http.get(api('ask_perms',"perm="+id+"&user="+user.id));
+  }
 }

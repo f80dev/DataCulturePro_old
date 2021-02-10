@@ -49,6 +49,8 @@ urlpatterns = [
     path('api/getyaml/', views.getyaml),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),
+    path('api/ask_perms/', views.ask_perms),
+    path('api/set_perms/', views.set_perms),
     path('api/export_all/csv/', views.export_all),
     path('api/export_all/xml/', views.export_all),
     path('api/export_all/xls/', views.export_all),

@@ -54,11 +54,18 @@ export class ProfilesComponent implements OnInit {
 
 
   sel_profil(p) {
-    this.config.user.perm=p.perm;
-    this.config.user.profil_name=p.id;
-    this.api.setuser(this.config.user).subscribe(()=>{
-      showMessage(this,"Profil modifié");
-      this._location.back();
-    })
+    if(p.subscription=="online"){
+      this.config.user.perm=p.perm;
+      this.config.user.profil_name=p.id;
+      this.api.setuser(this.config.user).subscribe(()=>{
+        showMessage(this,"Profil modifié");
+        this._location.back();
+      })
+    }else{
+      this.api.ask_perm(this.config.user,p.id).subscribe(()=>{
+        showMessage(this,"Demande de souscription transmise");
+        this.router.navigate(["search"]);
+      })
+    }
   }
 }

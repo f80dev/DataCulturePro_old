@@ -29,6 +29,7 @@ EMAIL_TESTER = ["hhoareau@gmail.com",
                 "sophie.dudule@gmail.com"
                 ]
 
+EMAIL_PERM_VALIDATOR="paul.dudule@gmail.com"
 LOCAL_FEDORA_SERVER='172.30.11.56'
 
 # Quick-start development settings - unsuitable for production
@@ -237,6 +238,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER ="reply@f80.fr"
 EMAIL_HOST_PASSWORD ="Hh42714280"
+
+
 
 APPNAME="Data Culture Pro"
 
