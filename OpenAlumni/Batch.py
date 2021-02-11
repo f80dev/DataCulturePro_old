@@ -83,7 +83,7 @@ def extract_film_from_unifrance(url:str,job_for=None):
                 for idx in range(len(links)):
                     if "/personne" in links[idx].get("href"):
                         k = k + 1
-                        if links[idx].get("href")==job_for:
+                        if links[idx].get("href")==job_for and len(jobs)>k:
                             rc["job"]=jobs[k].text.replace(" : ","")
                             break
 
@@ -200,7 +200,7 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
     """
     page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
 
-    rc = dict({"title": title})
+    rc = dict({"title": title,"nature":translate("film")})
 
     zone_info=page.find("div",{"class":"title_block"})
     if title.startswith("Episode") or "Episode" in zone_info.getText():

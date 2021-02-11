@@ -263,7 +263,6 @@
   <!--  </div>-->
 
   <div *ngIf="showAddWork==2" style="width:100%;text-align: center;">
-    <hr>
     <h3>Ajouter le Projet "{{add_work.movie}}"</h3>
     <br>
     <br>
@@ -322,7 +321,16 @@
       <mat-hint>Détailler l'expérience, difficultés rencontrées, bénéfices</mat-hint>
     </mat-form-field>
 
-    <br><br>
+    <br>
+    <hr>
+    <br>
+
+    <button class="app-button"
+            mat-button mat-raised-button
+            (click)="_location.back()">
+      Anuler
+    </button>
+
 
     <button class="app-button" color="primary"
             mat-button mat-raised-button

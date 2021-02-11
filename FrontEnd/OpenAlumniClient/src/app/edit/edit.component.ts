@@ -260,9 +260,10 @@ export class EditComponent implements OnInit  {
 
 
   analyse() {
-    this.message="Analyse en cours";
+    this.message="Analyse en cours des principaux annuaires";
     this.api._get("batch/","filter="+this.profil.id).subscribe(()=>{
       this.message="";
+      showMessage(this,"Analyse terminée");
       this.refresh_works();
     });
   }
