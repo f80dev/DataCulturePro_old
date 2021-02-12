@@ -11,6 +11,7 @@
     <mat-form-field *ngIf="advanced_search.length==0" appearance="legacy" style="max-width:250px;width:96%;font-size: large;" autofocus>
       <mat-label>Rechercher un profil</mat-label>
       <input matInput matNativeControl
+             id="txtSearch"
              title="Un ou plusieurs mots pour effectuer des recherches dans les métiers, les noms, les réalisations ..."
              (keyup)="onQuery($event)"
              placeholder="nom, métier, promotion ou titre d'une réalisation"
@@ -42,7 +43,7 @@
     <mat-form-field appearance="legacy"
                     style="max-width:150px;font-size: medium;">
       <mat-label>Trier par</mat-label>
-      <mat-select [(ngModel)]="order" (selectionChange)="refresh()">
+      <mat-select id="selOrder" [(ngModel)]="order" (selectionChange)="refresh()">
         <mat-option *ngFor="let f of fields" [value]="f.value">
           {{f.field}}
         </mat-option>
@@ -67,11 +68,11 @@
     {{profils.length}} profils &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
   </div>
 
-  <mat-checkbox (change)="switch_motor()" labelPosition="Before">
+  <mat-checkbox id="chkAdvanced" (change)="switch_motor()" labelPosition="Before">
     Recherche Avancée
   </mat-checkbox>
   &nbsp;
-   <mat-checkbox (change)="with_pro($event)" labelPosition="Before">
+   <mat-checkbox id="chkPro" (change)="with_pro($event)" labelPosition="Before">
     Profils Pro
   </mat-checkbox>
 
@@ -91,6 +92,7 @@
 <!-- Affichage des profils-->
 <div class="wrap-list" *ngIf="message.length==0 && config.ready">
   <app-profil
+    name="profils"
     *ngFor="let profil of profils"
     (delete)="deleteProfil(profil)"
     [writeAccess]="config.user && config.user.profil==profil?.id || config.hasPerm('edit_profil')"

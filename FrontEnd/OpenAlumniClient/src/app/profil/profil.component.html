@@ -24,8 +24,9 @@
 
   </mat-card-content>
 
-  <mat-card-actions *ngIf="showAction" style="text-align: left;padding: 0px;">
+  <mat-card-actions *ngIf="showAction" style="text-align: left;padding: 0px;" name="cardAction">
     <button mat-button mat-icon-button
+            name="cmdContact"
             *ngIf="config.user?.user?.email!=profil?.email && config.hasPerm('write_email')"
             (click)="write(profil)"
             title="Lui envoyer un message">
@@ -34,12 +35,14 @@
   &nbsp;
     <button mat-button mat-icon-button
             title="Réalisations / Films / Livres"
+            name="cmdOpenWork"
             *ngIf="profil?.works?.length>0 && config.hasPerm('r_works')"
             (click)="openWork(profil)">
       <mat-icon>videocam</mat-icon>
     </button>
 
     <button mat-button mat-icon-button
+            name="cmdLink"
             *ngIf="profil?.links?.length==1"
             [title]="profil?.links[0].text"
             (click)="openLink(profil)">
@@ -57,6 +60,7 @@
 
     <button mat-icon-button mat-button
             title="Partager / Envoyer ce profil"
+            name="cmdShareProfil"
             *ngIf="profil?.public_url?.length>0 && config.hasPerm('share')"
             (click)="share(profil)">
       <mat-icon>share</mat-icon>
@@ -64,13 +68,15 @@
 
     <button mat-button mat-icon-button
             title="Consulter son site web"
+            name="cmdWebsite"
             *ngIf="profil?.website?.length>0"
             (click)="openWebSite(profil?.website)">
       <mat-icon>public</mat-icon>
     </button>
 
     <button mat-button mat-icon-button
-            title="Consulter son site web"
+            title="Supprimer le profil"
+            name="cmdDelProfil"
             *ngIf="config.hasPerm('delete_profil')"
             (click)="deleteProfil(profil)">
       <mat-icon>delete</mat-icon>
@@ -78,6 +84,7 @@
 
      <button mat-button mat-icon-button
             title="Editer mon profil"
+             name="cmdEditProfil"
             *ngIf="writeAccess"
             (click)="editProfil(profil)">
       <mat-icon>create</mat-icon>
@@ -95,6 +102,7 @@
     -->
 
     <button mat-button mat-icon-button
+            title="Voir sa page linkedin"
             *ngIf="profil?.linkedin?.length>0 && config.hasPerm('r_linkedin')"
             (click)="openWebSite(profil?.linkedin)">
         <img src="/assets/icons/LinkedIn.png"

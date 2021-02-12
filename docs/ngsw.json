@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1613048164769,
+  "timestamp": 1613148453873,
   "index": "https://dcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -43,6 +43,7 @@
         "https://dcp.f80.fr/assets/img/anciens.jpg",
         "https://dcp.f80.fr/assets/img/anonymous.png",
         "https://dcp.f80.fr/assets/img/boy.png",
+        "https://dcp.f80.fr/assets/img/cercle_blanc.png",
         "https://dcp.f80.fr/assets/img/charts.jpeg",
         "https://dcp.f80.fr/assets/img/girl.png",
         "https://dcp.f80.fr/assets/img/hammer_1f528.png",
@@ -116,6 +117,7 @@
     "https://dcp.f80.fr/assets/img/anciens.jpg": "fd10c1fa0c85a0800a0f040ce57baeadaf0d551e",
     "https://dcp.f80.fr/assets/img/anonymous.png": "c015f4d0bf7c81184706a840cfabef65c3f4e0c4",
     "https://dcp.f80.fr/assets/img/boy.png": "7f24ab96f20f7326adfaa5a7bcbd14ee2fcd547d",
+    "https://dcp.f80.fr/assets/img/cercle_blanc.png": "9a6303385a785ed3fe3071aa06e5c7f66f14e074",
     "https://dcp.f80.fr/assets/img/charts.jpeg": "f005d708eba10115db8b242eab30950f880db6ce",
     "https://dcp.f80.fr/assets/img/girl.png": "957852db07cb128b2a0907b53a329596481f9848",
     "https://dcp.f80.fr/assets/img/hammer_1f528.png": "4df35a3abee020df341a816929f5d7b807ec8352",
@@ -129,7 +131,7 @@
     "https://dcp.f80.fr/assets/reporting.xlsx": "d7692ac8b02acd022d1df1374dfc1b8c88a2000a",
     "https://dcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://dcp.f80.fr/index.html": "57e54a7ce8810f4d6ff623ae5c0db52fd6be12cf",
-    "https://dcp.f80.fr/main.js": "42352f193d8aae1310e1dc75b63b45f6c9b3f34d",
+    "https://dcp.f80.fr/main.js": "9c3c7633776d12c90fb5fed62e4d3f4c5be83c17",
     "https://dcp.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
     "https://dcp.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "https://dcp.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",

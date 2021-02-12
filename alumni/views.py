@@ -7,8 +7,8 @@ import yaml
 import pandas as pd
 from django.http import JsonResponse, HttpResponse
 from django_elasticsearch_dsl import Index
-from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
-    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION, LOOKUP_FILTER_TERMS, \
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, \
+    SUGGESTER_COMPLETION, LOOKUP_FILTER_TERMS, \
     LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE, LOOKUP_FILTER_TERM
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
@@ -17,9 +17,9 @@ from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-from rest_framework.decorators import api_view, action, permission_classes, renderer_classes
+from rest_framework.decorators import api_view,  permission_classes, renderer_classes
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import WebDriver

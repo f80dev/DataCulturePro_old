@@ -78,7 +78,10 @@ def reset_password(email,username):
     :param username:
     :return:
     """
-    password = str(tirage(999999, 100000))
+    if email in EMAIL_TESTER:
+        password="123456"
+    else:
+        password = str(tirage(999999, 100000))
 
     sendmail("Voici votre code",[email],"welcome",dict({
         "email": email,

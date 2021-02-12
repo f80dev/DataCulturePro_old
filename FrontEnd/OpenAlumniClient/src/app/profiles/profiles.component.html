@@ -4,7 +4,7 @@
   <br>
 
   <mat-accordion [multi]="false" style="text-align: left;">
-  <mat-expansion-panel *ngFor="let profil of config.profils | filter:['email','online']" class="app-panel" style="margin:10px;">
+  <mat-expansion-panel name="tabProfils" *ngFor="let profil of config.profils | filter:['email','online']" class="app-panel" style="margin:10px;">
     <mat-expansion-panel-header>
       <mat-panel-title class="app-mat-panel-title">{{profil.title}}</mat-panel-title>
     </mat-expansion-panel-header>
@@ -25,12 +25,12 @@
 
     <mat-action-row>
       <button mat-button mat-raised-button
-          class="app-button"
+              name="cmdAskProfil"
+              class="app-button"
           (click)="sel_profil(profil)">
 
-        <span *ngIf="profil.subscription=='online'">Souscrire</span>
-        <span *ngIf="profil.subscription=='email'">Demander</span>
-
+          <span *ngIf="profil.subscription=='online'">Souscrire</span>
+          <span *ngIf="profil.subscription=='email'">Demander</span>
 
         </button>
 
@@ -54,7 +54,7 @@
   <div class="bottom-bar">
     <hr>
      <button mat-button mat-raised-button
-          class="app-button"
+          class="app-button" id="cmdShowPerms"
           (click)="showPerm=true">
           Voir vos permissions
     </button>
