@@ -101,7 +101,7 @@
     class="app-card" [profil]="profil">
 
     <div *ngIf="config.hasPerm('r_department')"
-         style="margin-top:20px;margin-bottom:20px;width: 100%;text-align: center;font-size: large">
+         style="margin-top:20px;margin-bottom:20px;width: 100%;text-align: center;font-size: large" name="lblFormation">
       <span style='cursor: pointer' (click)="openQuery(profil.department)">
         {{profil?.department}}
       </span>

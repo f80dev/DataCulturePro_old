@@ -6,7 +6,7 @@
     <div *ngIf="works?.length>6 && categories?.length>1" style="max-width: 250px;font-size: large;display: inline-block;">
       <mat-form-field appearance="fill">
         <mat-label>Catégorie</mat-label>
-        <mat-select  [(ngModel)]="cat_filter" placeholder="Catégorie">
+        <mat-select  [(ngModel)]="cat_filter" placeholder="Catégorie" id="lstCategory">
           <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -15,7 +15,7 @@
     <div style="max-width: 250px;font-size: large;display: inline-block;">
       <mat-form-field appearance="fill">
         <mat-label>Poste occupé</mat-label>
-        <mat-select [(ngModel)]="job_filter" placeholder="Catégorie">
+        <mat-select [(ngModel)]="job_filter" placeholder="Job" id="lstJob">
           <mat-option *ngFor="let job of jobs" [value]="job">{{job}}</mat-option>
         </mat-select>
       </mat-form-field>
