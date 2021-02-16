@@ -6,7 +6,7 @@
   <div *ngIf="showAddWork==0 && profil">
     <mat-accordion style="display: inline-block;width:98%;">
       <!--      Civilité -->
-      <mat-expansion-panel class="app-panel">
+      <mat-expansion-panel class="app-panel" id="pnlAdmin">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Civilité
@@ -69,14 +69,12 @@
       </mat-expansion-panel>
 
       <!--      Réseau sociaux -->
-      <mat-expansion-panel class="app-panel" style="text-align: left;">
+      <mat-expansion-panel class="app-panel" style="text-align: left;" id="pnlSocial">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Réseaux sociaux
           </mat-panel-title>
         </mat-expansion-panel-header>
-
-
 
         <table style="width: 100%;vertical-align: text-top;">
           <tr *ngFor="let social of socials">
@@ -113,7 +111,7 @@
 
 
       <!--      Mentorat-->
-      <mat-expansion-panel class="app-panel" style="text-align: left;">
+      <mat-expansion-panel class="app-panel" style="text-align: left;" id="pnlTutorat">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Tutorat
@@ -130,7 +128,7 @@
       </mat-expansion-panel>
 
       <!--      Expérience -->
-      <mat-expansion-panel class="app-panel" [expanded]="true">
+      <mat-expansion-panel class="app-panel" [expanded]="true" id="pnlExperience">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Vos expériences
@@ -149,25 +147,31 @@
               </div>
 
             </td>
-            <td style="text-align: right;width:70px;">
+            <td style="text-align: right;width:70px;" name="experience_panel">
 
-              <mat-icon style="cursor: pointer;font-size: medium;display: inline;" (click)="edit_work(work)" *ngIf="work.state!='E'">
+              <mat-icon style="cursor: pointer;font-size: medium;display: inline;"
+                        name="cmdEdit"
+                        (click)="edit_work(work)" *ngIf="work.state!='E'">
                 edit
               </mat-icon>
 
               <mat-icon *ngIf="work.public"
+                        name="cmdVisibilityOn"
                         title="Cette expérience est visible de tous (public)"
                         style="cursor: pointer;font-size: medium;display: inline;" (click)="_private(work)">
                 visibility
               </mat-icon>
 
               <mat-icon *ngIf="!work.public" style="cursor: pointer;font-size: medium"
+                        name="cmdVisibilityOff"
                         title="Cette expérience est privée (seule vous pouvez la connaitre)"
                         (click)="_private(work)">
                 visibility_off
               </mat-icon>
 
-              <mat-icon style="cursor: pointer;font-size: medium;display: inline;" (click)="del_work(work)">
+              <mat-icon style="cursor: pointer;font-size: medium;display: inline;"
+                        name="cmdDeleteExperience"
+                        (click)="del_work(work)">
                 cancel
               </mat-icon>
 
@@ -176,8 +180,9 @@
           </tr>
         </table>
 
-        <mat-action-row>
+        <mat-action-row id="pnlActionExperience">
           <button class="app-button" mat-button mat-raised-button
+                  id="cmdClear"
                   *ngIf="works?.length>0"
                   (click)="reset_works()">
             <div class="bloc-bouton">Effacer les<br>expériences</div>
@@ -185,12 +190,14 @@
 
           <button class="app-button" mat-button mat-raised-button
                   title="Déclenche une recherche de vos expériences sur les principaux portail cinématographique"
+                  id="cmdAnalyse"
                   (click)="analyse()">
             <div class="bloc-bouton">Recherche<br>automatique</div>
           </button>
 
           <button class="app-button" mat-button mat-raised-button
                   color="primary"
+                  id="cmdAdd"
                   (click)="add_pow()">
             <div class="bloc-bouton">Ajouter une<br>expérience</div>
           </button>
@@ -334,9 +341,10 @@
 
     <button class="app-button" color="primary"
             mat-button mat-raised-button
+            id="cmdAddExperience"
             title="Ajouter ce projet à votre expérience"
             (click)="save_newwork()">
-      Ajouter ce projet
+      <div class="bloc-bouton">Ajouter cette<br>expérience</div>
     </button>
 
   </div>

@@ -4,7 +4,7 @@
   <div style="min-width:350px;max-width: 500px;text-align: left;display: inline-block;">
     <mat-form-field appearance="fill" class="app-field" *ngIf="!showDetail">
       <mat-label>Titre du film</mat-label>
-      <input matInput placeholder="mon titre"
+      <input matInput placeholder="mon titre" id="txtTitle"
              (ngModelChange)="changeTitle($event)"
              type="text" max="300" [(ngModel)]="pow.title"
              required autofocus>
@@ -19,6 +19,7 @@
 
       <button class="app-button login-button"
               *ngIf="pow.title?.length>2"
+              id="cmdAddPow"
               mat-button mat-raised-button
               (click)="add_title()">
         Ajouter ce titre
@@ -29,7 +30,7 @@
     <mat-selection-list #items *ngIf="!showDetail"
                         (selectionChange)="select_title(items.selectedOptions.selected[0].value)"
                         [multiple]="false">
-      <mat-list-option *ngFor="let item of pows" [value]="item">
+      <mat-list-option *ngFor="let item of pows" [value]="item" name="films">
         <mat-icon mat-list-icon>videocam</mat-icon>
         <div mat-line>{{item.title}} ({{item.year}})</div>
       </mat-list-option>
@@ -53,6 +54,7 @@
               style="width:150px;"
               (click)="change_visual()">
           <button class="app-button login-button" color="primary"
+                  id="cmdVisual"
                   *ngIf="pow.visual.length==0"
                   mat-button mat-raised-button
                   (click)="change_visual()">
@@ -66,7 +68,7 @@
 
       <mat-form-field  appearance="fill" class="app-field">
         <mat-label>Synopsis</mat-label>
-        <input matInput
+        <input matInput id="txtSynopsis"
                type="text" max="3000"
                [(ngModel)]="pow.description">
         <mat-hint>Synopsis de l'oeuvre</mat-hint>
@@ -76,13 +78,14 @@
       <mat-form-field  appearance="fill" class="app-field" style="max-width: 100px">
         <mat-label>Année de sortie</mat-label>
         <input matInput required
+               id="txtYear"
                type="number" min="1900" max="2030"
                [(ngModel)]="pow.year">
       </mat-form-field>
 
       <mat-form-field  appearance="fill" class="app-field" style="max-width: 200px">
         <mat-label>Budget</mat-label>
-        <input matInput
+        <input matInput id="txtBudget"
                type="number" min="0"
                [(ngModel)]="pow.budget">
         <span matSuffix>€</span>
@@ -97,7 +100,7 @@
 
 
        </mat-expansion-panel>
-        <mat-expansion-panel class="app-panel">
+        <mat-expansion-panel class="app-panel" id="pnlAddLink">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Ajouter des hyperliens
@@ -129,7 +132,7 @@
         </mat-form-field>
 
 
-        <mat-action-row>
+        <mat-action-row id="pnlActionAddLink">
           <button class="app-button login-button"
                   *ngIf="pow.title.length>0 && link.url.length>0"
                   mat-button mat-raised-button
@@ -168,8 +171,10 @@
 
     <button class="app-button login-button"
             mat-button mat-raised-button
+            *ngIf="pow?.description.length>0 && pow?.year>0"
+            id="cmdSave" color="primary"
             (click)="quit(true)">
-      Enregistrer
+      Ajouter le film
     </button>
 
     <button class="app-button login-button"

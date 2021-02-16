@@ -5,6 +5,7 @@ from io import StringIO, BytesIO
 from urllib.request import urlopen
 import yaml
 import pandas as pd
+from django.db import connection
 from django.http import JsonResponse, HttpResponse
 from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, \
@@ -436,6 +437,26 @@ def send_to(request):
     return Response("Message envoyé", status=200)
 
 
+
+@api_view(["GET"])
+@renderer_classes((WorksCSVRenderer,))
+@permission_classes([AllowAny])
+def export_social_matrix(request):
+    """
+    Retourne la matrice des relations
+    :param request:
+    :return:
+    """
+    with connection.cursor() as cursor:
+        cursor.execute("DROP TABLE IF EXISTS social_matrix")
+        cursor.execute("""
+            CREATE TABLE Social_Matrix AS
+            SELECT alumni_work.profil_id AS Profil1, alumni_work1.profil_id AS Profil2, Count(alumni_work.pow_id) AS CountOfFilm
+            FROM alumni_work INNER JOIN alumni_work AS alumni_work1 ON alumni_work.pow_id = alumni_work1.pow_id
+            GROUP BY alumni_work.profil_id, alumni_work1.profil_id
+            HAVING (((alumni_work.profil_id)<>alumni_work1.profil_id));
+        """)
+    pass
 
 
 

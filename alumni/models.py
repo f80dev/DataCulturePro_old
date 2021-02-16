@@ -208,6 +208,7 @@ class PieceOfWork(models.Model):
     title=models.CharField(null=False,max_length=300,unique=True,default="sans titre",help_text="Titre de l'oeuvre, même temporaire")
     year=models.CharField(null=True,max_length=4,help_text="Année de sortie")
     nature=models.CharField(null=False,default='MOVIE',max_length=20,help_text="Classification de l'oeuvre")
+    dtCreate = models.DateField(auto_now_add=True,help_text="Date de création de l'oeuvre")
 
     #Structure : "url" du document, "text" du lien
     links=JSONField(null=True,help_text="Liens vers des références externes à l'oeuvre")
@@ -219,9 +220,9 @@ class PieceOfWork(models.Model):
     category=models.TextField(null=True,max_length=200,help_text="Liste des categories auxquelles appartient le film")
     lang=models.CharField(max_length=50,null=True,help_text="Langue originale de l'oeuvre")
 
+
     def __str__(self):
         return self.title
-
 
     def add_link(self, url, title, description=""):
         if self.links is None: self.links = []
