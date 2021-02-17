@@ -26,7 +26,6 @@
 
   <br>
 
-
   <div *ngIf="sel_report=='building'">
     <br><br>
     Rapport en cours de construction
@@ -71,6 +70,8 @@
 
   </table>
 
+  <br>
+
 
 
   <br>
@@ -98,6 +99,12 @@
 <!--      Export-->
 <!--    </button>-->
 
+    <button mat-button mat-raised-button
+          class="app-button"
+          id="cmdOpenSocialGraph"
+          (click)="openSocialGraph()">
+    Graphe social
+  </button>
 
     <button mat-button mat-raised-button
             class="app-button"

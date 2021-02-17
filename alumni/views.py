@@ -38,6 +38,7 @@ from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
     sendmail, to_xml, translate
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR
+from OpenAlumni.social import create_graph
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
@@ -441,21 +442,20 @@ def send_to(request):
 @api_view(["GET"])
 @renderer_classes((WorksCSVRenderer,))
 @permission_classes([AllowAny])
-def export_social_matrix(request):
+def social_graph(request):
     """
     Retourne la matrice des relations
     :param request:
     :return:
     """
-    with connection.cursor() as cursor:
-        cursor.execute("DROP TABLE IF EXISTS social_matrix")
-        cursor.execute("""
-            CREATE TABLE Social_Matrix AS
-            SELECT alumni_work.profil_id AS Profil1, alumni_work1.profil_id AS Profil2, Count(alumni_work.pow_id) AS CountOfFilm
-            FROM alumni_work INNER JOIN alumni_work AS alumni_work1 ON alumni_work.pow_id = alumni_work1.pow_id
-            GROUP BY alumni_work.profil_id, alumni_work1.profil_id
-            HAVING (((alumni_work.profil_id)<>alumni_work1.profil_id));
-        """)
+    format=request.GET.get("format","graphml")
+    with open(create_graph(format), 'rb') as f:
+        file_data = f.read()
+
+    response = HttpResponse(content=file_data,content_type='plain/text')
+    response["Content-Disposition"] = 'attachment; filename="femis.'+format+'"'
+    return response
+
     pass
 
 
@@ -685,7 +685,7 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('works__title','works__job','lastname','firstname','department','promo','town')
+    search_fields = ('works__title','works__job','lastname','firstname','department','promo')
     filter_fields = {
         'name': 'name',
         'lastname':'lastname',

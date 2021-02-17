@@ -51,4 +51,8 @@ export class StatsComponent implements OnInit {
     if(tools=="csv")open(api("export_all/csv","",true,""));
     if(tools=="xml")open(api("export_all/xml","",true,""));
   }
+
+  openSocialGraph() {
+    open(environment.domain_server+"/api/social_graph/")
+  }
 }

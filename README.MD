@@ -138,3 +138,9 @@ sudo sed -i 's/$releasever/31/g' /etc/yum.repos.d/docker-ce.repo
 sudo dnf install docker-ce
 sudo systemctl enable --now docker
 </pre>
+
+
+#Références
+##Analyse du graph social
+Utilisation de l'appli Gephi
+Manuel : http://gephi.michalnovak.eu/Mastering%20Gephi%20Network%20Visualization.pdf

@@ -2,6 +2,7 @@ from asyncio import sleep
 from urllib import parse
 from urllib.parse import urlparse
 
+#import numpy as np
 from django.utils.datetime_safe import datetime
 from imdb import IMDb
 from wikipedia import wikipedia, random, re
@@ -10,6 +11,7 @@ from OpenAlumni.Tools import log, translate
 from OpenAlumni.settings import MOVIE_CATEGORIES, MOVIE_NATURE, DELAY_TO_AUTOSEARCH
 from alumni.models import Profil, Work, PieceOfWork
 
+#from scipy import pdist
 
 ia=IMDb()
 
@@ -438,3 +440,15 @@ def exec_batch(profils):
             transact.update(dtLastSearch=profil.dtLastSearch)
 
     return True
+
+
+# def find_double():
+#     titles=[]
+#     for p in Profil.objects.all():
+#         titles.append(p.title.lower())
+#
+#     X = numpy.array(titles)
+#     Y=pdist(X,'levinstein')
+
+
+

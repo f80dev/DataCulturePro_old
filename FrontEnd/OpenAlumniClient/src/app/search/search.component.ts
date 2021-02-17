@@ -81,8 +81,14 @@ export class SearchComponent implements OnInit {
           for(let _work of item.works){
             item.filter_tag=normaliser(item.filter_tag+"titre:"+_work.title+" ");
           }
-          if(this.filter_with_pro || item.cursus=="S")
+
+          if(this.filter_with_pro || item.cursus=="S"){
             this.profils.push(item);
+          } else {
+
+          }
+
+
 
         }
         if(this.profils.length==0){
