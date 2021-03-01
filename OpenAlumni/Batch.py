@@ -169,8 +169,11 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                     if len(l.getText())>3 and l.parent.parent.parent.parent and l.parent.parent.parent.parent["id"]=="filmography":
                         texts=l.parent.parent.text.split("(")
                         nature="long"
-                        job:str=l.parent.parent.parent.parent.text.split("(")[0]
-                        job=job[job.rindex("\n"):].replace("\n","").strip()
+                        job:str=l.parent.parent.get("id").split("-")[0]
+                        if job=="miscellaneous":
+                            temp=l.parent.parent.text.split("(")
+                            job=temp[len(temp)-1].split(")")[0]
+                            pass
 
                         url = "https://www.imdb.com" + l.get("href")
                         url = url.split("?")[0]
@@ -370,8 +373,8 @@ def add_pows_to_profil(profil,links,all_links,job_for):
         else:
             job=l["job"]
 
-        if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id).exists():
-            job=translate(job)
+        job = translate(job)
+        if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id,job=job).exists():
             log("Ajout de l'experience "+job+" sur "+pow.title+" à "+profil.lastname)
             work = Work(pow=pow, profil=profil, job=job, source=source)
             work.save()

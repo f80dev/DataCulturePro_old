@@ -29,6 +29,12 @@ categories:
 
 #Normalisation des métiers
 jobs:
+  Camera_department: Caméra
+  Production_manager: Producteur
+  Music_department: Musique
+  Assistant_director: Assistant réalisateur
+  Script_department: Scénario
+  Soundtrack: Compositeur
   Sound department: son
   Second unit director or assistant director: Assistant réalisateur
   Editor: Montage
@@ -40,11 +46,11 @@ jobs:
   Writer: Scénario
   production assistant: Assistant de production
   second assistant director: Second assistant réalisateur
-  Composer: Composition musicale
-  Auteur de la musique: Composition musicale
+  Composer: Compositeur
+  Auteur de la musique: Compositeur
   Assistante à la réalisation: Assistant Réalisation
   Assistant à la réalisation: Assistant Réalisation
-  Auteurs de la musique: Composition musicale
+  Auteurs de la musique: Compositeur
   Attaché de presse (film): Relations presse
   Assistant réalisateur: Assistant réalisation
   Directeur de production: Direction de production

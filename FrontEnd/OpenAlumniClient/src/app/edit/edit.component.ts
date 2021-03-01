@@ -273,7 +273,7 @@ export class EditComponent implements OnInit  {
     let total=this.works.length;
     for(let w of this.works){
       if(!w.source.startsWith("man")){
-        this.api._patch("works/"+w.id+"/","",{state:"D",public:false}).subscribe(()=>{
+        this.api._delete("works/"+w.id+"/","").subscribe(()=>{
           total=total-1;
           this.works.splice(this.works.indexOf(w),1);
         });
