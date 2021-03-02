@@ -48,6 +48,7 @@ RUN pip3 install numpy
 RUN pip3 install pandas
 RUN pip3 install xlsxwriter
 RUN pip3 install docutils
+RUN pip3 install networkx
 
 #Création des répertoires
 ENV APP_HOME=/home/app
@@ -72,5 +73,4 @@ EXPOSE 8000
 #CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["python3", "manage.py", "runsslserver","--certificate","/certs/cert.pem","--key","/certs/privkey.pem","0.0.0.0:8000"]
 #ENTRYPOINT ["/home/app/start.sh"]
-
 
