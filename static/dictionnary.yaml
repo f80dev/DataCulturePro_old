@@ -54,6 +54,7 @@ jobs:
   Titles design: Designer
   Technical consultant: Consultant technique
   Art_director: Directeur artistique
+  Art_department: Département artistique
   Casting_department: Casting
   Casting_director: Casting
   Storyboardeur: Storyboard
@@ -133,4 +134,31 @@ jobs:
   Location management: Materiel
   Productrices: Production
   Département animation: Animation
+  Directrice artistique: Direction artistique
+  Opératrice du son: son
+  Photographes de plateau: Photo
+  Effets visuels: Effets spéciaux
+  Assistant de production: Production
+  Producteurs étrangers: Production
+  Auteur de l'œuvre originale: Auteur
+  Scénariste et réalisatrice: Auteur/Réalisateur
+  Assistante opératrice:
+  Régisseuse générale: Régisseur
+  Réalisateur chef-op auteur compositeur
+  Narration: Scénario
+  Interprètes de la musique: Musique
+  Chef décoratrice: Décors
+  Interprète de la musique: Musique
+  Intern: Diver
+  Segment team: Divers
+  Assistante décoratrice: Décors
+  Auteur réalisateur: Auteur/Réalisateur
+  Post: Postprod
+  Assistant set manager: Diver
+  Adaptation: Scénario
+  Productrice étrangère: Production
+  Visual consultant: Effets spéciaux
+  Participantes: Autre
+  Post-audio supervisor: Postprod
+  Assistant set manager - uncredited: Autre
 

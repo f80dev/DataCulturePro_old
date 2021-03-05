@@ -170,7 +170,7 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
                         texts=l.parent.parent.text.split("(")
                         nature="long"
                         job:str=l.parent.parent.get("id").split("-")[0]
-                        if job=="miscellaneous":
+                        if job=="miscellaneous" or len(job)==0:
                             temp=l.parent.parent.text.split("(")
                             job=temp[len(temp)-1].split(")")[0]
                             pass

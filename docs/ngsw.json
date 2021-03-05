@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1614683078649,
+  "timestamp": 1614959404726,
   "index": "https://dcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -54,7 +54,8 @@
         "https://dcp.f80.fr/assets/jobs.json",
         "https://dcp.f80.fr/assets/jobs_old.json",
         "https://dcp.f80.fr/assets/reporting.pbix",
-        "https://dcp.f80.fr/assets/reporting.xlsx"
+        "https://dcp.f80.fr/assets/reporting.xlsx",
+        "https://dcp.f80.fr/assets/~$reporting.xlsx"
       ],
       "patterns": []
     }
@@ -128,10 +129,11 @@
     "https://dcp.f80.fr/assets/jobs.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://dcp.f80.fr/assets/jobs_old.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://dcp.f80.fr/assets/reporting.pbix": "2b95ac35c6fee4fa408666be84d70943d4604ae8",
-    "https://dcp.f80.fr/assets/reporting.xlsx": "7bcea3860d6f8c68ddbf9f68fe4c472ff8712b74",
+    "https://dcp.f80.fr/assets/reporting.xlsx": "c0e2eff168f88e0f3779807439013bf44267355d",
+    "https://dcp.f80.fr/assets/~$reporting.xlsx": "df650bbb6b1bc0776d7434e056f9c4d6885eb19d",
     "https://dcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://dcp.f80.fr/index.html": "57e54a7ce8810f4d6ff623ae5c0db52fd6be12cf",
-    "https://dcp.f80.fr/main.js": "41bb2c3a2cf6f620f38121b0631bb3339ff62a0c",
+    "https://dcp.f80.fr/main.js": "c773488ecd8445079bb0a74afc14df08474b96e4",
     "https://dcp.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
     "https://dcp.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "https://dcp.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",
