@@ -117,6 +117,20 @@ dnf install cockpit-dashboard cockpit-podman cockpit-machines cockpit-networkman
 systemctl restart cockpit.socket
 </pre>
 
+##Configuration des sous domaines
+###paramaitrage du nom de domaine
+Connexion à https://my.ionos.fr/domain-details/dcp.f80.fr
+Paramétrage du dns : 
+    Sous domaine de production:
+    - dcp : 185.199.108.153 & 185.199.109.153
+    
+    Sous domaine de developpement:
+    - dcp-dev : 185.199.108.153 & 185.199.109.153
+
+###Paramaitrage du github
+
+    
+
 ##Installation du firewall
 <pre>
 dnf install 
@@ -124,6 +138,8 @@ systemctl unmask firewalld
 systemctl start firewalld
 systemctl enable firewalld
 </pre>
+
+
 
 ##Installation de podman (remplacent de docker pour fedora)
  <pre>
@@ -140,7 +156,10 @@ sudo systemctl enable --now docker
 </pre>
 
 
+
+
 #Références
 ##Analyse du graph social
 Utilisation de l'appli Gephi
 Manuel : http://gephi.michalnovak.eu/Mastering%20Gephi%20Network%20Visualization.pdf
+

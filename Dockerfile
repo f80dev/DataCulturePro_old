@@ -5,8 +5,16 @@
 
 FROM python
 
+#prod
 #fabrication: docker build -t f80hub/openalumni . & docker push f80hub/openalumni:latest
-#installation: docker rm -f openalumni && docker pull f80hub/openalumni:latest && docker run --restart=always -v /root/certs:/certs -p 8000:8000 --name openalumni -ti f80hub/openalumni:latest
+#installation: docker rm -f openalumni && docker pull f80hub/openalumni:latest && docker run --restart=always -v /root/certs:/certs -p 8000:8000 --name openalumni -d f80hub/openalumni:latest
+
+
+#dev
+#fabrication: docker build -t f80hub/openalumni-dev . & docker push f80hub/openalumni-dev:latest
+#installation: docker rm -f openalumni-dev && docker pull f80hub/openalumni-dev:latest && docker run --restart=always -v /root/certs:/certs -p 8100:8000 --name openalumni-dev -d f80hub/openalumni-dev:latest
+
+
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -69,6 +77,9 @@ COPY ./manage.py $APP_HOME
 #USER app
 
 EXPOSE 8000
+
+ENV DJANGO_SETTINGS_MODULE=OpenAlumni.settings_dev
+ENV DEBUG=True
 
 #CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["python3", "manage.py", "runsslserver","--certificate","/certs/cert.pem","--key","/certs/privkey.pem","0.0.0.0:8000"]

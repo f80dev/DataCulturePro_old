@@ -10,26 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from OpenAlumni.passwords import DB_PASSWORD
+
 import os
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import datetime
 
 from django.contrib import admindocs
 
-from OpenAlumni.passwords import DB_PASSWORD
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EMAIL_TESTER = ["hhoareau@gmail.com",
-                "paul.dudule@gmail.com",
-                "roger.legumes@gmail.com",
-                "j.lecanu@femis.fr",
-                "rv@f80.fr",
-                "herve.hoareau@f80.fr",
-                "sophie.dudule@gmail.com"
-                ]
+EMAIL_TESTER = []
 
-EMAIL_PERM_VALIDATOR="paul.dudule@gmail.com"
+EMAIL_PERM_VALIDATOR="hhoareau@gmail.com"
 LOCAL_FEDORA_SERVER='172.30.11.56'
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +35,7 @@ LOCAL_FEDORA_SERVER='172.30.11.56'
 SECRET_KEY = ')0p@7b_kew8_w+jjuv=(zbn!sp!bm2*=7$s7#%@bvkwy0i--0p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = [
     "*",
     "*.github.com",
