@@ -7,6 +7,8 @@ echo "Déploiement ?"
 pause 0
 c:
 cd C:\Users\hhoareau\PycharmProjects\OpenAlumni
+
+copy Dockerfile-prod Dockerfile
 docker build -t f80hub/openalumni .
 
 cd frontend/openalumniclient
@@ -18,4 +20,4 @@ docker push f80hub/openalumni:latest
 echo "Exécuter cette ligne sur le serveur"
 echo "docker rm -f openalumni && docker pull f80hub/openalumni:latest && docker run --restart=always -v /root/certs:/certs -p 8000:8000 --name openalumni -d f80hub/openalumni:latest"
 
-call "putty -load MainServer -l root"
+putty -load MainServer -l root
