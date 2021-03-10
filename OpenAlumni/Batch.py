@@ -61,12 +61,16 @@ def extract_film_from_unifrance(url:str,job_for=None):
     if not _real is None:
         rc["real"]=_real.find("a",attrs={"itemprop":"name"}).get("href")
 
-
+    idx_div=0
     for div in page.findAll("div",attrs={'class': "details_bloc"}):
+        if idx_div==0:
+            if not ":" in div.text:rc["nature"]=div.text
+
         if "Année de production : " in div.text:
             rc["year"]=div.text.replace("Année de production : ","")
         if "Genre(s) : " in div.text:
             rc["category"]=translate(div.text.replace("Genre(s) : ",""))
+        idx_div=idx_div+1
 
     if "category" in rc and len(rc["category"])==0:rc["category"]="inconnue"
 
@@ -79,15 +83,15 @@ def extract_film_from_unifrance(url:str,job_for=None):
 
             if not section is None:
                 jobs = section.findAll("h2")
-                links = section.findAll("a")
+                paras = section.findAll("p")
                 #if not "personne" in links[0].href:links.remove(0)
-                k=0
-                for idx in range(len(links)):
-                    if "/personne" in links[idx].get("href"):
-                        k = k + 1
-                        if links[idx].get("href")==job_for and len(jobs)>k:
-                            rc["job"]=jobs[k].text.replace(" : ","")
-                            break
+                for idx in range(len(paras)):
+                    links=paras[idx].findAll("a")
+                    for l in links:
+                        if "/personne" in l.get("href"):
+                            if l.get("href")==job_for:
+                                rc["job"]=jobs[idx].text.replace(" : ","")
+                                break
 
 
 
@@ -243,24 +247,23 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
     if not summary_section is None and not "Add a Plot" in summary_section.text:
         rc["synopsis"]=summary_section.text.replace("\n","").strip()
 
-    if len(job)>0:
-        rc["job"]=job
-    else:
-        log("Recherche du role sur le film")
-        credits=wikipedia.BeautifulSoup(wikipedia.requests.get(url+"fullcredits", headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
+    log("Recherche du role sur le film")
+    credits=wikipedia.BeautifulSoup(wikipedia.requests.get(url+"fullcredits", headers={'User-Agent': 'Mozilla/5.0'}).text,"html5lib")
+    if not credits is None:
+        credits=credits.find("div",{"id":"main"})
         if not credits is None:
-            zone_main=credits.find("div",{"id":"main"})
-            if not zone_main is None:
-                headers=zone_main.find_all(name="h4")
-                tables=credits.find("div",{"id":"main"}).find_all("table")
-                idx=0
-                for t in tables:
-                    if name.upper() in t.text.upper():
-                        rc["job"]=headers[idx].text.replace(" by","")
-                        break
-                    idx=idx+1
+            links=credits.find_all("a")
+            for l in links:
+                if name.upper() in l.text.upper():
+                    parent=l.parent.parent.find("td",{"class":"credit"})
+                    if not parent is None:
+                        rc["job"]=str(parent.getText().replace("\n","")).strip()
+                        while "  " in rc["job"]:
+                            rc["job"]=rc["job"].replace("  "," ")
 
-    if "job" in rc:rc["job"]=rc["job"].split("-")[0]
+                    break
+
+    if not "job" in rc: rc["job"]=job
 
     return rc
 
@@ -373,10 +376,11 @@ def add_pows_to_profil(profil,links,all_links,job_for):
         else:
             job=l["job"]
 
-        job = translate(job)
-        if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id,job=job).exists():
-            log("Ajout de l'experience "+job+" sur "+pow.title+" à "+profil.lastname)
-            work = Work(pow=pow, profil=profil, job=job, source=source)
+
+        t_job = translate(job)
+        if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id,job=t_job).exists():
+            log("Ajout de l'experience " + job + " traduit en "+t_job+" sur " + pow.title + " à " + profil.lastname)
+            work = Work(pow=pow, profil=profil, job=t_job, source=source)
             work.save()
 
 

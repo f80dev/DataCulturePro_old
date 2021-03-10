@@ -153,16 +153,16 @@ DATABASES = {
     },
 
     "dev": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": "alumni_db",
-            "USER": "hhoareau",
-            "PASSWORD": DB_PASSWORD,
-            'HOST': LOCAL_FEDORA_SERVER,
-            'PORT': '5432',
-            'OPTIONS': {
-                'options': '-c statement_timeout=5000'
-            }
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "test_alumni_db",
+        "USER": "hhoareau",
+        "PASSWORD": DB_PASSWORD,
+        'HOST': '161.97.75.165',
+        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c statement_timeout=5000'
         }
+    },
 }
 
 #Installation d'
@@ -171,7 +171,7 @@ ELASTICSEARCH_DSL = {
         'hosts': '161.97.75.165:9200'
     },
     'dev': {
-        'hosts': LOCAL_FEDORA_SERVER+':9200'
+        'hosts': '161.97.75.165:9210'
     },
 }
 

@@ -76,10 +76,19 @@ podman rm -f elastic_search_server
 podman run -p 9200:9200 -p 9300:9300 --restart=always -e "discovery.type=single-node" --name elastic_search_server -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
 </pre>
 
-ou avec podman (fedora 32)
+ou avec podman (fedora 32) pour la prod
 <pre>
 podman run -p 9200:9200 -p 9300:9300 --restart=always -e "discovery.type=single-node" --name elastic_search_server -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
 </pre>
+
+ou avec podman (fedora 32) pour l'environnement de dev
+<pre>
+firewall-cmd --zone=public --add-port=9210/tcp
+firewall-cmd --zone=public --add-port=9310/tcp
+podman run -p 9210:9200 -p 9310:9300 --restart=always -e "discovery.type=single-node" --name elastic_search_server-dev -d docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+</pre>
+
+
 
 puis reconstruire l'index par 
 <pre>
@@ -156,6 +165,8 @@ sudo systemctl enable --now docker
 </pre>
 
 
+#Déploiement de la version de production
+Produire le fichier 
 
 
 #Références

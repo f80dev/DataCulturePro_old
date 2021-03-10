@@ -124,7 +124,9 @@ jobs:
   Monteuse son et assistante mixage: Montage
   Chef opératrice: Chef(fe) op
   Cadre: cadrage
-  Assistants son: son
+  Self: lui-même
+  Assistants son: Assistant son
+  Second sound assistant: Assistant son
   Assistant monteur: Assistant montage
   Directrices de production: Direction de production
   Coproducteur: CoProduction
@@ -140,11 +142,13 @@ jobs:
   Effets visuels: Effets spéciaux
   Assistant de production: Production
   Producteurs étrangers: Production
+  Pre-production sound: pré-prod Son
+  Sound_department: Son
   Auteur de l'œuvre originale: Auteur
   Scénariste et réalisatrice: Auteur/Réalisateur
   Assistante opératrice:
   Régisseuse générale: Régisseur
-  Réalisateur chef-op auteur compositeur
+  Réalisateur chef-op auteur compositeur: Auteur/Réalisateur
   Narration: Scénario
   Interprètes de la musique: Musique
   Chef décoratrice: Décors
