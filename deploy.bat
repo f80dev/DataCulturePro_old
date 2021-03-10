@@ -18,5 +18,4 @@ docker push f80hub/openalumni:latest
 echo "Exécuter cette ligne sur le serveur"
 echo "docker rm -f openalumni && docker pull f80hub/openalumni:latest && docker run --restart=always -v /root/certs:/certs -p 8000:8000 --name openalumni -d f80hub/openalumni:latest"
 
-git push master
-call "putty -load MainServer -l root -pw Hh040271"
+call "putty -load MainServer -l root"
