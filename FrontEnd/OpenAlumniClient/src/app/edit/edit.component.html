@@ -127,7 +127,7 @@
         </mat-checkbox>
       </mat-expansion-panel>
 
-      <!--      Mentorat-->
+      <!--      Job-->
       <mat-expansion-panel class="app-panel" style="text-align: left;" id="pnlJob">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -137,7 +137,25 @@
             Augmenter vos opportunités
           </mat-panel-description>
         </mat-expansion-panel-header>
-        A définir
+
+        <table style="width:100%;">
+          <tr style="width:100%;" *ngFor="let site of jobsites">
+            <td>{{site.name}}</td>
+            <td style="padding: 5px;"><small>{{site.description}}</small></td>
+            <td style="width:50px">
+              <button class="app-button" mat-button mat-raised-button (click)="opensite(site,'search')">
+                Offres
+              </button>
+            </td>
+            <td style="width:50px">
+              <button class="app-button" mat-button mat-raised-button (click)="opensite(site,'login')">
+                Login
+              </button>
+            </td>
+          </tr>
+        </table>
+
+
       </mat-expansion-panel>
 
       <!--      Expérience -->

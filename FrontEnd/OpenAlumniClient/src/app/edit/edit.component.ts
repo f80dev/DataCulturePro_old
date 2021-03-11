@@ -30,6 +30,7 @@ export class EditComponent implements OnInit  {
   showAddWork=-1;
   socials:any[]=[];
   projects: any[];
+  jobsites: any[]=[];
 
    constructor(public _location:Location,
               public routes:ActivatedRoute,
@@ -70,6 +71,7 @@ export class EditComponent implements OnInit  {
           this.showAddWork=0;
           this.message="";
           this.autoAddMovie();
+          this.refresh_job();
         });
       }
     })
@@ -303,5 +305,15 @@ export class EditComponent implements OnInit  {
   }
 
 
+  refresh_job() {
+    this.api._get("jobsites/","profil="+this.profil.id).subscribe((res:any)=>{
+      this.jobsites=res.content;
+    })
+  }
+
+  opensite(site: any, page: string) {
+    if(page=="search")open(site.job_page)
+    if(page=="login")open(site.login_page)
+  }
 }
 

@@ -128,7 +128,7 @@
   <br>
   <br>
   <a title="Administration"
-     *ngIf="isLocal"
+     *ngIf="isLocal || config.hasPerm('admin')"
      mat-list-item routerLink="admin"
      id="cmdAdmin">
     <mat-icon>settings</mat-icon>

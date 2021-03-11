@@ -1,12 +1,17 @@
 import base64
 import csv
+import urllib
 from datetime import datetime, timedelta
 from io import StringIO, BytesIO
 from urllib.request import urlopen
+
+import urllib3
 import yaml
 import pandas as pd
+from django.contrib.admin.utils import quote
 from django.db import connection
 from django.http import JsonResponse, HttpResponse
+from django.utils.http import urlquote
 from django_elasticsearch_dsl import Index
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, \
     SUGGESTER_COMPLETION, LOOKUP_FILTER_TERMS, \
@@ -175,6 +180,24 @@ def askfriend(request):
     asks.append(request.GET.get("from"))
     u.update(ask=asks)
     return JsonResponse(u)
+
+
+#http://localhost:8000/api/jobsites/12/
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def refresh_jobsites(request):
+    with open(settings.STATIC_ROOT+"/jobsites.yaml", 'r', encoding='utf8') as f:
+        text:str=f.read()
+
+    profil=Profil.objects.get(id=request.GET.get("profil"))
+    text = text.replace("%job%", urlquote(profil.job))
+    text = text.replace("%lastname%", urlquote(profil.lastname))
+    text = text.replace("%firstname%", urlquote(profil.firstname))
+
+    sites=yaml.load(text)
+    return JsonResponse(sites)
+
+
 
 
 #http://localhost:8000/api/update_dictionnary/
