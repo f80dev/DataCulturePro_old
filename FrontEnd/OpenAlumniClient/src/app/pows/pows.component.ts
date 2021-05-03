@@ -57,6 +57,7 @@ export class PowsComponent implements OnInit {
 
 
   refresh() {
+
     let param=translateQuery(this.query.value,this.all);
     param=param.replace("works__title","title__terms");
     param=param+"&limit="+this.limit;
