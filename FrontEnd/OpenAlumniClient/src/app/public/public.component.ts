@@ -14,6 +14,7 @@ export class PublicComponent implements OnInit {
 
   constructor(public router:Router,public route:ActivatedRoute,public api:ApiService) { }
 
+  //test http://localhost:4200/public/?id=3076
   ngOnInit(): void {
     let id=this.route.snapshot.queryParamMap.get("id");
     if(id){
@@ -25,8 +26,6 @@ export class PublicComponent implements OnInit {
             w=w.replace("'","\"")
           this.works.push(JSON.parse(w));
         }
-
-        debugger
       })
     } else {
       this.router.navigate(["search"]);

@@ -12,6 +12,20 @@ test: http://localhost:8000/api/faqs
 #- format est optionnel et par défaut à txt, il peut être à HTML si 'content\" contient des balises
 
 content:
+  - index: setup
+    title: Comment installer DCP sur son téléphone ?
+    order: 0
+    format: html
+    content: "
+      <p>
+      Il est possible d'installer {{appname}} sur son téléphone comme pour n'importe quelle application.<br>
+      Il suffit d'ouvrir le menu du navigateur de votre téléphone et de sélectionner 'Installer ...'
+      L'icone de {{appname}} devrait se retrouver parmi vos applications déjà installées
+      </p>
+      "
+
+
+
   - index: query
     title: Quelle syntaxe pour le moteur de recherche ?
     order: 0

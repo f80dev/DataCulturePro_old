@@ -19,7 +19,6 @@ from django.urls import path, include
 from graphene_django.views import GraphQLView
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.urlpatterns import format_suffix_patterns
 
 from alumni import views
 from alumni.schema import schema
@@ -28,6 +27,8 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet,basename="user")
 router.register(r'extrausers', views.ExtraUserViewSet,basename="permuser")
 router.register(r'profils', views.ProfilViewSet)
+router.register(r'extraprofils', views.ExtraProfilViewSet)
+router.register(r'articles', views.ArticleViewSet)
 router.register(r'pows', views.POWViewSet)
 router.register(r'extraworks', views.ExtraWorkViewSet)
 router.register(r'works', views.WorkViewSet)
@@ -36,17 +37,33 @@ router.register(r'profilsdoc', views.ProfilDocumentView,basename="profilsdoc")
 router.register(r'powsdoc', views.PowDocumentView,basename="powsdoc")
 
 urlpatterns = [
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('api/',include('alumni.urls')),
     path('api/users/register/', views.UserCreate.as_view()),
     path('api/resend/', views.resend),
+    path('api/update_dictionnary/', views.update_dictionnary),
+    path('api/jobsites/', views.refresh_jobsites),
     path('api/send_to/', views.send_to),
     path('api/test/', views.test),
     path('api/batch/', views.batch),
+    path('api/search/', views.search),
+    path('api/reindex/', views.rebuild_index),
     path('api/getyaml/', views.getyaml),
+    path('api/search_profil/', views.search_profil),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),
+    path('api/ask_perms/', views.ask_perms),
+    path('api/set_perms/', views.set_perms),
+    path('api/get_students/', views.get_students),
+    path('api/social_graph/', views.social_graph),
+    path('api/export_all/csv/', views.export_all),
+    path('api/export_all/xml/', views.export_all),
+    path('api/export_all/xls/', views.export_all),
+    path('api/export_profils/', views.export_profils),
+    path('api/export_all/json/', views.export_all),
     path('api/ask_for_update/', views.ask_for_update),
+    path('api/show_movies/', views.show_movies),
     url(r'^api/movie_importer/$',views.movie_importer),
     url('^api/api-token-auth/', obtain_auth_token),
     path("api/",include(router.urls)),

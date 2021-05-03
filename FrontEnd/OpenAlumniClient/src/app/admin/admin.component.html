@@ -1,30 +1,44 @@
 <br>
 <div class="h-zone">Commandes disponibles</div>
 <br>
-
-&nbsp;
-&nbsp;
+nbsp;
+nbsp;
 <button mat-raised-button mat-button class="app-button" (click)="router.navigate(['search'])">Recherche</button>
 
 <button mat-raised-button mat-button class="app-button" (click)="openQuery()">Extraction</button>
-
 <button mat-raised-button mat-button class="app-button" (click)="openDjangoAdmin()">Admin Serveur</button>
-
 <button mat-raised-button mat-button class="app-button" (click)="initdb()">Initialisation</button>
-
 <button mat-raised-button mat-button class="app-button" (click)="openHelloWorld()">Hello world</button>
-
 <hr>
 <button mat-raised-button mat-button class="app-button" (click)="send_update()">Demande de mise a jour</button>
+
+
+<hr>
+Gestion des profils<br>
+<button mat-raised-button mat-button class="app-button" (click)="export_profils('S')">Export FI</button>
+<button mat-raised-button mat-button class="app-button" (click)="export_profils('P')">Export FPro</button>
+<br>
+<button mat-raised-button mat-button class="app-button" (click)="raz('profils')">RAZ</button>
+
 
 <hr>
 Importation des données<br>
 
-<button mat-raised-button mat-button class="app-button" (click)="batch()">Batch de traitement</button>
-<button mat-raised-button mat-button class="app-button" (click)="router.navigate(['import'])">Importation</button>
+<button mat-raised-button mat-button
+        class="app-button" (click)="batch()">Batch de traitement
+</button>
+
+<button mat-raised-button mat-button
+        class="app-button" (click)="router.navigate(['import'])">Importation
+</button>
+
+<button mat-raised-button mat-button
+        class="app-button" (click)="update_index()">Réindexer
+</button>
+
 <br>
 Raz:
-<button mat-raised-button mat-button class="app-button" (click)="raz('profils')">Profils</button>
+
 <button mat-raised-button mat-button class="app-button" (click)="raz('pows')">Films</button>
 
 

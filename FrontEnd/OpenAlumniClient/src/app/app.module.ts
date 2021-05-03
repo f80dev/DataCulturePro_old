@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchComponent } from './search/search.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { environment } from '../environments/environment';
 import { ImportComponent } from './import/import.component';
 import {ApiService} from "./api.service";
@@ -62,6 +63,15 @@ import {MatListModule} from "@angular/material/list";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { PowsComponent } from './pows/pows.component';
+import {NgChatModule} from "ng-chat";
+import {OverlayModule} from "@angular/cdk/overlay";
+import {MatRadioModule} from "@angular/material/radio";
+import { DevComponent } from './dev/dev.component';
+import { HtmlEditorComponent } from './html-editor/html-editor.component';
+import { BlogComponent } from './blog/blog.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { PlayerComponent } from './player/player.component';
 
 @NgModule({
   declarations: [
@@ -91,40 +101,57 @@ import { PowsComponent } from './pows/pows.component';
     SplashComponent,
     WriteComponent,
     StatsComponent,
-    PowsComponent
+    PowsComponent,
+    DevComponent,
+    HtmlEditorComponent,
+    BlogComponent,
+    PlayerComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MatNativeDateModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-        MatCardModule,
-        QuillModule.forRoot({
-            placeholder: 'Ecrivez votre message'
-        }),
-        MatTableModule,
-        MatSnackBarModule,
-        ImageCropperModule,
-        TextFieldModule,
-        SocialLoginModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        FormsModule,
-        MatProgressSpinnerModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatGridListModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatListModule,
-        MatCheckboxModule,
-        MatExpansionModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ScrollingModule,
+    QuillModule.forRoot({
+      modules: {
+        syntax:false,
+      },
+      theme: 'snow',
+      format: 'html',
+      readOnly: false,
+      placeholder: 'votre article ici'
+    }),
+    BrowserAnimationsModule,
+    MatNativeDateModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    MatCardModule,
+    MatTableModule,
+    MatSnackBarModule,
+    ImageCropperModule,
+    TextFieldModule,
+    SocialLoginModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgChatModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    FormsModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatGridListModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    OverlayModule,
+    MatRadioModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    QuillModule
+  ],
   providers: [
     ApiService,
     TransPipe,

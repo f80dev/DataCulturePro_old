@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {$$, api, showError} from "./tools";
+import {$$, api, now, showError} from "./tools";
 import {timeout} from "rxjs/operators";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environment";
@@ -50,6 +50,11 @@ export class ApiService {
   _put(url,params="",body,_timeoutInSec=60){
     url=api(url,params,true,"");
     return this.http.put(url,body,this.getHttpOptions()).pipe(timeout(_timeoutInSec*1000));
+  }
+
+  _patch(url,params="",body,_timeoutInSec=60){
+    url=api(url,params,true,"");
+    return this.http.patch(url,body,this.getHttpOptions()).pipe(timeout(_timeoutInSec*1000));
   }
 
   resend(email: string) {
@@ -128,7 +133,6 @@ export class ApiService {
 
 
   setuser(fields:any) {
-    //if(fields["acceptSponsor"])fields["acceptSponsor"]="True"; else fields["acceptSponsor"]="False";
     return this._put("extrausers/"+fields.id+"/","",fields);
   }
 
@@ -139,7 +143,7 @@ export class ApiService {
   getPOW(id=null) {
     let params="";
     if(id)params=id+"/";
-    return this._get("pows/"+params);
+    return this._get("extrapows/"+params);
   }
 
   addpow(pow: any) {
@@ -155,16 +159,26 @@ export class ApiService {
   }
 
   getworks(email: any) {
-    return this._get("extraworks","search="+email);
+    return this._get("extraworks","profil__email="+email);
   }
 
+  //Mise a jour du profil du user
   setprofil(data:any) {
+    data.dtLastUpdate=now()
     return this._put("profils/"+data.id+"/","",data);
   }
 
 
-  send(id: string, _from:string,text: any) {
-    return this._post("send_to","profil="+id+"&from="+_from,text);
+  send(id: string, _from:string,text:string,social:string,send_copy:boolean,fullname:string) {
+    let obj={
+      _to:id,
+      text:text,
+      fullname:fullname,
+      social:social,
+      send_copy:send_copy,
+      _from:_from
+    }
+    return this._post("send_to/","",obj);
   }
 
 
@@ -180,5 +194,9 @@ export class ApiService {
 
   getfaqs() {
     return this.http.get(api('getyaml',"name=faqs"));
+  }
+
+  ask_perm(user: any, id: string) {
+    return this.http.get(api('ask_perms',"perm="+id+"&user="+user.id));
   }
 }

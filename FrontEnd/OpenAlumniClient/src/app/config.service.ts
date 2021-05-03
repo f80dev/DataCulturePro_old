@@ -4,7 +4,7 @@ import {ApiService} from "./api.service";
 import {Platform} from "@angular/cdk/platform";
 import {HttpClient} from "@angular/common/http";
 import { Location } from '@angular/common';
-import {$$, initAvailableCameras} from "./tools";
+import {$$, initAvailableCameras, showMessage} from "./tools";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,7 @@ export class ConfigService {
 
   profils:any[]=[];
   jobs: any[]=[];
+  query_cache: any[]; //Conserve le contenu de la dernière requete
 
     constructor(private location: Location,
               private http: HttpClient,
@@ -59,33 +60,39 @@ export class ConfigService {
    * @param func
    */
   init(func=null){
+
+    if(this.values && func)
+      func(this.values);
+
     $$("Initialisation de la configuration");
     this.width_screen=window.innerWidth;
 
     initAvailableCameras((res)=>{this.webcamsAvailable=res;});
 
     $$("Chargement des jobs");
-    this.getJson('/assets/jobs.json').then((r:any)=>{
-      if(this.jobs.length==0){
-        for(let i of Object.values(r)){
-          this.jobs.push({value:i,label:i});
+    this.api.getyaml("","dictionnary").subscribe((yaml:any)=>{
+      if(this.jobs.length==0) {
+        for (let i of Object.values(yaml.jobs)) {
+          let new_job={value: i, label: i};
+          if(this.jobs.indexOf(new_job)==-1)
+            this.jobs.push(new_job);
         }
-        this.api.getyaml("","profils").subscribe((r:any)=>{
-          this.profils=r.profils;
+        this.api.getyaml("", "profils").subscribe((r: any) => {
+          this.profils = r.profils;
           this.raz_user();
 
-          this.getConfig().then(r=>{
-              this.values=r;
-              this.ready=true;
-              $$("Chargement du fichier de configuration",r);
-              if(func!=null)func(this.values);
-            },()=>{
-              $$("Probléme de chargement de la configuration")
-            });
+          this.getConfig().then(r => {
+            this.values = r;
+            this.ready = true;
+            $$("Chargement du fichier de configuration", r);
+            if (func) func(this.values);
+          }, () => {
+            $$("Probléme de chargement de la configuration")
+          });
         })
-
       }
     })
+
 
 
 
@@ -99,12 +106,19 @@ export class ConfigService {
         if(r.count>0){
           $$("Chargement de l'utilisateur ",r.results[0]);
           this.user=r.results[0];
+          if(!this.user.profil){
+            this.api._get("search_profil","email="+this.user.user.email).subscribe((rany)=>{
+              showMessage(this,"Message:"+r.result);
+            })
+          }
+
           if(func_success)func_success();
         } else {
           $$("Aucun compte disponible a l'adresse mail"+email+" on réinitialise le compte")
           this.raz_user();
           this.api.logout();
           this.user.perm=this.profils[this.values.anonymousOffer].perm;
+          this.user.profil=this.values.anonymousOffer;
           if(func_anonyme)func_anonyme();
         }
      });
@@ -112,5 +126,9 @@ export class ConfigService {
 
   public raz_user() {
     this.user={email:"",perm:this.profils[0].perm};
+  }
+
+  isLogin() {
+    return(this.user && this.user.user && this.user.email && this.user.user.email.length>0);
   }
 }

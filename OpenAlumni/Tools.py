@@ -1,37 +1,56 @@
-from html import escape
-from urllib import parse
-from urllib.parse import urlparse
+import hashlib
+import html
+from time import sleep
+from os import remove, scandir, stat
+from os.path import exists
 
+import py7zr
 import wikipedia
 import random
-import smtplib
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from io import BytesIO
 
 import yaml
 import PyPDF2
-from django.conf.urls.static import static
 from django.core.mail import send_mail
-from linkedin_v2 import linkedin
-from linkedin_v2.linkedin import LinkedInApplication
+# from linkedin_v2 import linkedin
+# from linkedin_v2.linkedin import LinkedInApplication
 
 from OpenAlumni import settings
 from OpenAlumni.settings import LINKEDIN_API_KEY, LINKEDIN_RETURN_URL, LINKEDIN_API_SECRET, DOMAIN_APPLI, DOMAIN_SERVER, \
-    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER
+    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER,MYDICT
 
-authentication = linkedin.LinkedInAuthentication(
-    LINKEDIN_API_KEY,
-    LINKEDIN_API_SECRET,
-    LINKEDIN_RETURN_URL,
-    permissions="r_basicprofil"
-)
-print(authentication.authorization_url)
-LinkedInApplication(authentication)
+# authentication = linkedin.LinkedInAuthentication(
+#     LINKEDIN_API_KEY,
+#     LINKEDIN_API_SECRET,
+#     LINKEDIN_RETURN_URL,
+#     permissions="r_basicprofil"
+# )
+# print(authentication.authorization_url)
+# LinkedInApplication(authentication)
+
+
+def to_xml(df,row_separator="row"):
+    def row_to_xml(row):
+        xml = ['<'+row_separator+'>']
+
+        for i, col_name in enumerate(row.index):
+            val=html.escape(str(row.iloc[i]))
+            if len(col_name)>0:
+                xml.append('<field name="{0}">{1}</field>'.format(col_name, val))
+            else:
+                log("Un champs vide")
+
+        xml.append('</'+row_separator+'>')
+
+        return '\n'.join(xml)
+
+    res = '\n'.join(df.apply(row_to_xml, axis=1))
+    return res
 
 
 def stringToUrl(txt:str):
+    if txt is None:return None
     if txt=="http://":return ""
     if not txt.startswith("http"):txt="http://"+txt
     return txt
@@ -62,9 +81,12 @@ def reset_password(email,username):
     :param username:
     :return:
     """
-    password = str(tirage(999999, 100000))
+    if email in EMAIL_TESTER:
+        password="123456"
+    else:
+        password = str(tirage(999999, 100000))
 
-    sendmail("Voici votre code",email,"welcome",dict({
+    sendmail("Voici votre code",[email],"welcome",dict({
         "email": email,
         "url_appli":settings.DOMAIN_APPLI+"/?email="+email,
         "username": username,
@@ -73,97 +95,6 @@ def reset_password(email,username):
     }))
     print("passowrd=" + password)
     return password
-
-
-def extract_film_from_unifrance(url:str):
-    rc=dict()
-    if not url.startswith("http"):
-        log("On passe par la page de recherche pour retrouver le titre")
-        page = wikipedia.BeautifulSoup(wikipedia.requests.get("https://unifrance.org/recherche?q="+parse.quote(url), headers={'User-Agent': 'Mozilla/5.0'}).text)
-        _link=page.find("a",attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]")})
-        if _link is None:return rc
-
-        url=_link.get("href")
-
-    r=wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0',"accept-encoding": "gzip, deflate"})
-    page = wikipedia.BeautifulSoup(str(r.content,encoding="utf-8"))
-    _title=page.find('h1', attrs={'itemprop': "name"})
-    if not _title is None:rc["title"]=_title.text
-
-    _img=page.find("img",attrs={'itemprop': "image"})
-    if not _img is None:
-        src:str=_img.get("src")
-        if not src.startswith("/ressource"):
-            rc["visual"]=src
-
-    for div in page.findAll("div",attrs={'class': "details_bloc"}):
-        if "Année de production : " in div.text:
-            rc["year"]=div.text.replace("Année de production : ","")
-        if "Genre(s) : " in div.text:
-            rc["category"]=div.text.replace("Genre(s) : ","")
-
-    _synopsis = page.find("div", attrs={"itemprop": "description"})
-    if not _synopsis is None:rc["synopsis"]=_synopsis.getText(strip=True)
-
-    return rc
-
-
-
-
-
-
-def extract_actor_from_unifrance(name="céline sciamma"):
-    url="https://www.unifrance.org/recherche/personne?q=$query&sort=pertinence".replace("$query",parse.quote(name))
-    page=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text)
-    links=page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/annuaires/personne/")})
-
-    rc=list()
-    if len(links)>0:
-        page=wikipedia.BeautifulSoup(wikipedia.requests.get(links[0].get("href"), headers={'User-Agent': 'Mozilla/5.0'}).text)
-        for l in page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]*/")}):
-            rc.append({"url":l.get("href"),"text":l.get("text")})
-
-    return {"links":rc}
-
-
-
-def extract_actor_from_wikipedia(name="céline sciamma"):
-    wikipedia.set_lang("fr")
-    rc=None
-    search=wikipedia.search(name)
-
-    if len(search)>0:
-        rc=dict({"links": [],"name": name})
-        page=wikipedia.page(search[0])
-        for img in page.images:
-            if img.endswith(".jpg"):rc["photo"]=img
-
-        save_domains=["unifrance.org","www.lefilmfrancais","www.allocine.fr","catalogue.bnf.fr","www.allmovie.com"]
-        libs = ["UniFrance", "Le Film Francais", "Allocine", "La BNF", "All movie"]
-        try:
-            for ref in page.references:
-                domain=urlparse(ref).netloc
-                try:
-                    idx = save_domains.index(domain)
-                    rc["links"].append({
-                        "text":libs[idx],
-                        "href":ref
-                    })
-                except:
-                    pass
-        except:
-            pass
-
-        html:wikipedia.BeautifulSoup= wikipedia.BeautifulSoup(page.html())
-        #Recherche de la section des films
-        # for link in html.findAll('a', attrs={'href': wikipedia.re.compile("^http://")}):
-        #     if "film" in link.text:
-        #         pass
-
-        rc["links"].append({"text":"wikipedia","href":page.url})
-        rc["summary"]=page.summary
-
-    return rc
 
 
 
@@ -230,16 +161,57 @@ def get_faqs(filters="",domain_appli=DOMAIN_APPLI,domain_server=DOMAIN_SERVER,co
         return rc
 
 
+def levenshtein(s:str, t:str):
+    """
+        iterative_levenshtein(s, t) -> ldist
+        ldist is the Levenshtein distance between the strings
+        s and t.
+        For all i and j, dist[i,j] will contain the Levenshtein
+        distance between the first i characters of s and the
+        first j characters of t
+    """
+
+    rows = len(s) + 1
+    cols = len(t) + 1
+    dist = [[0 for x in range(cols)] for x in range(rows)]
+
+    # source prefixes can be transformed into empty strings
+    # by deletions:
+    for i in range(1, rows):
+        dist[i][0] = i
+
+    # target prefixes can be created from an empty source string
+    # by inserting the characters
+    for i in range(1, cols):
+        dist[0][i] = i
+
+    for col in range(1, cols):
+        for row in range(1, rows):
+            if s[row - 1] == t[col - 1]:
+                cost = 0
+            else:
+                cost = 1
+            dist[row][col] = min(dist[row - 1][col] + 1,  # deletion
+                                 dist[row][col - 1] + 1,  # insertion
+                                 dist[row - 1][col - 1] + cost)  # substitution
+
+    return dist[row][col]
+
 
 def sendmail(subject, _to, template, field):
     field["appname"]=APPNAME
     field["email"]=_to
     html=open_html_file(template,field)
     log("Envoi de "+html)
-    if _to in EMAIL_TESTER or len(EMAIL_TESTER)==0:
-        send_mail(subject,message="",from_email=EMAIL_HOST_USER,recipient_list=[_to],
-                  auth_user=settings.EMAIL_HOST_USER,html_message=html,
-                  auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
+    _dest=[]
+    if type(_to)==str:_to=[_to]
+    for c in _to:
+        if c in EMAIL_TESTER or len(EMAIL_TESTER) == 0:
+            _dest.append(c)
+
+    send_mail(subject,message="",from_email=EMAIL_HOST_USER,recipient_list=_dest,
+              auth_user=settings.EMAIL_HOST_USER,html_message=html,
+              auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
 
 
 def open_html_file(name:str,replace=dict(),domain_appli=DOMAIN_APPLI):
@@ -406,3 +378,72 @@ def dateToTimestamp(txt):
 
     log("Probleme de conversion de " + str(txt) + " en date")
     return None
+
+
+
+def translate(wrd:str,dictionnary=None):
+    """
+    Remplacement de certains termes
+    :param wrd:
+    :param dictionnary:
+    :return:
+    """
+    global MYDICT
+    if MYDICT is None:
+        with open("./static/dictionnary.yaml", 'r', encoding='utf8') as f:
+            body = f.read()
+        MYDICT=yaml.load(body.lower())
+
+    if wrd is None:
+        return None
+
+    key=wrd.lower().replace(",","").replace("(","").replace(")","")
+    rc = key
+    for section in ["jobs","categories"]:
+        if key in MYDICT[section].keys():
+            rc = MYDICT[section][key]
+            break
+
+    if not rc is None and len(rc)>1:
+        return (rc[0].upper()+rc[1:].lower()).strip()
+    else:
+        return rc
+
+
+def clear_directory(dir, ext):
+    log("Netoyage du répertoire des films")
+    for file in scandir(dir):
+        if file.name.endswith("."+ext):
+            remove(file.path)
+
+
+
+def load_page(url:str):
+    filename=hashlib.sha224(bytes(url,"utf8")).hexdigest()+".html"
+
+    if not exists("./Temp/" + filename):
+        with py7zr.SevenZipFile("./Temp/html.7z", 'r') as archive:
+            archive.extract(path="./Temp",targets=filename)
+
+
+    if exists("./Temp/"+filename) and datetime.now().timestamp()-stat("./Temp/"+filename).st_mtime<3600*24*31:
+        log("Utilisation du cache pour "+url)
+        with open("./Temp/"+filename, 'r', encoding='utf8') as f:
+            html=f.read()
+            f.close()
+
+        return wikipedia.BeautifulSoup(html)
+    else:
+        log("Chargement de la page "+url)
+        sleep(random.randint(1000,2000)/1000)
+        rc= wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text, "html5lib")
+
+        with open("./Temp/"+filename, 'w', encoding='utf8') as f:
+            f.write(str(rc))
+            f.close()
+
+        with py7zr.SevenZipFile("./Temp/html.7z", 'a') as archive:
+            archive.write("./Temp/"+filename,filename)
+
+        return rc
+

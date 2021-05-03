@@ -1,0 +1,193 @@
+#La syntaxe du dictionnaire est A:B, signifiant qu'il remplace systématique A par B
+
+#Normalisation des categories
+categories:
+  documentary: documentaire
+  movie: film
+  short: court-métrage
+  tv: télévision
+  long: film
+  comedy: comédie
+  biography: biopic
+  drama: drame
+  sci-fi: science-fiction
+  history: historique
+  musical: comédie musicale
+  romance: comédie dramatique
+  war: guerre
+  mystery: thriller
+  family: comédie familliale
+  fantasy: héroïque fantaisie
+  writer: scénariste
+  serie: série
+  Fiction, expérimental: fiction
+  Expérimental, animation: expérimental
+  Crime: policier
+  Documentaire, fiction: documentaire
+  Expérimental, documentaire: documentaire
+
+
+formation:
+  VAE DEC: Directeur d'exploitation (VAE)
+  VAE ARD: ARD (VAE)
+
+
+#Normalisation des métiers
+jobs:
+  Boom operator: Opérateur Son
+  Sound: Son
+  Sound mixer: Mixage Son
+  Sound assistant: Assitant(e) Son
+  Sound editor: Mixage Son
+  Camera_department: Caméra
+  Production_manager: Producteur
+  Music_department: Musique
+  Assistant_director: Assitant(e) réalisateur
+  Script_department: Scénario
+  Soundtrack: Compositeur
+  Sound department: Son
+  Second unit director or Assitant(e) director: Assitant(e) réalisateur
+  Editor: Montage
+  First assistant camera: Premier assistant caméra
+  second assistant camera: Second assistant caméra
+  first assistant camera / gaffer: Premier assistant caméra
+
+  still photographer: Photo
+  Second unit sound recordist: Son
+  Extra sound: Son
+  Monteur: Montage
+  Scénaristes: Scénario
+  Director: Réalisation
+  Réalisateur: Réalisation
+  Réalisatrice: Réalisation
+  Writer: Scénario
+  Monitor technician: Technicien
+  Set_decorator: Décors
+  Production_designer: Production
+  Head writer: Scénario
+  Visual_effects: Effets spéciaux
+  Craft service: Effets spéciaux
+  Title designer: Designer
+  Titles design: Designer
+  Technical consultant: Consultant technique
+  Art_director: Directeur artistique
+  Art_department: Département artistique
+  Casting_department: Casting
+  Casting_director: Casting
+  Storyboardeur: Storyboard
+  production assistant: Assitant(e) de production
+  second Assitant(e) director: Assitant(e) réalisateur
+  Composer: Compositeur
+  Auteur de la musique: Compositeur
+  Assistante à la réalisation: Assitant(e) Réalisation
+  Assitant(e) à la réalisation: Assitant(e) Réalisation
+  Auteurs de la musique: Compositeur
+  Attaché de presse (film): Relations presse
+  Assitant(e) réalisateur: Assitant(e) réalisation
+  Directeur de production: Direction de production
+  Actress: Acteur(trice)
+  Attachée de presse (film): Relations presse
+  Producer: Production
+  Directeur de la photo: Direction Photo
+  Directrice de la photo: Direction Photo
+  Directeurs de la photo: Direction Photo
+  Cinematographer: Direction Photo
+  Ingénieur du son  monteur son  sound designer  mixeur: son
+  Ingénieur du son monteur son mixeur: son
+  Ingénieurs du son: son
+  Monteur son: son
+  Art department: Département artistique
+  Décorateur: Décorateur/trice
+  Décoratrice: Décorateur/trice
+  Décoratrices: Décorateur/trice
+  Additional crew: Equipe Supplémentaire
+  Scénariste: Scénario
+  Mixeur monteur son: Mixeur
+  Attachées de presse (film): Relations presse
+  Attachés de presse (film): Relations presse
+  Chef opérateur du son et monteur son: Chef(fe) op son
+  Directrice de production: Direction de production
+  Production designer: Production
+  Responsable de la post-production: Post-production
+  Monteur son - ingénieur du son: Ingénieur son
+  Producteurs délégués: Production déléguée
+  Assistants opérateurs: Assitant(e) opérateur
+  Producteurs: Production
+  Producteurs exécutifs: Production
+  Producteur exécutif: Production
+  Monteur son et mixeur: Mixeur
+  Distributrice france: Distribution
+  Scénarios: Scénario
+  Production manager: Production
+  Producteur étranger: Production
+  Script and continuity department: Scénario
+  Agents (presse france): Relations presse
+  Chef monteuse: Montage
+  Assistante opérateur: Assistant(e) opérateur
+  Productrice déléguée: Production déléguée
+  Animation department: Département animation
+  Directeurs de production: Production
+  Monteuse: Montage
+  Art director: Décorateur(trice)
+  Décorateur / ensemblier: Décorateur(trice)
+  Chef operateur son monteur son: Chef(fe) op
+  Scénariste réalisateur: Réalsateur(trice) / Scénariste
+  Producteur associé: Production
+  Editorial department: Montage
+  Assistante monteuse: Assistant(e) montage
+  Actor: Acteur(trice)
+  Chef opérateur et réalisateur: Chef(fe) op
+  Directrices de la photo: Direction Photo
+  Monteuse son et assistante mixage: Assitant(e) son
+  Chef opératrice: Chef(fe) op
+  Cadre: cadrage
+  Self: lui-même
+  Assistants son: Assitant(e) son
+  Second sound assistant: Assitant(e) son
+  Assitant(e) monteur: Assitant(e) montage
+  Directrices de production: Direction de production
+  Coproducteur: CoProduction
+  Camera and electrical department: Materiel
+  Premier Assitant(e) opv / directeur photo: Photo
+  Costume designer: Costumes
+  Location management: Materiel
+  Productrices: Production
+  Département animation: Animation
+  Directrice artistique: Direction artistique
+  Opératrice du son: son
+  Photographes de plateau: Photo
+  Effets visuels: Effets spéciaux
+  Assitant(e) de production: Production
+  Producteurs étrangers: Production
+  Pre-production sound: pré-prod Son
+  Sound_department: Son
+  Auteur de l'œuvre originale: Auteur
+  Scénariste et réalisatrice: Auteur/Réalisateur
+  Assistante opératrice: Assitant(e) Opérateur(trice)
+  Régisseuse générale: Régisseur
+  Réalisateur chef-op auteur compositeur: Auteur/Réalisateur
+  Narration: Scénario
+  Interprètes de la musique: Musique
+  Chef décoratrice: Décors
+  Interprète de la musique: Musique
+  Intern: Divers
+  Segment team: Divers
+  Assistante décoratrice: Décors
+  Auteur réalisateur: Auteur/Réalisateur
+  Post: Postprod
+  Assitant(e) set manager: Divers
+  Adaptation: Scénario
+  Productrice étrangère: Production
+  Visual consultant: Effets spéciaux
+  Participantes: Autre
+  Post-audio supervisor: Postprod
+  Assitant(e) set manager - uncredited: Autre
+  directed by: Réalisation
+  location_management: Matériel
+  Script supervisor: Scénario
+  Script: Scénario
+  Assitant(e) script supervisor: Assistance scénario
+  Written by: Scénario
+  Creator and: Scénario
+  First assistant director: Assistant(e) réalisation
+  Second assistant director: Assistant(e) réalisation

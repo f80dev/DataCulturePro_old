@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {$$, showError, showMessage, translateQuery} from "../tools";
@@ -6,6 +6,7 @@ import {ConfigService} from "../config.service";
 import {NgNavigatorShareService} from "ng-navigator-share";
 import {ClipboardService} from "ngx-clipboard";
 import {environment} from "../../environments/environment";
+import {MatAccordion} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-pows',
@@ -15,6 +16,8 @@ import {environment} from "../../environments/environment";
 export class PowsComponent implements OnInit {
   pows: any[]=[];
   query: any={value:""};
+  limit=50;
+  @ViewChild('powAccordion') powAccordion: MatAccordion;
 
   constructor(public api:ApiService,
               public ngNavigatorShareService:NgNavigatorShareService,
@@ -30,6 +33,7 @@ export class PowsComponent implements OnInit {
   }
 
   open_search(name: string) {
+    if(name.indexOf(" ")>-1)name=name.split(' ')[1];
     this.router.navigate(["search"],{queryParams:{filter:name}});
   }
 
@@ -37,6 +41,10 @@ export class PowsComponent implements OnInit {
     this.query.value='';
     this.refresh();
   }
+
+
+  message: string ="";
+  all: any=true;
 
   handle:any;
   onQuery($event: KeyboardEvent) {
@@ -48,10 +56,13 @@ export class PowsComponent implements OnInit {
 
 
 
-  private refresh() {
-    let param=translateQuery(this.query.value);
+  refresh() {
+    let param=translateQuery(this.query.value,this.all);
     param=param.replace("works__title","title__terms");
+    param=param+"&limit="+this.limit;
+    this.message="Recherche des films";
     this.api._get("powsdoc",param).subscribe((r:any)=>{
+      this.message="";
       this.pows=[];
       for(let i of r.results){
         let tmp=[];
@@ -65,6 +76,9 @@ export class PowsComponent implements OnInit {
         // }
         // i.works=tmp;
         this.pows.push(i);
+      }
+      if(r.results.length<10){
+        this.powAccordion.openAll();
       }
     },(err)=>{
       showError(this,err);
@@ -93,32 +107,38 @@ export class PowsComponent implements OnInit {
   }
 
   get_pow(pow: any) {
-    let index=this.pows.indexOf(pow);
-    //if(!this.pows[index].hasOwnProperty("links")){
-      this.api.getPOW(pow.id).subscribe((r:any)=>{
+      this.api._get("extraworks/","pow__id="+pow.id).subscribe((r:any)=>{
         let rc=[];
-        if(r.hasOwnProperty("works")){
-          for(let w of r.works){
-            let json_str=w.replace(/\'/gi,"\"");
-            try {
-              rc.push(JSON.parse(json_str));
-            } catch (e) {
-              showError(this,e);
-              $$("Erreur de conversion de "+json_str,e);
+        if(r.results.length>0){
+          pow.visual=r.results[0].pow.visual;
+          pow.description=r.results[0].pow.description;
+          for(let item of r.results){
+            if(item.public){
+              rc.push({
+                job:item.job,
+                name:item.profil.firstname+" "+item.profil.lastname
+              })
             }
           }
+          pow.expanded=true;
+          pow.works=rc;
         }
-        r.works=rc;
-        r.expanded=true;
 
-        this.pows[index]=r;
       });
-   // }
   }
 
   deletePow(pow: any) {
     this.api._delete("/pows/"+pow.id).subscribe(()=>{
       showMessage(this,"film supprimé");
     })
+  }
+
+  show_all() {
+    if(this.limit==50)
+      this.limit=500;
+    else
+      this.limit=50;
+
+    this.refresh();
   }
 }

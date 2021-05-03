@@ -19,8 +19,9 @@ export class TutoComponent implements OnInit {
   @Input("delay") delay=0.2;
   @Input("duration") duration=0;
   @Input("background") background="";
+  @Input("background-color") bkColor="black";
   @Input('if') _if=true;
-  @Input('image') image: string="";
+  @Input('image') image: string="./assets/img/tips.png";
   @Input('main_button') labelButton: string="Continuez";
   @Input('icon') icon:string="";
   @Input('color') color:string="white";
@@ -36,6 +37,7 @@ export class TutoComponent implements OnInit {
   code:string="";
 
   refresh(){
+
     this.text=brand_text(this.text,this.config);
     this.title=brand_text(this.title,this.config);
 
@@ -75,7 +77,6 @@ export class TutoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if(this._type=="tips" && this.image.length==0)this.image="./assets/img/tips.png";
     if(this.icon!=null && this.icon.length>0)this.image="";
     if(this.text==null || this.text.length==0)this.text=this.label;
     if(this.title!=null && this.title.length>0 || this.subtitle.length>0){

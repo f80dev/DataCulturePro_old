@@ -3,7 +3,7 @@
   aux fonctionalités avancées
 </div>
 
-<div *ngIf="config.user?.user?.email.length>0">
+<div *ngIf="config.user?.user?.email.length>0" style="margin: 10px;">
   <div style="color:lightgray;font-size: x-small">Bonjour,</div>
   {{config.user?.user?.email}}
   <br><br>
@@ -12,7 +12,7 @@
 <hr>
 <br>
 
-<mat-nav-list>
+<mat-nav-list class="sidemenu">
 
   <a title="Consultation de l'annuaire"
      routerLink="search"
@@ -30,25 +30,60 @@
     &nbsp;&nbsp;Consulter les films
   </a>
 
+  <a title="Voir le blog"
+     routerLink="blog"
+     mat-list-item
+     id="cmdBlog">
+    <mat-icon>rss_feed</mat-icon>
+    &nbsp;&nbsp;Le blog
+  </a>
+
   <br>
   <a title="Editer votre profil"
      *ngIf="config.user?.profil"
      routerLink="edit"
      [queryParams]="{id:this.config.user?.profil}"
      mat-list-item
-     id="cmdEditProfil">
+     id="cmdEditMyProfil">
     <mat-icon>build</mat-icon>
-    &nbsp;&nbsp;Editer votre profil
+    &nbsp;&nbsp;Editer mon profil
+  </a>
+
+  <a title="Rédiger un article"
+     *ngIf="config.hasPerm('publish')"
+     routerLink="htmledit"
+     mat-list-item
+     id="cmdPublish">
+    <mat-icon>subject</mat-icon>
+    &nbsp;&nbsp;Publier un article
   </a>
 
  <a title="Ajouter des films dans le catalogue"
-     *ngIf="config.hasPerm('add_movies') || isLocal"
+     *ngIf="config.hasPerm('add_movies')"
      routerLink="addpow"
      [queryParams]="{owner:'public'}"
      mat-list-item
      id="cmdAddMovie">
     <mat-icon>videocam</mat-icon>
-    &nbsp;&nbsp;Ajouter des films
+    &nbsp;&nbsp;Gestion des films
+  </a>
+
+  <a title="Accèder à la console de statistiques"
+     *ngIf="config.hasPerm('stats')"
+     routerLink="stats"
+     mat-list-item
+     id="cmdOpenStats">
+    <mat-icon>leaderboard</mat-icon>
+    &nbsp;&nbsp;Statistiques
+  </a>
+
+ <a title="Accèder à la console developper"
+     *ngIf="config.hasPerm('dev')"
+     routerLink="dev"
+     mat-list-item
+     id="cmdOpenDev">
+    <mat-icon>build</mat-icon>
+    &nbsp;&nbsp;Développeurs
   </a>
 
 
@@ -110,7 +145,7 @@
   <br>
   <br>
   <a title="Administration"
-     *ngIf="isLocal"
+     *ngIf="isLocal || config.hasPerm('admin')"
      mat-list-item routerLink="admin"
      id="cmdAdmin">
     <mat-icon>settings</mat-icon>

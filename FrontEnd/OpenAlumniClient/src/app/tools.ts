@@ -14,25 +14,36 @@ export function showError(vm:any,err:any){
 }
 
 
-export function translateQuery(text:string):string {
+export function translateQuery(text:string,all_term=false):string {
     if(text.length==0)return "";
     let dict={
       "nom":"lastname",
       "prenom":"firstname",
       "prénom":"firstname",
-      "ville":"town",
       "code postal":"cp",
       "film":"works__title",
+      "ville":"town",
       "promotion":"promo",
-      "titre":"works__title",
       "job":"works__job"
     }
     for(let k in dict){
       text=text.replace(k+":",dict[k]+":");
     }
 
-    if(text.indexOf("&")>-1){
-      text="title__terms="+text.split("&")[0].trim()+"&title__terms="+text.split("&")[1].trim();
+    if(text.indexOf(":")>0){
+      let rc="";
+      for(let term of text.split(" ")){
+        rc=rc + term.replace(":","=")+"&"
+      }
+      return rc.substr(0,rc.length-1);
+    }
+
+    if(all_term){
+      let rc="";
+      for(let wrd of text.split(" ")){
+        rc=rc+"title__term="+wrd.toLowerCase().trim()+"&";
+      }
+      text=rc.substr(0,rc.length-1);
     }
     else
       text="search="+text;
@@ -95,6 +106,7 @@ export function api(service: string , param: string= '', encode: boolean = true,
 
   if(rc.endsWith("?"))rc=rc.substr(0,rc.length-1);
   rc=rc.replace("http:/","http://").replace("https:/","https://");
+  rc=rc.replace("&&","&");
   return rc;
 }
 
@@ -355,12 +367,13 @@ export function showMessage(vm:any,s:string="",duration=2000,func=null,label_but
     //Affichage en mode toaster
     var toaster:MatSnackBar=vm.toast || vm.snackBar || vm.toaster;
     if(toaster!=null){
-      if(duration==0)
-        toaster.open(s,label_button).onAction().subscribe(()=>{
-          if(func!=null)func();
+      if(func!=null){
+        toaster.open(s,label_button,{duration:duration}).onAction().subscribe(()=>{
+          func();
         });
-      else
+      } else {
         toaster.open(s,"",{duration:duration});
+      }
     }
 
   }

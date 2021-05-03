@@ -1,0 +1,252 @@
+
+body { height: 100%; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html {
+  background-color: #545454;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
+
+
+.app-card {
+  margin:2px !important;
+  padding:6px !important;
+  vertical-align: text-top;
+}
+
+.visual-coupon {
+  color: white;
+  position:relative;
+  margin:3px;
+  width:100%;
+  height:260px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  filter: brightness(100%) blur(0.3px);
+}
+
+.app-card-content {
+  padding:0px;
+  margin:0px;
+  width: 100%;
+  max-width: 900px;
+  vertical-align: text-top;
+}
+
+.form-field-style {
+  width:95%;
+  display: flex;
+}
+
+.small-icon-button {
+  font-size: x-small;
+  margin:1px;
+  width:10px;
+  height:10px;
+}
+
+.spacer {
+  flex: 1 1 auto !important;
+}
+
+.filler {
+  flex: 1 1 auto !important;
+}
+
+.flyer {
+  width:200px;
+  margin:3px;
+  height:200px;
+  cursor: pointer;
+}
+
+.app-button {
+  margin:3px !important;
+  min-width:100px !important;
+  background-color: rgba(46, 138, 255, 0.31);
+}
+
+.app-logo-button {
+  margin:3px !important;
+  background-color: rgba(46, 138, 255, 0.31);
+}
+
+.login-button {
+  background-color: rgba(46, 138, 255, 0.31);
+  margin:3px !important;
+  width:150px;
+}
+
+
+
+
+
+@media print {
+  app-root > * { display: none; }
+  app-root app-print-layout { display: block; }
+}
+
+.app-card-action {
+  text-align: right;
+  padding:8px !important;
+}
+
+.large-button {
+  width:200px;
+}
+
+.app-card-title {
+  font-size: large;
+  line-height: 90%;
+  margin-top:10px;
+  margin-left:10px;
+}
+
+.medium-button {
+  text-align: center;
+  padding:0px !important;
+  width:95px;
+}
+
+.small-button {
+  width:60px;
+}
+
+.app-card-header {
+  padding-top:2px !important;
+  padding-bottom:2px !important;
+  padding-left:0px !important;
+  vertical-align: text-top;
+  font-size: small;
+}
+
+.app-toolbar {
+  max-width: 900px;
+  line-height: 100%;
+  font-size: medium;
+  margin:0;
+  padding: 0;
+  background: None;
+}
+
+
+.image-photo {
+  box-shadow: 6px 6px 5px #7c7c7c;
+  margin: 5px;
+  border: 1px #bfbec4 solid;
+}
+
+.big-icon {
+  font-size:40px;
+  color:black;
+  opacity: 0.5;
+  display: inline-block;
+}
+
+.app-card-subtitle {
+  font-size: small;
+  color:lightgrey;
+}
+
+h3 {
+  margin-top:20px;
+  font-size: large;
+  font-weight: lighter;
+}
+
+h2 {
+  margin-top:30px;
+  font-size: x-large;
+  font-weight: normal;
+}
+
+
+.mat-expansion-panel-body {
+  padding: 8px !important;
+}
+
+.step-title {
+  color:black !important;
+  font-weight: lighter;
+}
+
+.bloc-bouton {
+  margin:0px;
+  padding:0px;
+  text-align: center;
+  display:inline-block;
+  font-size:small;
+  line-height: 100%;
+}
+
+.image-icon {
+  width:22px;
+}
+
+.input-full-width {
+  width:100%;
+  max-width:500px;
+  margin-right:2%;
+}
+
+.mainform {
+  padding: 2px;
+  width:96vw;
+  margin-left:2vw;
+  margin-top:5px;
+}
+
+.faq-content {
+  padding-left: 20px;
+}
+
+.app-table {
+  font-size: small;
+  border-collapse: collapse;
+  border-spacing: 10px;
+  text-align: center;
+  padding: 3px;
+  border: lightgrey solid 1px;
+  display: inline-block;
+}
+
+th {
+  background-color: darkblue;
+  color:white;
+  padding:5px;
+  padding-left: 10px;
+  padding-right:10px;
+}
+
+table, th, td {
+  border: none;
+}
+
+
+.zone-option {
+  width:200px;
+  height:200px;
+  display: inline-block;
+  font-size: small;
+  text-align: center;
+  margin:2%;
+}
+
+.zone-option-header {
+  height:50px;
+  margin-bottom: 10px;
+  width:80%;
+  display: inline-block;
+}

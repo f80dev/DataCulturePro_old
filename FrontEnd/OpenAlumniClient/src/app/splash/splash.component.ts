@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ConfigService} from "../config.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -12,12 +12,24 @@ export class SplashComponent implements OnInit {
 
   version:any;
 
-  constructor(public config:ConfigService,public router:Router) { }
+  constructor(public config:ConfigService,
+              public routes: ActivatedRoute,
+              public router:Router) { }
 
   ngOnInit(): void {
     this.version=environment.appVersion;
+    let id=this.routes.snapshot.queryParamMap.get("id");
+    let name=this.routes.snapshot.queryParamMap.get("name");
+
     setTimeout(()=>{
-      this.router.navigate(["search"]);
+      if(id){
+        let url=this.routes.snapshot.url.join("/");
+        if(url.indexOf("public"))this.router.navigate(["public"],{queryParams:{id:id}});
+        if(url.indexOf("works"))this.router.navigate(["works"],{queryParams:{id:id,name:name}});
+      }
+      else{
+        this.router.navigate(["search"]);
+      }
     },2000);
   }
 

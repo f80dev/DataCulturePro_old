@@ -1,72 +1,131 @@
-<mat-card [ngStyle]="{height:height,width:width,backgroundColor:backgroundColor,textAlign:'left'}" [class.mat-elevation-z8]="true">
-  <mat-card-header>
+<mat-card name="card" [ngStyle]="{height:height,width:width,'min-width':'300px',backgroundColor:backgroundColor,textAlign:'left'}" [class.mat-elevation-z8]="true">
+  <mat-card-header name="cardHeader">
     <div mat-card-avatar *ngIf="config.hasPerm('r_photo')">
       <img mat-card-avatar [src]="profil?.photo" class="icon-profil">
     </div>
-    <mat-card-title>
+    <mat-card-title name="cardTitle">
       <span *ngIf="config.hasPerm('r_firstname')">{{profil?.firstname}}</span>
       <span *ngIf="config.hasPerm('r_lastname')"> {{profil?.lastname}}</span>
     </mat-card-title>
-    <mat-card-subtitle *ngIf="config.hasPerm('r_promo')">Promotion {{profil?.degree_year}}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="config.hasPerm('r_promo')">
+      <span *ngIf="profil?.cursus=='P'" name="lblCursus">Cursus Pro - </span>
+      <span *ngIf="profil?.cursus=='S'" name="lblCursus">Promotion </span>
+      <span style='cursor: pointer'
+            name="lblPromo"
+            title="Rechercher par promotion"
+            (click)="onclick.emit(profil?.degree_year)">
+        {{profil?.degree_year}}
+      </span>
+    </mat-card-subtitle>
   </mat-card-header>
 
-  <mat-card-content>
+  <mat-card-content name="cardContent">
 
     <ng-content></ng-content>
 
   </mat-card-content>
 
-  <mat-card-actions *ngIf="showAction" style="text-align: left;">
+  <mat-card-actions *ngIf="showAction" style="text-align: left;padding: 0px;" name="cardAction">
     <button mat-button mat-icon-button
+            name="cmdContact"
+            class="small-icon-button"
             *ngIf="config.user?.user?.email!=profil?.email && config.hasPerm('write_email')"
             (click)="write(profil)"
             title="Lui envoyer un message">
       <mat-icon>email</mat-icon>
     </button>
-
+    &nbsp;
     <button mat-button mat-icon-button
             title="Réalisations / Films / Livres"
+            name="cmdOpenWork"
+            class="small-icon-button"
             *ngIf="profil?.works?.length>0 && config.hasPerm('r_works')"
             (click)="openWork(profil)">
       <mat-icon>videocam</mat-icon>
     </button>
 
+    <button mat-button mat-icon-button
+            name="cmdLink"
+            class="small-icon-button"
+            *ngIf="profil?.links?.length==1"
+            [title]="profil?.links[0].text"
+            (click)="openLink(profil)">
+      <mat-icon>link</mat-icon>
+    </button>
+
+    <mat-select *ngIf="profil?.links?.length>1"
+                style="width: 70px;" [placeholder]="'Sources'"
+                (selectionChange)="openLink($event)">
+      <mat-option *ngFor="let link of profil?.links" [value]="link.url">
+        {{link.text}}
+      </mat-option>
+    </mat-select>
+
 
     <button mat-icon-button mat-button
             title="Partager / Envoyer ce profil"
+            name="cmdShareProfil"
+            class="small-icon-button"
             *ngIf="profil?.public_url?.length>0 && config.hasPerm('share')"
             (click)="share(profil)">
       <mat-icon>share</mat-icon>
     </button>
 
     <button mat-button mat-icon-button
+            class="small-icon-button"
             title="Consulter son site web"
+            name="cmdWebsite"
             *ngIf="profil?.website?.length>0"
             (click)="openWebSite(profil?.website)">
       <mat-icon>public</mat-icon>
     </button>
 
     <button mat-button mat-icon-button
-            title="Consulter son site web"
+            class="small-icon-button"
+            title="Supprimer le profil"
+            name="cmdDelProfil"
             *ngIf="config.hasPerm('delete_profil')"
             (click)="deleteProfil(profil)">
       <mat-icon>delete</mat-icon>
     </button>
 
-     <button mat-button mat-icon-button
+    <button mat-button mat-icon-button
+            class="small-icon-button"
+            title="Demander en tuteur"
+            name="cmdAskTutor"
+            *ngIf="config.hasPerm('ask_tutor') && profil.acceptSponsor && config.user.profil"
+            (click)="ask_tutor(profil)">
+      <mat-icon>school</mat-icon>
+    </button>
+
+    <button mat-button mat-icon-button
             title="Editer mon profil"
-            *ngIf="config.user?.user?.email==profil?.email"
+            class="small-icon-button"
+            name="cmdEditProfil"
+            *ngIf="writeAccess"
             (click)="editProfil(profil)">
       <mat-icon>create</mat-icon>
     </button>
 
+    <!--
+        TODO: a rétablir pour les communications
+        <button mat-button mat-icon-button
+                title="Demander en ami"
+                *ngIf="config.user?.user?.email!=profil?.email && config.hasPerm('ask_friend')"
+                (click)="askFriend(profil)">
+          <mat-icon>group_add</mat-icon>
+        </button>
+
+        -->
+
     <button mat-button mat-icon-button
+            title="Voir sa page linkedin"
+            class="small-icon-button"
             *ngIf="profil?.linkedin?.length>0 && config.hasPerm('r_linkedin')"
             (click)="openWebSite(profil?.linkedin)">
-        <img src="/assets/icons/LinkedIn.png"
-             class="icon-button"
-             style="background-color: white;">
+      <img  src="/assets/icons/LinkedIn.png"
+            class="small-icon-button"
+            style="background-color: white;">
     </button>
   </mat-card-actions>
 </mat-card>
-

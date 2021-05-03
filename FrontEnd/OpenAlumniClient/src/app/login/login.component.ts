@@ -54,18 +54,25 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     $$("Ouverture de la fenêtre de login");
 
-    if(localStorage.getItem("email") && localStorage.getItem("token"))this.quit();
+    this.config.init_user(()=>{
+      $$("L'utilisateur est déjà loggé");
+      this.quit();
+    },()=>{
+      var params: ParamMap = this.route.snapshot.queryParamMap;
+      this.redirect = params.get("redirect");
+      if (params.has("message")) this.message = params.get("message");
+      if (params.has("address") || params.has("email")) {
+        var addr=params.get("address");
+        if(!addr)addr=params.get("email");
+        $$("Récupération de l'adresse " + addr);
+        localStorage.setItem("lastEmail", addr);
+        this.email_login();
+      }
+    })
 
-    var params: ParamMap = this.route.snapshot.queryParamMap;
-    this.redirect = params.get("redirect");
-    if (params.has("message")) this.message = params.get("message");
-    if (params.has("address") || params.has("email")) {
-      var addr=params.get("address");
-      if(!addr)addr=params.get("email");
-      $$("Récupération de l'adresse " + addr);
-      localStorage.setItem("lastEmail", addr);
-      this.email_login();
-    }
+
+
+
   }
 
 
@@ -129,7 +136,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.wait_message="Nouveau compte, création en cours";
             this.api.register({"email": email,"username":email}).subscribe((res: any) => {
-             this.wait_message="";
+              this.wait_message="";
               if (res != null) {
                 this.messageCode="Afin de vérifier que vous êtes bien le propriétaire de " + email + ", veuillez indiquer le code à 6 chiffres que vous avez reçu";
               }
@@ -150,12 +157,12 @@ export class LoginComponent implements OnInit {
       }
     })
 
-          // var message="Un lien de connexion à votre nouveau profil vous a été envoyer sur votre boite. Utilisez le pour vous reconnecter";
-          // if(res.status!=200)message="Problème technique. Essayer une autre méthode d'authentification";
-          // this.message=message;
-          // setTimeout(()=>{
-          //   this.dialogRef.close({"message":message});
-          // },5000);
+    // var message="Un lien de connexion à votre nouveau profil vous a été envoyer sur votre boite. Utilisez le pour vous reconnecter";
+    // if(res.status!=200)message="Problème technique. Essayer une autre méthode d'authentification";
+    // this.message=message;
+    // setTimeout(()=>{
+    //   this.dialogRef.close({"message":message});
+    // },5000);
     //     })
     //   }
     // });
@@ -188,12 +195,12 @@ export class LoginComponent implements OnInit {
     this.api.checkCode(this.email, code).subscribe((r: any) => {
       this.wait_message="";
       if (r != null) {
-          this.api.token=r.token;
-          localStorage.setItem("token",r.token);
-          if(this.email)localStorage.setItem("email",this.email);
-          showMessage(this, "Connexion à votre compte");
-          this.messageCode="";
-          this.config.init_user(()=>{this.quit();});
+        this.api.token=r.token;
+        localStorage.setItem("token",r.token);
+        if(this.email)localStorage.setItem("email",this.email);
+        showMessage(this, "Connexion à votre compte");
+        this.messageCode="";
+        this.config.init_user(()=>{this.quit();});
       } else {
         this.config.raz_user();
         this.messageCode="";
@@ -213,16 +220,12 @@ export class LoginComponent implements OnInit {
     $$("Recherche d'un compte ayant ce mail",data);
     this.wait_message="Récupération de l'utilisateur";
     this.api.getuser(data.email).subscribe((result:any)=> {
-      if (result.results.length > 0) {
-          // let _old_user = result.results[0];
-          // this.wait_message = "";
-          // this.messageCode = "Le compte " + _old_user.email + " existe déjà, veuillez saisir votre mot de passe";
-          // this.email = data.email;
+        if (result.results.length > 0) {
+          this.email = data.email;
           this.updateCode(data.provider_id)
         } else {
           $$("Il n'y a pas de compte à cet email");
           this.email = data.email;
-          debugger
           this.api.register({
             "email": data.email,
             "username":"___"+data.provider_id,
@@ -233,7 +236,8 @@ export class LoginComponent implements OnInit {
             this.messageCode = "Veuillez saisir le code qui vous a été envoyé sur votre adresse mail";
             this.wait_message = "";
           },(err)=>{
-            showError(this,err);
+            showMessage(this,"Problème d'authentification. Faites une authentification par mail");
+            this.wait_message = "";
           });
         }
       }
@@ -243,7 +247,7 @@ export class LoginComponent implements OnInit {
 
 
 
-
+  n_try=0;
   public socialSignIn(socialPlatform : string) {
     let servicePlatform=GoogleLoginProvider.PROVIDER_ID;
     if(socialPlatform=="facebook")servicePlatform=FacebookLoginProvider.PROVIDER_ID;
@@ -251,9 +255,9 @@ export class LoginComponent implements OnInit {
     $$("Appel de la plateforme d'authentification "+socialPlatform);
     this.wait_message="Récupération de votre adresse mail via "+socialPlatform;
     this.socialAuthService.signIn(servicePlatform).then((socialUser) => {
-      this.wait_message="";
-      this.message="";
-      $$("Resultat de l'authentification ",socialUser);
+        this.wait_message="";
+        this.message="";
+        $$("Resultat de l'authentification ",socialUser);
         this.initUser({
           "email":socialUser.email,
           "first_name":socialUser.firstName,
@@ -265,9 +269,16 @@ export class LoginComponent implements OnInit {
         },false);
       },
       (err)=>{
-      this.wait_message="";
-      showError(this,err);
-    }
+        this.n_try=this.n_try+1;
+        $$("Echec de connexion "+this.n_try+"eme essai");
+        if(this.n_try<2) {
+          setTimeout(() => {this.socialSignIn(socialPlatform);}, 500);
+        } else {
+          this.wait_message="";
+          showError(this,err);
+
+        }
+      }
     );
   }
 }

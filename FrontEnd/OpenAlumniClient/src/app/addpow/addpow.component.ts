@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators} from "@angular/forms";
 import {$$, showError, showMessage} from "../tools";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfigService} from "../config.service";
@@ -35,6 +34,7 @@ export class AddpowComponent implements OnInit {
   ngOnInit(): void {
     this.initPow();
   }
+
 
   initPow(){
     this.pow={title:"",links:[],description:"",visual:""};
@@ -85,7 +85,7 @@ export class AddpowComponent implements OnInit {
 
   changeTitle(evt: any) {
     if(evt.length>2){
-      this.api._get("powsdoc","search="+evt).subscribe((r:any)=>{
+      this.api._get("pows","search="+evt).subscribe((r:any)=>{
         this.pows=r.results;
       })
     } else {
@@ -136,7 +136,7 @@ export class AddpowComponent implements OnInit {
   }
 
 
-   import(fileInputEvent: any) {
+   _import(fileInputEvent: any) {
       var reader = new FileReader();
       let filename=fileInputEvent.target.files[0].name;
       let format=filename.split(".")[1];
@@ -152,5 +152,12 @@ export class AddpowComponent implements OnInit {
         })
       };
       reader.readAsDataURL(fileInputEvent.target.files[0]);
+  }
+
+  analyse() {
+    this.message="Analyse global en cours";
+    this.api._get("batch").subscribe(()=>{
+      this.message="";
+    })
   }
 }

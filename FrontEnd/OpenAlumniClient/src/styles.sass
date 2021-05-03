@@ -1,10 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
+$darkgray: #303030
+$darkdarkgray: #1c1a1a
+$grayinput: #303030
+$button-color: #3a293c
+$primary-color: #ff059b
+
 
 .app-button
   margin: 4px !important
   min-width: 100px !important
-  background-color: rgb(100, 100, 100)
+  background-color: $button-color
 
 h2
   color: white
@@ -27,7 +33,14 @@ h2
   margin: 3px
   display: inline-block
   cursor: pointer
-  background-color: rgb(100, 100, 100)
+  background-color: $button-color
+
+.small-icon-button
+  margin: 0px !important
+  padding: 0px
+  display: inline-block
+  cursor: pointer
+
 
 .large-card
   min-width: 500px
@@ -41,14 +54,60 @@ h2
   flex-wrap: wrap
   justify-content: center
 
-html
-  background-color: #545454
 
-p, div
+html, body, app-root
+  margin: 0 !important
+  padding: 0 !important
   color: white
+  background-color: $darkdarkgray !important
+  font-family: Roboto, "Helvetica Neue", sans-serif
+  overflow: hidden
 
-body
-  margin: 5px
+::-webkit-scrollbar
+    width: 0px
+    background: transparent
+
+::-webkit-scrollbar-thumb
+    background: transparent
+
+
+.toolbar-app
+  height: 40px
+  background-color: black
+
+
+.sidemenu
+  background-color: $darkgray
+  margin: 0px !important
+  padding: 0px !important
+  z-index: 1
+  display: inline-block
+  overflow: hidden
+
+
+.sidenav-content
+  width: 100%
+  justify-content: center
+  text-align: center
+  padding: 0
+  margin: 0
+  background-color: $darkdarkgray
+
+.container
+  width: 100vw
+  height: 100vh
+  background: transparent
+  position: fixed
+  padding: 0
+  margin: 0
+
+.sidenav
+  background-color: $darkgray
+  padding: 5px
+  display: inline-block
+  z-index: 0
+
+
 
 
 .app-field
@@ -84,6 +143,10 @@ h3
   width: 96%
   margin: 2%
 
+mat-panel-title
+  color: lightgray !important
+  font-weight: bold
+
 .app-mat-panel-description
   font-weight: lighter
   color: darkgray
@@ -106,6 +169,7 @@ h3
 
 
 
+
 .app-mat-panel-title
   text-align: left
   font-weight: bold
@@ -114,8 +178,11 @@ h3
   max-width: 500px
   width: 90%
   margin: 7px !important
+  font-size: small
   display: inline-block
 
 a
   color: lightblue
   text-decoration: none
+
+

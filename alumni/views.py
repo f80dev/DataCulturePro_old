@@ -1,24 +1,33 @@
 import base64
 import csv
+import urllib
 from datetime import datetime, timedelta
-from io import StringIO
-from random import random
-from threading import Thread
-from time import sleep
+from io import StringIO, BytesIO
 from urllib.request import urlopen
 
+import urllib3
 import yaml
-from django.core.mail import send_mail
-from django.http import JsonResponse
-from django_elasticsearch_dsl_drf.constants import LOOKUP_FILTER_RANGE, LOOKUP_QUERY_IN, LOOKUP_QUERY_GT, \
-    LOOKUP_QUERY_GTE, LOOKUP_QUERY_LT, LOOKUP_QUERY_LTE, SUGGESTER_COMPLETION
+import pandas as pd
+from django.contrib.admin.utils import quote
+from django.db import connection
+from django.http import JsonResponse, HttpResponse
+from django.utils.http import urlquote
+from django_elasticsearch_dsl import Index
+from django_elasticsearch_dsl_drf import serializers
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, \
+    SUGGESTER_COMPLETION, LOOKUP_FILTER_TERMS, \
+    LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE, LOOKUP_FILTER_TERM
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, DefaultOrderingFilterBackend, SearchFilterBackend
-from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
+from django_elasticsearch_dsl_drf.pagination import PageNumberPagination, LimitOffsetPagination
 from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
-from rest_framework.decorators import api_view, action, permission_classes
+from django_filters.rest_framework import DjangoFilterBackend
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
+from rest_framework.decorators import api_view,  permission_classes, renderer_classes
+from rest_framework.fields import JSONField
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -32,14 +41,16 @@ from django.shortcuts import redirect
 from rest_framework import viewsets, generics
 
 from OpenAlumni import settings
+from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
-    sendmail, extract_actor_from_wikipedia, extract_actor_from_unifrance, extract_film_from_unifrance
-from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_HOST_USER
+    sendmail, to_xml, translate, levenshtein
+from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR
+from OpenAlumni.social import create_graph
 from alumni.documents import ProfilDocument, PowDocument
-from alumni.models import Profil, ExtraUser, PieceOfWork, Work
+from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
     WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
-    PowDocumentSerializer
+    PowDocumentSerializer, WorksCSVRenderer, ArticleSerializer, ExtraProfilSerializer, ProfilsCSVRenderer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,6 +72,9 @@ class ExtraUserViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (SearchFilter,)
     search_fields = ["user__email","id","user__username"]
+
+    def partial_update(self, request, pk=None):
+        pass
 
 
 
@@ -88,32 +102,52 @@ class ProfilViewSet(viewsets.ModelViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ["email"]
 
+class ExtraProfilViewSet(viewsets.ModelViewSet):
+    queryset = Profil.objects.all()
+    serializer_class = ExtraProfilSerializer
+    permission_classes = [AllowAny]
+    filter_backends = (SearchFilter,)
+
+
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [AllowAny]
+    filter_backends = (SearchFilter,)
+    search_fields = ["autor"]
+
+
+
+
 
 #http://localhost:8000/api/pow
 class POWViewSet(viewsets.ModelViewSet):
     queryset = PieceOfWork.objects.all()
     serializer_class = POWSerializer
     permission_classes = [AllowAny]
-    filter_backends = (SearchFilter,)
-    search_fields = ["title"]
+    filter_backends = (SearchFilter,DjangoFilterBackend,)
+    search_fields=["title","category","nature","year"]
+    filter_fields = ("id", "title","owner", "category", "year","nature",)
 
 
-#http://localhost:8000/api/works
+#http://localhost:8000/api/extraworks/
 class ExtraWorkViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = ExtraWorkSerializer
     permission_classes = [AllowAny]
-    filter_backends = (SearchFilter,)
-    search_fields = ["profil__id"]
+    filter_fields = ('job',"pow__id","profil__id","profil__email")
 
 
 class WorkViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = WorkSerializer
     permission_classes = [AllowAny]
+    search_fields=["id"]
+    filter_fields=("profil","pow","job")
 
 
-
+#http://localhost:8000/api/extrapows
 class ExtraPOWViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = ExtraPOWSerializer
@@ -131,6 +165,25 @@ def getyaml(request):
         f=urlopen(url)
     result=yaml.safe_load(f.read())
     return JsonResponse(result,safe=False)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def search_profil(request):
+    email=request.GET.get("email","")
+    if len(email)>0:
+        profils=Profil.objects.filter(email__exact=email)
+        if len(profils)>0:
+            user=ExtraUser.objects.get(user__email=email)
+            if not user is None:
+                user.profil=profils.first()
+                user.save()
+                return Response({"message":"User update"})
+
+    Response({"message": "No update"})
+
+
+
 
 
 
@@ -154,63 +207,105 @@ def test(request):
     return JsonResponse(infos)
 
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def askfriend(request):
+    u=ExtraUser.objects.filter(id=request.GET.get("to"))
+    asks=u.ask
+    asks.append(request.GET.get("from"))
+    u.update(ask=asks)
+    return JsonResponse(u)
+
+
+#http://localhost:8000/api/jobsites/12/
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def refresh_jobsites(request):
+    with open(settings.STATIC_ROOT+"/jobsites.yaml", 'r', encoding='utf8') as f:
+        text:str=f.read()
+
+    profil=Profil.objects.get(id=request.GET.get("profil"))
+    job=request.GET.get("job","")
+    if len(job)==0:job=profil.job
+
+    text = text.replace("%job%", urlquote(job))
+    text = text.replace("%lastname%", urlquote(profil.lastname))
+    text = text.replace("%firstname%", urlquote(profil.firstname))
+
+    sites=yaml.load(text)
+    return JsonResponse({"sites":sites,"job":profil.job})
+
+
+
+
+#http://localhost:8000/api/update_dictionnary/
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def update_dictionnary(request):
+    for w in Work.objects.all():
+        job=translate(w.job)
+        if job!=w.job:
+            log("Traitement de "+str(w.job))
+            w.job=job
+            w.save()
+
+    for p in PieceOfWork.objects.all():
+        category=translate(p.category)
+        if category!=p.category:
+            p.category=category
+            p.save()
+
+    return Response({"message":"ok"})
+
+
+#http://localhost:8000/api/search?q=hoareau
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def search(request):
+    q=request.GET.get("q","")
+    s=Search().using(Elasticsearch()).query("match",title=q)
+    return s.execute()
+
+
+
+#http://localhost:8000/api/reindex/
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def rebuild_index(request):
+    p=ProfilDocument()
+    p.init(index="profils")
+    return JsonResponse({"message":"Re-indexage terminé"})
+
+
+
 
 
 #http://localhost:8000/api/batch
+#https://server.f80.fr:8000/api/batch
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def batch(request):
-    for profil in Profil.objects.all():
-        transact = Profil.objects.filter(id=profil.id)
-        if profil.delay_update(0,True)>1000:
-            log("Traitement de "+profil.lastname)
-
-            # Recherche des films
-            infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
-            for l in infos["links"]:
-                sleep(random()*5)
-                film = extract_film_from_unifrance(l["url"])
-                pow = PieceOfWork.objects.filter(title=film["title"])
-                if not pow.exists():
-                    log("Ajout de " + film["title"])
-                    pow = PieceOfWork(title=film["title"])
-                    if "synopsis" in film: pow.description = film["synopsis"]
-                    if "visual" in film:pow.visual=film["visual"]
-                    if "category" in film:pow.category=film["category"]
-                    if "year" in film:pow.year=film["year"]
-
-                    pow.save()
-                    work = Work(pow=pow, profil=profil,job=profil.department)
-                    work.save()
+    filter= request.GET.get("filter", "*")
+    profils=Profil.objects.all()
+    if filter!="*":
+        profils=Profil.objects.filter(id=filter)
+        profils.update(auto_updates="0,0,0,0,0,0")
+    exec_batch(profils)
+    return Response({"message":"ok"})
 
 
-            try:
-                infos=extract_actor_from_wikipedia(profil.firstname+" "+profil.lastname)
-                sleep(random()*5)
-                if not infos is None:
-
-                    if "photo" in infos:transact.update(photo=infos["photo"])
-                    if "summary" in infos and len(profil.biography)==0:transact.update(biography=infos["summary"])
-                    if "links" in infos:
-                        if profil.links is None:
-                            profil.links = infos["links"]
-                        else:
-                            for l in infos["links"]:
-                                profil.links.append(l)
-                        transact.update(links=profil.links)
-
-            except:
-                pass
-
-        transact.update(auto_updates=profil.auto_updates)
-
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_students(request):
+    sponsor_id = request.GET.get("sponsor", "")
+    profils=Profil.objects.filter(sponsorBy__id=sponsor_id)
+    return JsonResponse(list(profils.values()),safe=False)
 
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def initdb(request):
-    profils=yaml.load(DOMAIN_APPLI+"/assets/profils.yaml")
-
+    return Response({"message": "Base initialisée"})
 
 
 
@@ -218,6 +313,85 @@ def initdb(request):
 @permission_classes([IsAuthenticatedOrReadOnly])
 def helloworld(request):
     return Response({"message": "Hello world"})
+
+
+#test: http://localhost:8000/api/set_perms/?user=6&perm=statistique&response=accept
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def set_perms(request):
+    profil_id = request.GET.get("perm")
+    response = request.GET.get("response")
+    ext_users = ExtraUser.objects.filter(user__id=int(request.GET.get("user")))
+    if len(ext_users.values())>0:
+        ext_user=ext_users.first()
+        if response=="accept":
+            perms = yaml.safe_load(open(settings.STATIC_ROOT + "/profils.yaml", "r", encoding="utf-8").read())
+            for p in perms["profils"]:
+                if p["id"]==profil_id:
+                    ext_user.perms=p["perm"]
+                    ext_user.save()
+                    sendmail("Acces à '" + profil_id + "'", ext_user.user.email,"accept_perm",
+                             dict(
+                                 {
+                                     "ask_user": ext_user.user.email,
+                                     "ask_perm": profil_id,
+                                 }
+                             ))
+                    break
+
+            return Response({"message": "perm Accepted"})
+        else:
+            sendmail("Refus d'acces à '"+ profil_id + "'",ext_user.user.email,"refuse_perm",
+                     dict(
+                         {
+                             "ask_user": ext_user.user.email,
+                            "ask_perm": profil_id,
+                        }
+                     ))
+            return Response({"message": "perm rejected"})
+
+
+
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def ask_perms(request):
+    perm_id=request.GET.get("perm")
+    ext_user = ExtraUser.objects.filter(id=request.GET.get("user")).first()
+
+    detail_perm=""
+    profils = yaml.safe_load(open(settings.STATIC_ROOT + "/profils.yaml", "r", encoding="utf-8").read())
+    for p in profils["profils"]:
+        if p["id"]==perm_id:
+            detail_perm=p["perm"]
+
+    sendmail("Demande d'acces '"+perm_id+"' pour "+ext_user.user.email,EMAIL_PERM_VALIDATOR,"ask_perm",dict(
+                             {
+                                "ask_user":ext_user.user.email,
+                                "ask_perm":perm_id,
+                                 "detail_perm":detail_perm,
+                                "url_ok":settings.DOMAIN_SERVER+"/api/set_perms/?user="+str(ext_user.user.id)+"&perm="+perm_id+"&response=accept",
+                                "url_cancel": settings.DOMAIN_SERVER + "/api/set_perms/?user=" + str(ext_user.user.id) + "&perm=" + perm_id + "&response=refuse"
+                              })
+             )
+
+    return Response({"message": "Hello world"})
+
+
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def rebuild_index_old(request):
+    index_name=request.GET.get("name","profils")
+    es = Index(index_name,using="default")
+    if es.exists():es.delete()
+    es.create("default")
+    es.save("default")
+    return Response({"message": "Reconstruction de l'index "+index_name+" terminée"})
 
 
 
@@ -267,7 +441,17 @@ def raz(request):
         PieceOfWork.objects.all().delete()
 
     log("Effacement de la base terminée")
-    return Response("Compte effacé",status=200)
+    return Response({"message":"Compte effacé"})
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def show_movies(request):
+    year=request.GET.get("year",10)
+    department=request.GET.get("department","image")
+    films=list(PieceOfWork.objects.filter(works__profil__degree_year=year,works__profil__department=department))
+    return JsonResponse({"movies":films},status=200)
 
 
 
@@ -287,7 +471,7 @@ def ask_for_update(request):
 
         if profil.obsolescenceScore>obso_max and days_notif>delay_notif:
             Profil.objects.filter(id=profil.id).update(dtLastNotif=datetime.now(),obsolescenceScore=profil.obsolescenceScore)
-            sendmail("Mettre a jour votre profil",profil.email,"update",{
+            sendmail("Mettre a jour votre profil",[profil.email],"update",{
                 "name":profil.firstname,
                 "appname":APPNAME,
                 "url":DOMAIN_APPLI+"/edit?id="+str(profil.id)+"&email="+profil.email,
@@ -304,20 +488,123 @@ def ask_for_update(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def send_to(request):
-    text=str(request.body,"utf8")
+    body=request.data
+    text=body["text"].replace("&#8217;","")
+
+    social_link=""
+    if "social" in body and "value" in body["social"] and len(body["social"]["value"])>0:
+        social_link="<br>Vous pouvez répondre directement via <a href='"+body["social"]["value"]+"'>"+body["social"]["label"]+"</a>"
+
     log("Envoie du mail " + text)
 
-    _from=ExtraUser.objects.get(id=request.query_params["from"])
-    _profil=Profil.objects.get(id=request.query_params['profil'])
+    _from=User.objects.get(id=body["_from"])
+    _profil=Profil.objects.get(id=body['_to'])
 
     #TODO vérifier la black liste
 
-    sendmail("["+APPNAME+"] Message de "+_from.profil.fullname,
-              from_email=settings.EMAIL_HOST_USER,
-              message=text,
-              recipient_list=[_profil.email])
+    cc=""
+    if "send_copy" in body and body["send_copy"]: cc = _from["email"]
+    fullname=_from.first_name+" "+_from.last_name
+    sendmail(
+        subject="["+APPNAME+"] Message de "+fullname,
+        template="contact.html",
+        field={"text":text,"social_link":social_link,"fullname":fullname},
+        _to=[_profil.email,cc]
+    )
+
     return Response("Message envoyé", status=200)
 
+
+
+@api_view(["GET"])
+@renderer_classes((WorksCSVRenderer,))
+@permission_classes([AllowAny])
+def social_graph(request):
+    """
+    Retourne la matrice des relations
+    :param request:
+    :return:
+    """
+    format=request.GET.get("format","graphml")
+    with open(create_graph(format), 'rb') as f:
+        file_data = f.read()
+
+    response = HttpResponse(content=file_data,content_type='plain/text')
+    response["Content-Disposition"] = 'attachment; filename="femis.'+format+'"'
+    return response
+
+    pass
+
+
+#http://localhost:8000/api/export_profils/
+@api_view(["GET"])
+@renderer_classes((ProfilsCSVRenderer,))
+@permission_classes([AllowAny])
+def export_profils(request):
+    cursus:str=request.GET.get("cursus","S")
+    profils=Profil.objects.filter(cursus__exact=cursus)
+    df: pd.DataFrame = pd.DataFrame.from_records(list(profils.values(
+        "id", "photo","gender", "lastname", "firstname", "department", "cursus",
+        "degree_year", "address","cp", "town","birthdate","country","email","mobile","nationality","job"
+    )))
+    df.columns = ProfilsCSVRenderer.header
+
+    #Formatage du fichier d'export pour OASIS
+    df=df.replace("/assets/img/boy.png","")
+    df=df.replace("/assets/img/girl.png","")
+    df = df.replace("/assets/img/anonymous.png", "")
+    df["mobile"]=df["mobile"].replace(" ","")
+    df["email"] = df["email"].replace(" ", "")
+    df["nationality"]=df["nationality"].replace("","France")
+    df["source"]="DCP"
+
+    response = HttpResponse(content_type='text/csv; charset=ansi')
+    response["Content-Disposition"]='attachment; filename="profils.csv"'
+    df.to_csv(response,sep=";",encoding="ansi")
+    return response
+
+
+
+
+
+from dict2xml import dict2xml as xmlify
+#http://localhost:8000/api/export_all/csv/
+#http://localhost:8000/api/export_all/xls/
+#http://localhost:8000/api/export_all/xml/
+@api_view(["GET"])
+@renderer_classes((WorksCSVRenderer,))
+@permission_classes([AllowAny])
+def export_all(request):
+    headers=WorksCSVRenderer.header
+    works=Work.objects.all()
+    df:pd.DataFrame = pd.DataFrame.from_records(list(works.values(
+        "profil__id","profil__gender","profil__lastname","profil__firstname","profil__department","profil__cursus","profil__degree_year","profil__cp","profil__town",
+        "pow__id","pow__title","pow__nature","pow__category","pow__year",
+        "id","job","comment","validate","source","state"
+    )))
+    df.columns=headers
+
+    if "xml" in request.get_full_path():
+        d="<root>"+to_xml(df,"record")+"</root>"
+        #d="<root>"+xmlify(df.to_,wrap="list-items",indent="  ")+"</root>"
+        return HttpResponse(d,content_type="text/xml")
+
+    if "csv" in request.get_full_path():
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response["Content-Disposition"]='attachment; filename="works.csv"'
+        df.to_csv(response,sep=";",encoding="utf-8")
+        return response
+
+    if "json" in request.get_full_path():
+        return HttpResponse(content=df.to_json(orient="index"),content_type='application/json')
+
+    if "xls" in request.get_full_path():
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        df.to_excel(writer,sheet_name="FEMIS")
+        response = HttpResponse(content=writer,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response["Content-Disposition"] = 'attachment; filename="femis.xlsx"'
+        return response
 
 
 #http://localhost:8000/api/movie_importer/
@@ -325,49 +612,96 @@ def send_to(request):
 @permission_classes([AllowAny])
 def movie_importer(request):
     log("Importation de films")
-    header=str(request.body)[20:35]
-    if "excel" in header:
-        txt = str(base64.b64decode(str(request.body).split("base64,")[1]),encoding="utf-8")
-        d = csv.reader(StringIO(txt), delimiter=";")
-    else:
-        d=extract_text_from_pdf(base64.b64decode(str(request.body).split("base64,")[1]))
-        return
+    content = str(request.body).split("base64,")[1]
+    b64_content = base64.b64decode(content)
 
+    try:
+        txt = str(b64_content,encoding="utf-8")
+    except:
+        txt = str(b64_content,encoding="ansi")
+
+    d = csv.reader(StringIO(txt), delimiter=";")
     i = 0
     record = 0
-    for row in list(d):
-        if i>0:
 
-            #dtEnd=str(datetime.fromtimestamp(dateToTimestamp(row[3]))),
+    if txt.startswith("visa"):
+        log("Fichier extrait du CNC")
+        for row in list(d):
+            if i>0:
+                title:str=row[1].replace("(le)","").replace("(la)","").replace("(les)","")
+                pows=list(PieceOfWork.objects.filter(title__icontains=title))
+                for pow in pows:
+                    if levenshtein(title.lower(),pow.title.lower())<3:
+                        pow.reference=row[0]
+                        pow.production=row[3]
+                        pow.budget=int(row[4])
+                        pow.save()
+                        log("Mise a jour de "+title)
+                    else:
+                        log("Les titre "+title+" / "+pow.title+" sont trop éloignés")
+            i=i+1
+    else:
+        log("Fichier extrait de la base des films")
 
-            if row[6]=="":row[6]="0"
-            if row[11]=="":row[11]="1800"
+        for row in list(d):
+            pow=None
+            if len(row)>10:
+                if i>0:
+                    if row[6]=="":row[6]="0"
+                    if row[11]=="":row[11]="1800"
 
-            pow:PieceOfWork=PieceOfWork(
-                title=row[0].replace(u'\xa0', u' '),
-                description=row[1],
-                visual=row[4],
-                nature=row[5],
-                dtStart=row[2],
-                budget=int(row[6]),
-                category=row[7],
-                links=[{"url":row[9],"text":row[8]}],
-                lang="US",
-                year=int(row[11]),
-                owner=row[10]
-            )
+                    pow:PieceOfWork=PieceOfWork(
+                        title=row[0].replace(u'\xa0', u' '),
+                        description=row[1],
+                        visual=row[4],
+                        nature=row[5],
+                        dtStart=row[2],
+                        budget=int(row[6]),
+                        category=row[7],
+                        links=[{"url":row[9],"text":row[8]}],
+                        lang="US",
+                        year=int(row[11]),
+                        owner=row[10]
+                    )
 
-            try:
-                pow.category=pow.category.replace("|"," ")
-                rc = pow.save()
-                log("Ajout de "+pow.title)
-                record = record + 1
-            except Exception as inst:
-                log("Probléme d'enregistrement" + str(inst))
-        i=i+1
+                    if not pow is None:
+                        try:
+                            pow.category = pow.category.replace("|", " ")
+                            rc = pow.save()
+                            log("Ajout de " + pow.title)
+                            record = record + 1
+                        except Exception as inst:
+                            log("Probléme d'enregistrement" + str(inst))
+
+            else:
+                pows=PieceOfWork.objects.filter(title__iexact=row[0])
+                if len(pows)==0:
+                    pow: PieceOfWork = PieceOfWork(
+                        title=row[0],
+                        description=translate(row[4]),
+                        nature=translate(row[2]),
+                        category=row[3],
+                        lang="FR"
+                    )
+                    if len(row[1])>0:pow.year=int(str(row[1]).split(",")[0])
+                    pow.add_link("","FEMIS","Film ajouter depuis le référencement FEMIS")
+                    pow.save()
+                    log("Ajout de "+pow.title)
+                else:
+                    pow=pows.first()
+
+                name=row[6].replace("\n","")
+                if " " in name:
+                    profils = Profil.objects.filter(lastname__icontains=name.split(" ")[1],firstname__icontains=name.split(" ")[0])
+                    if len(profils)>0:
+                        work=Work(pow_id=pow.id,job=translate(row[5]),profil_id=profils.first().id)
+                        work.save()
+            i=i+1
+
     log("Importation terminé de "+str(record)+" films")
 
     return Response(str(record) + " films importés", 200)
+
 
 
 
@@ -375,47 +709,96 @@ def movie_importer(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def importer(request,format=None):
+
+    header=list()
+    def idx(col:str,row=None,default=None):
+        for c in col.lower().split(","):
+            if c in header:
+                if row is not None:
+                    return row[header.index(c)]
+                else:
+                    return header.index(c)
+        return default
+
+
+
     log("Importation de profil")
-    txt=str(base64.b64decode(str(request.body).split("base64,")[1]),"utf-8")
-    d =csv.reader(StringIO(txt), delimiter=";")
+    data=base64.b64decode(str(request.body).split("base64,")[1])
+
+    for _encoding in ["utf-8","ansi"]:
+        try:
+            txt=str(data, encoding=_encoding)
+            break
+        except:
+            pass
+
+    txt=txt.replace("&#8217;","")
+
+    d=csv.reader(StringIO(txt), delimiter=";")
     i=0
     record=0
     for row in d:
-        if i>0:
-            if row[5]=="1":
-                if len(row[34])==0:
-                    if row[0]=="Monsieur":
+        if i==0:
+            header=[x.lower() for x in row]
+        else:
+            firstname=row[idx("firstname,prenom")]
+            lastname=row[idx("lastname,nom")]
+            email=row[idx("email,mail")]
+            idx_photo=idx("photo,picture,image")
+            #Eligibilité
+            if len(lastname)>2 and len(lastname)+len(firstname)>5 and len(email)>4 and "@" in email:
+                if idx_photo is None or len(row[idx_photo])==0:
+                    photo=None
+                    gender=row[idx("genre,civilite")]
+                    if gender=="":
+                        photo="/assets/img/anonymous.png"
+                        row[idx("genre,civilite")] = ""
+
+                    if gender=="Monsieur" or gender=="M." or gender.startswith("Mr"):
                         photo="/assets/img/boy.png"
-                    else:
+                        row[idx("genre,civilite")] = "M"
+
+                    if photo is None:
+                        row[idx("genre,civilite")]="F"
                         photo = "/assets/img/girl.png"
                 else:
-                    photo=stringToUrl(row[34])
+                    photo=stringToUrl(row[idx("photo")])
 
                 #Calcul
-                ts=dateToTimestamp(row[3])
+                ts=dateToTimestamp(row[idx("birthday,anniversaire,datenaissance")])
                 dt = None
                 if not ts is None:dt=datetime.fromtimestamp(ts)
 
                 profil=Profil(
-                    firstname=row[1],
-                    lastname=row[2],
-                    nationality=row[4],
+                    firstname=firstname,
+                    lastname=lastname,
+                    gender=row[idx("genre,civilite")],
+                    mobile=row[idx("mobile,telephone,tel")][:20],
+                    nationality=idx("nationality",row,"Francaise"),
+                    country=idx("country,pays",row,"France"),
                     birthdate=dt,
-                    department=row[8],
-                    degree_year=int(row[7]),
-                    cp=row[11],
-                    website=stringToUrl(row[18]),
-                    email=row[14],
+                    department=idx("departement,department,formation",row,"")[:60],
+                    job=idx("job,metier,competences",row,"")[:60],
+                    degree_year=row[idx("promo,promotion,anneesortie")],
+                    address=row[idx("address,adresse")][:200],
+                    town=idx("town,ville",row,"")[:50],
+                    cp=idx("cp,codepostal,code_postal,postal_code,postalcode",row,"")[:5],
+                    website=stringToUrl(idx("website,siteweb,site,url",row)),
+                    email=email,
                     photo=photo,
-                    linkedin=row[33]
+                    linkedin=idx("linkedin",row),
+                    cursus=idx("cursus",row,"S"),
                 )
                 try:
                     rc=profil.save()
                     record=record+1
                 except Exception as inst:
-                    log("Probléme d'enregistrement"+str(inst))
+                    log("Probléme d'enregistrement de "+email+" :"+str(inst))
         i=i+1
-    return Response(str(record)+" profils importés",200)
+
+    cr=str(record)+" profils importés"
+    log(cr)
+    return Response(cr,200)
 
 
 
@@ -455,7 +838,7 @@ def oauth(request):
 class ProfilDocumentView(DocumentViewSet):
     document=ProfilDocument
     serializer_class = ProfilDocumentSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     lookup_field = "id"
     filter_backends = [
         FilteringFilterBackend,
@@ -464,38 +847,40 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('works__title','works__job','lastname','job','firstname','department','promo')
+    search_fields = ('works__title','works__job','lastname','firstname','department','promo')
     filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE,],
-        },
         'name': 'name',
+        'lastname':'lastname',
+        'firstname': 'firstname',
+        'cursus':'cursus',
         'title':'works__title',
         'promo':'promo',
-        'job':'department'
+        'town':'town',
+        'formation':'department'
     }
-
     ordering_fields = {
-        'lastname': 'lastname'
+        'id':'id',
+        'promo':'degree_year',
+        'update':'dtLastUpdate'
     }
-
     suggester_fields = {
         'name_suggest': {
             'field': 'lastname',
             'suggesters': [SUGGESTER_COMPLETION,],
         },
     }
-    ordering = ("name")
 
 
 
+
+#http://localhost:8000/api/powsdoc
 @permission_classes([AllowAny])
 class PowDocumentView(DocumentViewSet):
     document=PowDocument
     serializer_class = PowDocumentSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     lookup_field = "id"
+
     filter_backends = [
         FilteringFilterBackend,
         IdsFilterBackend,
@@ -503,14 +888,21 @@ class PowDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('title','description','category',"nature","year")
+
+    search_fields = ('title','category',"nature","year","works")
     filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [LOOKUP_FILTER_RANGE,LOOKUP_QUERY_IN,LOOKUP_QUERY_GT,LOOKUP_QUERY_GTE,LOOKUP_QUERY_LT,LOOKUP_QUERY_LTE],
+        'title':{
+            'field':'title',
+            'lookups':[LOOKUP_FILTER_TERM,LOOKUP_FILTER_TERMS,LOOKUP_FILTER_PREFIX,LOOKUP_FILTER_WILDCARD,LOOKUP_QUERY_IN,LOOKUP_QUERY_EXCLUDE,]
+        },
+        'category': {
+            'field': 'category',
+            'lookups': [LOOKUP_FILTER_TERM, LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD,
+                        LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE, ]
         }
     }
     ordering_fields = {
+        'year':'year',
         'title': 'title'
     }
 

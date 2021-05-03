@@ -10,21 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from OpenAlumni.passwords import DB_PASSWORD
+
 import os
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import datetime
 
-from OpenAlumni.passwords import DB_PASSWORD
+from django.contrib import admindocs
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EMAIL_TESTER = ["hhoareau@gmail.com",
-                "paul.dudule@gmail.com",
-                "roger.legumes@gmail.com",
-                "j.lecanu@femis.fr",
-                "rv@f80.fr",
-                "herve.hoareau@f80.fr",
-                "sophie.dudule@gmail.com"]
+EMAIL_TESTER = []
+
+EMAIL_PERM_VALIDATOR="hhoareau@gmail.com"
+LOCAL_FEDORA_SERVER='172.30.11.56'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -33,7 +35,7 @@ EMAIL_TESTER = ["hhoareau@gmail.com",
 SECRET_KEY = ')0p@7b_kew8_w+jjuv=(zbn!sp!bm2*=7$s7#%@bvkwy0i--0p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = [
     "*",
     "*.github.com",
@@ -43,7 +45,7 @@ ALLOWED_HOSTS = [
     "dcp.f80.fr"
 ]
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 STATIC_URL  = "/static/"
 STATIC_ROOT=os.path.join(BASE_DIR, "static")
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'oauth2_provider',
+    'django.contrib.admindocs',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -63,6 +66,7 @@ INSTALLED_APPS = [
     'sslserver',
     'alumni.apps.AlumniConfig',
     'django_elasticsearch_dsl',
+    'django_filters',
     'django_elasticsearch_dsl_drf',
     'django.contrib.staticfiles',
     'graphene_django'
@@ -78,9 +82,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware'
 ]
 
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': './static/'}
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ['http://localhost:4200']
@@ -136,12 +141,7 @@ WSGI_APPLICATION = 'OpenAlumni.wsgi.application'
 #     'NAME': os.path.join(BASE_DIR, 'alumni_db'),
 # },
 
-
-
 DATABASES = {
-
-
-
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "alumni_db",
@@ -154,25 +154,32 @@ DATABASES = {
         }
     },
 
-    "prod": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": "alumni_db",
-            "USER": "hhoareau",
-            "PASSWORD": DB_PASSWORD,
-            'HOST': 'localhost',
-            'PORT': '5432',
-            'OPTIONS': {
-                'options': '-c statement_timeout=5000'
-            }
+    "dev": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "test_alumni_db",
+        "USER": "hhoareau",
+        "PASSWORD": DB_PASSWORD,
+        'HOST': '161.97.75.165',
+        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c statement_timeout=5000'
         }
+    },
+}
 
-
-
+#Installation d'
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': '161.97.75.165:9200'
+    },
+    'dev': {
+        'hosts': '161.97.75.165:9210'
+    },
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 200,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 50,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'ORDERING_PARAM':'ordering',
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -184,16 +191,12 @@ REST_FRAMEWORK = {
 }
 
 
+
 GRAPHENE = {
     'SCHEMA': 'alumni.profil.schema'
 }
 
-#Installation d'
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': '161.97.75.165:9200'
-    },
-}
+
 
 #https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/quick_start.html#installation
 #chemin du répertoire document
@@ -235,6 +238,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER ="reply@f80.fr"
 EMAIL_HOST_PASSWORD ="Hh42714280"
 
+
+
 APPNAME="Data Culture Pro"
 
 #DOMAIN_APPLI="http://localhost:4200"
@@ -252,4 +257,31 @@ LINKEDIN_RETURN_URL="http://localhost:8000/api/oauth_callback"
 #SECURE_SSL_REDIRECT = True
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+MOVIE_CATEGORIES=[
+    "Documentary",
+    "Action",
+    "Adventure",
+    "Sci-Fi",
+    "Mystery",
+    "Horror",
+    "Thriller",
+    "Animation",
+    "Comedy",
+    "Family",
+    "Fantasy",
+    "Drama",
+    "Music",
+    "Biography",
+    "Romance",
+    "History",
+    "Crime",
+    "Western",
+    "War",
+    "Musical",
+    "Sport"
+]
 
+MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]
+MYDICT=None
+
+DELAY_TO_AUTOSEARCH=0*0.2   #10 jours

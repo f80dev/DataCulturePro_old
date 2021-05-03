@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from "../api.service";
-import {showError, showMessage} from "../tools";
+import {api, showError, showMessage} from "../tools";
 import {Router} from "@angular/router";
 import {ConfigService} from "../config.service";
 import {environment} from "../../environments/environment";
@@ -62,5 +62,17 @@ export class AdminComponent implements OnInit {
     this.api._get("batch/").subscribe(()=>{
       showMessage(this,"traitement terminé")
     })
+  }
+
+  update_index() {
+    this.api._get("rebuild_index","name=profils").subscribe((r:any)=>{
+      showMessage(this,r.message);
+    });
+  }
+
+  export_profils(cursus:string="S") {
+    let url=api("export_profils/","cursus="+cursus,true,"csv");
+    debugger
+    open(url);
   }
 }

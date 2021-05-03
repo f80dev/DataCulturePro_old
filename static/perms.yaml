@@ -13,8 +13,23 @@ perms:
   - tag: firstname
     description: au prénom
 
+  - tag: edit_profil
+    description: l'édition de l'ensemble des profils
+
   - tag: delete_pow
     description: la suppression des oeuvres
+
+  - tag: ask_friend
+    description: à la demande d'ami
+
+  - tag: ask_tutor
+    description: à la demande de tutorat
+
+  - tag: publish
+    description: rédiger / publiez des annonces, articles, job
+
+  - tag: validate
+    description: gérer les annonces, articles
 
   - tag: delete_profil
     description: la suppression d'un profil
@@ -45,3 +60,6 @@ perms:
 
   - tag: add_movies
     description: à l'ajout de nouvelles productions
+
+  - tag: dev
+    description: a la documentation des API et l'obtention d'une clé developpeur
