@@ -131,4 +131,8 @@ export class ConfigService {
   isLogin() {
     return(this.user && this.user.user && this.user.email && this.user.user.email.length>0);
   }
+
+  isProd() {
+    return environment.production;
+  }
 }

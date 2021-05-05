@@ -113,10 +113,9 @@ export class HtmlEditorComponent implements OnInit {
       html: this.editorContent,
       owner: this.config.user.id,
       validate: false,
-      tags:this.allTags.join(" "),
+      tags:this.tags.join(" "),
       to_publish:false
     }
-    debugger
     if(!id || id=="null"){
       this.api._post("articles/","",body).subscribe((r:any)=>{
         localStorage.setItem("article_id",r.id);

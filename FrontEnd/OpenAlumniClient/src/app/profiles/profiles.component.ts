@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from "../api.service";
 import {ConfigService} from "../config.service";
-import {checkLogin, showMessage} from "../tools";
+import {checkLogin, showError, showMessage} from "../tools";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Location} from "@angular/common";
+import {DialogData, PromptComponent} from "../prompt/prompt.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-profiles',
@@ -18,6 +20,7 @@ export class ProfilesComponent implements OnInit {
 
   constructor(public api:ApiService,
               public toast:MatSnackBar,
+              public dialog:MatDialog,
               public _location:Location,
               public config:ConfigService,
               public router:Router) { }
@@ -54,14 +57,29 @@ export class ProfilesComponent implements OnInit {
 
 
   sel_profil(p) {
-    if(p.subscription=="online"){
-      this.config.user.perm=p.perm;
-      this.config.user.profil_name=p.id;
-      this.api.setuser(this.config.user).subscribe(()=>{
-        showMessage(this,"Profil modifié");
-        this._location.back();
-      })
-    }else{
+    if(p.subscription=="online") {
+      this.dialog.open(PromptComponent, {
+        data: {
+          title: 'Acces',
+          question: "Code d'accès ?",
+          onlyConfirm: false,
+          lbl_ok: 'Valider',
+          lbl_cancel: 'Annuler'
+        }
+      }).afterClosed().subscribe((result_code) => {
+        if (this.config.isProd() || result_code == this.config.config.profil_code) {
+          this.config.user.perm = p.perm;
+          this.config.user.profil_name = p.id;
+          this.api.setuser(this.config.user).subscribe(() => {
+            showMessage(this, "Profil modifié");
+            this._location.back();
+          }, (err) => {
+            showError(this, err);
+          });
+        }
+      });
+    }
+    else{
       this.api.ask_perm(this.config.user,p.id).subscribe(()=>{
         showMessage(this,"Demande de souscription transmise");
         this.router.navigate(["search"]);

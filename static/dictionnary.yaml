@@ -27,36 +27,6 @@ categories:
   Expérimental, documentaire: documentaire
 
 
-<<<<<<< HEAD
-formation:
-  VAE DEC: Directeur d'exploitation (VAE)
-  VAE ARD: ARD (VAE)
-
-
-#Normalisation des métiers
-jobs:
-  Boom operator: Opérateur Son
-  Sound: Son
-  Sound mixer: Mixage Son
-  Sound assistant: Assitant(e) Son
-  Sound editor: Mixage Son
-  Camera_department: Caméra
-  Production_manager: Producteur
-  Music_department: Musique
-  Assistant_director: Assitant(e) réalisateur
-  Script_department: Scénario
-  Soundtrack: Compositeur
-  Sound department: Son
-  Second unit director or Assitant(e) director: Assitant(e) réalisateur
-  Editor: Montage
-  First assistant camera: Premier assistant caméra
-  second assistant camera: Second assistant caméra
-  first assistant camera / gaffer: Premier assistant caméra
-
-  still photographer: Photo
-  Second unit sound recordist: Son
-  Extra sound: Son
-=======
 #Normalisation des métiers
 jobs:
   Camera_department: Caméra
@@ -68,7 +38,6 @@ jobs:
   Sound department: son
   Second unit director or assistant director: Assistant réalisateur
   Editor: Montage
->>>>>>> origin/master
   Monteur: Montage
   Scénaristes: Scénario
   Director: Réalisation
@@ -89,17 +58,6 @@ jobs:
   Casting_department: Casting
   Casting_director: Casting
   Storyboardeur: Storyboard
-<<<<<<< HEAD
-  production assistant: Assitant(e) de production
-  second Assitant(e) director: Assitant(e) réalisateur
-  Composer: Compositeur
-  Auteur de la musique: Compositeur
-  Assistante à la réalisation: Assitant(e) Réalisation
-  Assitant(e) à la réalisation: Assitant(e) Réalisation
-  Auteurs de la musique: Compositeur
-  Attaché de presse (film): Relations presse
-  Assitant(e) réalisateur: Assitant(e) réalisation
-=======
   production assistant: Assistant de production
   second assistant director: Second assistant réalisateur
   Composer: Compositeur
@@ -109,7 +67,6 @@ jobs:
   Auteurs de la musique: Compositeur
   Attaché de presse (film): Relations presse
   Assistant réalisateur: Assistant réalisation
->>>>>>> origin/master
   Directeur de production: Direction de production
   Actress: Acteur(trice)
   Attachée de presse (film): Relations presse
@@ -137,27 +94,16 @@ jobs:
   Responsable de la post-production: Post-production
   Monteur son - ingénieur du son: Ingénieur son
   Producteurs délégués: Production déléguée
-<<<<<<< HEAD
-  Assistants opérateurs: Assitant(e) opérateur
-=======
   Assistants opérateurs: Assistant opérateur
->>>>>>> origin/master
   Producteurs: Production
   Producteurs exécutifs: Production
   Producteur exécutif: Production
   Monteur son et mixeur: Mixeur
   Distributrice france: Distribution
-<<<<<<< HEAD
-  Scénarios: Scénario
-  Production manager: Production
-  Producteur étranger: Production
-  Script and continuity department: Scénario
-=======
   Scriptes: Scripte
   Production manager: Production
   Producteur étranger: Production
   Script and continuity department: Scripte
->>>>>>> origin/master
   Agents (presse france): Relations presse
   Chef monteuse: Montage
   Assistante opérateur: Assistant(e) opérateur
@@ -175,19 +121,6 @@ jobs:
   Actor: Acteur(trice)
   Chef opérateur et réalisateur: Chef(fe) op
   Directrices de la photo: Direction Photo
-<<<<<<< HEAD
-  Monteuse son et assistante mixage: Assitant(e) son
-  Chef opératrice: Chef(fe) op
-  Cadre: cadrage
-  Self: lui-même
-  Assistants son: Assitant(e) son
-  Second sound assistant: Assitant(e) son
-  Assitant(e) monteur: Assitant(e) montage
-  Directrices de production: Direction de production
-  Coproducteur: CoProduction
-  Camera and electrical department: Materiel
-  Premier Assitant(e) opv / directeur photo: Photo
-=======
   Monteuse son et assistante mixage: Montage
   Chef opératrice: Chef(fe) op
   Cadre: cadrage
@@ -199,7 +132,6 @@ jobs:
   Coproducteur: CoProduction
   Camera and electrical department: Materiel
   Premier assistant opv / directeur photo: Photo
->>>>>>> origin/master
   Costume designer: Costumes
   Location management: Materiel
   Productrices: Production
@@ -208,58 +140,29 @@ jobs:
   Opératrice du son: son
   Photographes de plateau: Photo
   Effets visuels: Effets spéciaux
-<<<<<<< HEAD
-  Assitant(e) de production: Production
-=======
   Assistant de production: Production
->>>>>>> origin/master
   Producteurs étrangers: Production
   Pre-production sound: pré-prod Son
   Sound_department: Son
   Auteur de l'œuvre originale: Auteur
   Scénariste et réalisatrice: Auteur/Réalisateur
-<<<<<<< HEAD
-  Assistante opératrice: Assitant(e) Opérateur(trice)
-=======
   Assistante opératrice:
->>>>>>> origin/master
   Régisseuse générale: Régisseur
   Réalisateur chef-op auteur compositeur: Auteur/Réalisateur
   Narration: Scénario
   Interprètes de la musique: Musique
   Chef décoratrice: Décors
   Interprète de la musique: Musique
-<<<<<<< HEAD
-  Intern: Divers
-=======
   Intern: Diver
->>>>>>> origin/master
   Segment team: Divers
   Assistante décoratrice: Décors
   Auteur réalisateur: Auteur/Réalisateur
   Post: Postprod
-<<<<<<< HEAD
-  Assitant(e) set manager: Divers
-=======
   Assistant set manager: Diver
->>>>>>> origin/master
   Adaptation: Scénario
   Productrice étrangère: Production
   Visual consultant: Effets spéciaux
   Participantes: Autre
   Post-audio supervisor: Postprod
-<<<<<<< HEAD
-  Assitant(e) set manager - uncredited: Autre
-  directed by: Réalisation
-  location_management: Matériel
-  Script supervisor: Scénario
-  Script: Scénario
-  Assitant(e) script supervisor: Assistance scénario
-  Written by: Scénario
-  Creator and: Scénario
-  First assistant director: Assistant(e) réalisation
-  Second assistant director: Assistant(e) réalisation
-=======
   Assistant set manager - uncredited: Autre
 
->>>>>>> origin/master

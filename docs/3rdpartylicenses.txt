@@ -97,9 +97,6 @@ THE SOFTWARE.
 ng-chat
 MIT
 
-ng-chat
-MIT
-
 ng-navigator-share
 MIT
 

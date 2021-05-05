@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1620055373719,
+  "timestamp": 1620209674170,
   "index": "https://testdcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -30,6 +30,7 @@
         "ignoreVary": true
       },
       "urls": [
+        "https://testdcp.f80.fr/assets/Reporting.xlsx",
         "https://testdcp.f80.fr/assets/default_jobs.json",
         "https://testdcp.f80.fr/assets/icons/LinkedIn.png",
         "https://testdcp.f80.fr/assets/icons/icon-128x128.png",
@@ -53,8 +54,7 @@
         "https://testdcp.f80.fr/assets/img/tips.png",
         "https://testdcp.f80.fr/assets/jobs.json",
         "https://testdcp.f80.fr/assets/jobs_old.json",
-        "https://testdcp.f80.fr/assets/reporting.pbix",
-        "https://testdcp.f80.fr/assets/reporting.xlsx"
+        "https://testdcp.f80.fr/assets/reporting.pbix"
       ],
       "patterns": []
     }
@@ -104,6 +104,7 @@
   ],
   "hashTable": {
     "https://testdcp.f80.fr/0.js": "1bf74fff0179129decefb007c463521f36f024c8",
+    "https://testdcp.f80.fr/assets/Reporting.xlsx": "fc2a8295b08f3c940cf53fd7f2fe7cf06fed299d",
     "https://testdcp.f80.fr/assets/default_jobs.json": "2c564458c2e15d101fadf154cbb3171407ed39c2",
     "https://testdcp.f80.fr/assets/icons/LinkedIn.png": "dec770e0a226b15021d0b80154aa18841097a46e",
     "https://testdcp.f80.fr/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
@@ -128,10 +129,9 @@
     "https://testdcp.f80.fr/assets/jobs.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://testdcp.f80.fr/assets/jobs_old.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://testdcp.f80.fr/assets/reporting.pbix": "2b95ac35c6fee4fa408666be84d70943d4604ae8",
-    "https://testdcp.f80.fr/assets/reporting.xlsx": "8e588e7929706f1f364e68e0e2cd9eec7cc91073",
     "https://testdcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://testdcp.f80.fr/index.html": "9ec2cc542341775e824e29e73c8916437fd82525",
-    "https://testdcp.f80.fr/main.js": "49e07c89375c079b4015a7edb667eb0da147ef5f",
+    "https://testdcp.f80.fr/main.js": "626fca3aa98792353e4cb17e3a70f1f91b826a9a",
     "https://testdcp.f80.fr/manifest.webmanifest": "5430bb03fa346e338146a0956939e110243e7d40",
     "https://testdcp.f80.fr/polyfills.js": "3330d32f2d183bee4bd491b0a9ae9d2413cc9981",
     "https://testdcp.f80.fr/runtime.js": "5264a6daea6ec0713f2b8ce8dc4c29df11c5924e",
