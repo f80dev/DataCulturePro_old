@@ -16,21 +16,25 @@ export class SplashComponent implements OnInit {
               public routes: ActivatedRoute,
               public router:Router) { }
 
+
   ngOnInit(): void {
     this.version=environment.appVersion;
+    setTimeout(()=>{this.read_params();},2000);
+  }
+
+  read_params(){
     let id=this.routes.snapshot.queryParamMap.get("id");
     let name=this.routes.snapshot.queryParamMap.get("name");
 
-    setTimeout(()=>{
-      if(id){
-        let url=this.routes.snapshot.url.join("/");
-        if(url.indexOf("public"))this.router.navigate(["public"],{queryParams:{id:id}});
-        if(url.indexOf("works"))this.router.navigate(["works"],{queryParams:{id:id,name:name}});
-      }
-      else{
-        this.router.navigate(["search"]);
-      }
-    },2000);
+    if(id){
+      let url=this.routes.snapshot.url.join("/");
+      if(url.length==0){url="public"}
+      if(url.indexOf("works")>-1)this.router.navigate(["works"],{queryParams:{id:id,name:name},replaceUrl:true});
+      if(url.indexOf("public")>-1)this.router.navigate(["public"],{queryParams:{id:id},replaceUrl:true});
+    }
+    else{
+      this.router.navigate(["search"]);
+    }
   }
 
 }

@@ -30,11 +30,7 @@ export class AppComponent implements OnInit {
     this.appVersion=environment.appVersion;
 
     config.init(() => {
-      this.config.init_user(()=>{
-
-      },()=>{
-        //this.router.navigate(["search"]);
-      });
+      this.config.init_user();
     });
   }
 
@@ -49,6 +45,7 @@ export class AppComponent implements OnInit {
       this.config.raz_user();
       window.location.reload();
     }
+
 
     @HostListener('window:resize', ['$event'])
     onResize($event: any) {
