@@ -50,40 +50,46 @@ export class ProfilesComponent implements OnInit {
     if(!perm)return "";
     let rc="";
     for(let it of perm.split(" ")){
-      rc=rc+this.readPerm(it)+" ";
+      rc=rc+this.readPerm(it)+" - ";
     }
     return rc;
   }
 
 
   sel_profil(p) {
-    if(p.subscription=="online") {
-      this.dialog.open(PromptComponent, {
-        data: {
-          title: 'Acces',
-          question: "Code d'accès ?",
-          onlyConfirm: false,
-          lbl_ok: 'Valider',
-          lbl_cancel: 'Annuler'
-        }
-      }).afterClosed().subscribe((result_code) => {
-        if (this.config.isProd() || result_code == this.config.config.profil_code) {
-          this.config.user.perm = p.perm;
-          this.config.user.profil_name = p.id;
-          this.api.setuser(this.config.user).subscribe(() => {
-            showMessage(this, "Profil modifié");
-            this._location.back();
-          }, (err) => {
-            showError(this, err);
-          });
-        }
-      });
-    }
-    else{
-      this.api.ask_perm(this.config.user,p.id).subscribe(()=>{
-        showMessage(this,"Demande de souscription transmise");
-        this.router.navigate(["search"]);
-      })
+    if(!this.config.isProd()){
+      this.config.user.perm = p.perm;
+      this.config.user.profil_name = p.id;
+       this._location.back();
+    } else {
+      if(p.subscription=="email") {
+        this.dialog.open(PromptComponent, {
+          data: {
+            title: 'Acces',
+            question: "Code d'accès ?",
+            onlyConfirm: false,
+            lbl_ok: 'Valider',
+            lbl_cancel: 'Annuler'
+          }
+        }).afterClosed().subscribe((result_code) => {
+          if (this.config.isProd() || result_code == this.config.config.profil_code) {
+            this.config.user.perm = p.perm;
+            this.config.user.profil_name = p.id;
+            this.api.setuser(this.config.user).subscribe(() => {
+              showMessage(this, "Profil modifié");
+              this._location.back();
+            }, (err) => {
+              showError(this, err);
+            });
+          }
+        });
+      }
+      else{
+        this.api.ask_perm(this.config.user,p.id).subscribe(()=>{
+          showMessage(this,"Demande de souscription transmise");
+          this.router.navigate(["search"]);
+        })
+      }
     }
   }
 }

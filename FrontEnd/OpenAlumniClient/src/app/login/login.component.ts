@@ -22,7 +22,7 @@ import {PromptComponent} from "../prompt/prompt.component";
 })
 export class LoginComponent implements OnInit {
   email = 'paul.dudule@gmail.com';
-  message = "Pour enregistrer votre mail, vous pouvez utilisez Google ou Facebook, ou directement le saisir";
+  message = "Pour vous authentifier vous pouvez utilisez votre compte Google ou Facebook ou saisir votre mail";
   wait_message="";
   redirect = null;
   code="";
