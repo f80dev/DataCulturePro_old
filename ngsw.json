@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1615891331829,
+  "timestamp": 1620648580808,
   "index": "https://dcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -30,6 +30,7 @@
         "ignoreVary": true
       },
       "urls": [
+        "https://dcp.f80.fr/assets/Reporting.xlsx",
         "https://dcp.f80.fr/assets/default_jobs.json",
         "https://dcp.f80.fr/assets/icons/LinkedIn.png",
         "https://dcp.f80.fr/assets/icons/icon-128x128.png",
@@ -53,8 +54,7 @@
         "https://dcp.f80.fr/assets/img/tips.png",
         "https://dcp.f80.fr/assets/jobs.json",
         "https://dcp.f80.fr/assets/jobs_old.json",
-        "https://dcp.f80.fr/assets/reporting.pbix",
-        "https://dcp.f80.fr/assets/reporting.xlsx"
+        "https://dcp.f80.fr/assets/reporting.pbix"
       ],
       "patterns": []
     }
@@ -103,7 +103,8 @@
     }
   ],
   "hashTable": {
-    "https://dcp.f80.fr/4.js": "d193ebdb11607479c9d2ba878c3d30b94597a83c",
+    "https://dcp.f80.fr/4.js": "860ea068c364e76a0bbe5985b88ae7b87f785932",
+    "https://dcp.f80.fr/assets/Reporting.xlsx": "fc2a8295b08f3c940cf53fd7f2fe7cf06fed299d",
     "https://dcp.f80.fr/assets/default_jobs.json": "2c564458c2e15d101fadf154cbb3171407ed39c2",
     "https://dcp.f80.fr/assets/icons/LinkedIn.png": "dec770e0a226b15021d0b80154aa18841097a46e",
     "https://dcp.f80.fr/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
@@ -128,14 +129,13 @@
     "https://dcp.f80.fr/assets/jobs.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://dcp.f80.fr/assets/jobs_old.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://dcp.f80.fr/assets/reporting.pbix": "2b95ac35c6fee4fa408666be84d70943d4604ae8",
-    "https://dcp.f80.fr/assets/reporting.xlsx": "96cf0ffc81aa4fb40725028336ff2962ff12e09f",
     "https://dcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "https://dcp.f80.fr/index.html": "57e54a7ce8810f4d6ff623ae5c0db52fd6be12cf",
-    "https://dcp.f80.fr/main.js": "e297e5c350153d1ba4a8db0ac7ad7fe19f22405b",
-    "https://dcp.f80.fr/manifest.webmanifest": "826bdc7b88d3b15d1361d23d4eca5e4a9eddbcc3",
-    "https://dcp.f80.fr/polyfills.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
-    "https://dcp.f80.fr/runtime.js": "3a44ec68845eb7b4326544fba9d118c39ae8ca50",
-    "https://dcp.f80.fr/styles.css": "6f8e1c0729d5dbb982b544037e7265d429cc89cc"
+    "https://dcp.f80.fr/index.html": "a01c055c46a73fdc4b20bfb51e90985c6a9a3c60",
+    "https://dcp.f80.fr/main.js": "4ff9a5552e3d45cf8cb24b30d478bc0e289a9d26",
+    "https://dcp.f80.fr/manifest.webmanifest": "5430bb03fa346e338146a0956939e110243e7d40",
+    "https://dcp.f80.fr/polyfills.js": "763cd3b34dfa4600ebb9d9588ec7116988e98920",
+    "https://dcp.f80.fr/runtime.js": "981458a6f13f5ed9579dc21b658e9feb4b792953",
+    "https://dcp.f80.fr/styles.css": "95847df727218a19dccd569926a8746bbc61e807"
   },
   "navigationUrls": [
     {
@@ -154,5 +154,6 @@
       "positive": false,
       "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
     }
-  ]
+  ],
+  "navigationRequestStrategy": "performance"
 }
