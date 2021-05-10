@@ -64,13 +64,14 @@ ENV APP_HOME=/home/app
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
 RUN mkdir $APP_HOME/mediafiles
+RUN mkdir $APP_HOME/Temp
 
 WORKDIR $APP_HOME
 COPY ./static $APP_HOME/static
 COPY ./OpenAlumni $APP_HOME/OpenAlumni
 COPY ./alumni $APP_HOME/alumni
 COPY ./manage.py $APP_HOME
-
+COPY ./Temp $APP_HOME/Temp
 
 # chown all the files to the app user
 #RUN addgroup -S app && adduser -S app -G app

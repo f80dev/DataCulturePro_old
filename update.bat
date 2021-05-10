@@ -17,4 +17,3 @@ docker build -t f80hub/openalumni-dev . & docker push f80hub/openalumni-dev:late
 echo "Pousser sur Github et déployer l'image avec "
 echo "docker rm -f openalumni-dev && docker pull f80hub/openalumni-dev:latest && docker run --restart=always -v /root/certs:/certs -p 8100:8000 --name openalumni-dev -d f80hub/openalumni-dev:latest"
 
-start putty -load MainServer -l root

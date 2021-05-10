@@ -24,7 +24,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get install libpq-dev
 
-RUN pip3 install Django==3.2
+RUN pip3 install Django==3.0.8
 RUN pip3 install markdown
 RUN pip3 install django-oauth-toolkit
 RUN pip3 install oauthlib
@@ -79,8 +79,8 @@ COPY ./manage.py $APP_HOME
 
 EXPOSE 8000
 
-ENV DJANGO_SETTINGS_MODULE=OpenAlumni.settings_dev
-ENV DEBUG=True
+ENV DJANGO_SETTINGS_MODULE=OpenAlumni.settings
+ENV DEBUG=False
 
 #CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["python3", "manage.py", "runsslserver","--certificate","/certs/cert.pem","--key","/certs/privkey.pem","0.0.0.0:8000"]
