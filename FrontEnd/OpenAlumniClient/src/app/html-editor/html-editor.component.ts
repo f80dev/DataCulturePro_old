@@ -8,8 +8,9 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {ApiService} from "../api.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfigService} from "../config.service";
-import {showError, showMessage} from "../tools";
+import {checkLogin, showError, showMessage} from "../tools";
 import {Location} from "@angular/common";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -36,6 +37,7 @@ export class HtmlEditorComponent implements OnInit {
   constructor(
     public api:ApiService,
     public toast:MatSnackBar,
+    public router:Router,
     public config:ConfigService,
     public _location:Location
   ) {
@@ -45,6 +47,7 @@ export class HtmlEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    checkLogin(this);
     this.editorContent=localStorage.getItem("article_content");
     if(!this.editorContent || this.editorContent=="null")this.editorContent="Votre article ici";
   }
@@ -117,10 +120,10 @@ export class HtmlEditorComponent implements OnInit {
       to_publish:false
     }
     if(!id || id=="null"){
-      this.api._post("articles/","",body).subscribe((r:any)=>{
+      this.api._post("articles","",body).subscribe((r:any)=>{
         localStorage.setItem("article_id",r.id);
         showMessage(this,"Nouvel Article enregistré");
-        if(func)func(id);
+        if(func)func(r.id);
       },(err)=>{
         showError(this,err);
       });
