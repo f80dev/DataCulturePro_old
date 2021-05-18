@@ -10,6 +10,7 @@ import { environment } from '../environments/environment';
 import { ImportComponent } from './import/import.component';
 import {ApiService} from "./api.service";
 import {HttpClientModule} from "@angular/common/http";
+
 import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatButtonModule} from "@angular/material/button";
@@ -72,6 +73,7 @@ import { BlogComponent } from './blog/blog.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { PlayerComponent } from './player/player.component';
+import { VisgraphComponent } from './visgraph/visgraph.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +107,8 @@ import { PlayerComponent } from './player/player.component';
     DevComponent,
     HtmlEditorComponent,
     BlogComponent,
-    PlayerComponent
+    PlayerComponent,
+    VisgraphComponent
   ],
   imports: [
     BrowserModule,

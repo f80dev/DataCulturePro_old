@@ -53,6 +53,7 @@ export class StatsComponent implements OnInit {
   }
 
   openSocialGraph() {
-    open(environment.domain_server+"/api/social_graph/")
+    this.router.navigate(["visgraph"]);
+    //open(environment.domain_server+"/api/social_graph/");
   }
 }

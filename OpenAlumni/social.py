@@ -10,15 +10,10 @@ def create_graph(format="graphml"):
     G = nx.Graph()
 
     for p in Profil.objects.all():
-        name=p.firstname + " " + p.lastname
-        # G.add_node(p.id,
-        #            label=str(bytes(name,encoding="utf-8"),encoding="iso8859"),
-        #            formation=str(bytes(p.department,encoding="utf-8"),encoding="iso8859"),
-        #            promo=p.promo
-        #            )
         G.add_node(p.id,
-                   label=name,
+                   label=p.firstname + " " + p.lastname,
                    formation=p.department,
+                   photo=p.photo,
                    promo=str(p.promo)
                    )
 
@@ -43,6 +38,14 @@ def create_graph(format="graphml"):
         if format=="graphml":
             filename="./static/femis.graphml"
             nx.write_graphml(G,filename,encoding="utf-8")
+
+        if format=="json":
+            nodes_with_attr = list()
+            for n in G.nodes.data():
+                n[1]["id"]=n[0]
+                nodes_with_attr.append(n[1])
+            rc={"nodes":nodes_with_attr,"edges":list(G.edges)}
+            return rc
 
     return filename
 

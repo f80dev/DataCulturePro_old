@@ -515,25 +515,26 @@ def send_to(request):
     return Response("Message envoyé", status=200)
 
 
-
+#Exemple : http://localhost:8000/api/social_graph/
 @api_view(["GET"])
 @renderer_classes((WorksCSVRenderer,))
 @permission_classes([AllowAny])
-def social_graph(request):
+def social_graph(request,format="json"):
     """
     Retourne la matrice des relations
     :param request:
     :return:
     """
-    format=request.GET.get("format","graphml")
-    with open(create_graph(format), 'rb') as f:
-        file_data = f.read()
+    if format=="json":
+        return JsonResponse(create_graph(format))
+    else:
+        with open(create_graph(format), 'rb') as f:
+            file_data = f.read()
 
-    response = HttpResponse(content=file_data,content_type='plain/text')
-    response["Content-Disposition"] = 'attachment; filename="femis.'+format+'"'
-    return response
+        response = HttpResponse(content=file_data,content_type='plain/text')
+        response["Content-Disposition"] = 'attachment; filename="femis.'+format+'"'
+        return response
 
-    pass
 
 
 #http://localhost:8000/api/export_profils/
