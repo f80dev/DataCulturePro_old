@@ -24,6 +24,7 @@ from django_elasticsearch_dsl_drf.viewsets import  DocumentViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
+from erdpy.accounts import Account
 from rest_framework.decorators import api_view,  permission_classes, renderer_classes
 from rest_framework.fields import JSONField
 from rest_framework.filters import SearchFilter
@@ -44,7 +45,9 @@ from OpenAlumni import settings
 from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
     sendmail, to_xml, translate, levenshtein
-from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR
+from OpenAlumni.nft import NFTservice
+from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR, TOKEN_ID, NFT_CONTRACT, BC_PROXY, \
+    ADMIN_PEMFILE
 from OpenAlumni.social import create_graph
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article
@@ -199,12 +202,14 @@ def resend(request):
     return Response({"message":"Check your email"})
 
 
-#http://localhost:8000/api/test/?movie=joker
+#http://localhost:8000/api/test
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def test(request):
-    infos=extract_film_from_unifrance(request.GET.get("movie"))
-    return JsonResponse(infos)
+    nft=NFTservice()
+    rc=nft.init_token()
+    return JsonResponse({"result":rc})
+
 
 
 @api_view(["GET"])
@@ -215,6 +220,48 @@ def askfriend(request):
     asks.append(request.GET.get("from"))
     u.update(ask=asks)
     return JsonResponse(u)
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def write_nft(request):
+    p=Profil.objects.get(id= request.GET.get("id"))
+    if len(p.blockchain)==0:
+        rc=NFTservice().post("FEMIS:"+p.department+" ("+p.promo+")",p.firstname+" "+p.lastname)
+        if len(rc)>0:
+            if len(rc[0]["result"])>1:
+                p.blockchain=rc[0]["result"][1]
+                p.save()
+            else:
+                return rc[0]["returnMessage"], 500
+    else:
+        return JsonResponse({"message":"déjà présent"})
+
+    return JsonResponse(rc)
+
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def nfts(request):
+    _u=Account(pem_file=ADMIN_PEMFILE)
+    url=BC_PROXY+"/address/"+_u.address.bech32()+"/esdt/"
+    r=requests.get(url).json()
+    rc=[]
+    for t in r["data"]["esdts"]:
+        if t.startswith(TOKEN_ID):
+            nft=r["data"]["esdts"][t]
+            try:
+                nft["attributes"]=str(base64.b64decode(nft["attributes"]),"utf8")
+                rc.append(nft)
+            except:
+                pass
+    return JsonResponse({"results":rc})
+
+
+
 
 
 #http://localhost:8000/api/jobsites/12/

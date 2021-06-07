@@ -58,6 +58,7 @@ RUN pip3 install xlsxwriter
 RUN pip3 install docutils
 RUN pip3 install networkx
 RUN pip3 install py7zr
+RUN pip3 install erdpy
 
 #Création des répertoires
 ENV APP_HOME=/home/app
@@ -73,6 +74,7 @@ COPY ./alumni $APP_HOME/alumni
 COPY ./manage.py $APP_HOME
 COPY ./Temp $APP_HOME/Temp
 
+
 # chown all the files to the app user
 #RUN addgroup -S app && adduser -S app -G app
 #RUN chown -R app:app $APP_HOME
@@ -80,8 +82,8 @@ COPY ./Temp $APP_HOME/Temp
 
 EXPOSE 8000
 
-ENV DJANGO_SETTINGS_MODULE=OpenAlumni.settings_dev
-ENV DEBUG=True
+ENV DJANGO_SETTINGS_MODULE=OpenAlumni.settings
+ENV DEBUG=False
 
 #CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["python3", "manage.py", "runsslserver","--certificate","/certs/cert.pem","--key","/certs/privkey.pem","0.0.0.0:8000"]

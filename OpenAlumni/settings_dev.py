@@ -286,3 +286,10 @@ MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]
 MYDICT=None
 
 DELAY_TO_AUTOSEARCH=24*0.2   #10 jours
+
+#NFTS
+TOKEN_ID='FEMIS-3ae1d3'
+ADMIN_PEMFILE="./femis.pem"
+NFT_CONTRACT="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
+BC_PROXY="https://devnet-gateway.elrond.com"
+BC_EXPLORER="https://devnet-explorer.elrond.com"

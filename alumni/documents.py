@@ -34,7 +34,7 @@ class ProfilDocument(Document):
         fields=["id","firstname","lastname",
                 "acceptSponsor",
                 "email","department",
-                "cp","cursus",
+                "cp","cursus","blockchain",
                 "mobile","photo","address",
                 "town","degree_year","dtLastUpdate"]
 

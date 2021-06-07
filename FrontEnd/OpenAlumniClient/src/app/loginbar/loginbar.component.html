@@ -109,10 +109,15 @@
 
   <a title="Se déconnecter"
      *ngIf="config.user?.user?.email?.length>0"
-     mat-list-item (click)="logout()"
-     id="cmdLogout">
+     mat-list-item (click)="logout()" id="cmdLogout">
     <mat-icon>logout</mat-icon>
-    &nbsp;&nbsp;Se déconnecter
+    &nbsp;&nbsp;&nbsp;Se déconnecter
+  </a>
+
+  <a title="Voir les NFTs"
+     routerLink="nfts" mat-list-item
+     id="cmdNFTS">
+    <mat-icon>enhanced_encryption</mat-icon>&nbsp;Voir les NFTs
   </a>
 
 

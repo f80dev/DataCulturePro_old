@@ -89,6 +89,15 @@
       <mat-icon>delete</mat-icon>
     </button>
 
+ <button mat-button mat-icon-button
+            class="small-icon-button"
+            title="Générer un NFT"
+            name="cmdCreateNFT"
+            *ngIf="config.hasPerm('nft_write')"
+            (click)="writeNFT(profil)">
+      <mat-icon>enhanced_encryption</mat-icon>
+    </button>
+
     <button mat-button mat-icon-button
             class="small-icon-button"
             title="Demander en tuteur"

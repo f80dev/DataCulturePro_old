@@ -21,6 +21,7 @@ import {HtmlEditorComponent} from "./html-editor/html-editor.component";
 import {BlogComponent} from "./blog/blog.component";
 import {PlayerComponent} from "./player/player.component";
 import {VisgraphComponent} from "./visgraph/visgraph.component";
+import {NftsComponent} from "./nfts/nfts.component";
 
 const routes: Routes = [
   { path: 'public', component: PublicComponent},
@@ -41,6 +42,7 @@ const routes: Routes = [
   { path: 'dev', component: DevComponent},
   { path: 'stats', component: StatsComponent},
   { path: 'visgraph', component: VisgraphComponent},
+  { path: 'nfts', component: NftsComponent},
   { path: 'write', component: WriteComponent},
   { path: 'player', component: PlayerComponent},
   { path: '', component: SplashComponent}

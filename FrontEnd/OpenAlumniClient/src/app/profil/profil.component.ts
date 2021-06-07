@@ -67,6 +67,7 @@ export class ProfilComponent implements OnInit,OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
   }
 
   write(profil:any) {
@@ -90,7 +91,6 @@ export class ProfilComponent implements OnInit,OnChanges {
     else {
       open(profil.links[0].url);
     }
-
   }
 
   ask_tutor(profil: any) {
@@ -102,6 +102,18 @@ export class ProfilComponent implements OnInit,OnChanges {
         showMessage(this,"Vous êtes tutorés par "+profil.name);
       },(err)=>{showError(this,err);});
     },(err)=>{showError(this,err);})
+  }
+
+
+
+  writeNFT(profil: any) {
+    profil.message="Enregistrement dans la blockchain";
+    this.api._get("write_nft","id="+profil.id).subscribe((r:any)=>{
+      showMessage(this,"NFT créé");
+      profil.message="";
+    },(err)=>{
+      showError(this,err);
+    })
   }
 }
 

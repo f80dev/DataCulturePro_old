@@ -46,6 +46,8 @@ urlpatterns = [
     path('api/jobsites/', views.refresh_jobsites),
     path('api/send_to/', views.send_to),
     path('api/test/', views.test),
+    path('api/write_nft/', views.write_nft),
+    path('api/nfts/', views.nfts),
     path('api/batch/', views.batch),
     path('api/search/', views.search),
     path('api/reindex/', views.rebuild_index),

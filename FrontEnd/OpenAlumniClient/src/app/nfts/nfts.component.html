@@ -1,0 +1,11 @@
+<div class="mainform">
+  <br>
+  <span *ngIf="nfts?.length==0">Aucun diplôme dans la blockchain pour l'instant</span>
+
+  <div *ngFor="let t of nfts">
+    {{t.attributes}}
+  </div>
+
+  <br>
+  <a [href]="url_explorer">Voir dans la blockchain</a>
+</div>

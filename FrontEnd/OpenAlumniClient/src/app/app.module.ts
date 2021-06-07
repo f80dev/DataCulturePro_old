@@ -74,6 +74,7 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { PlayerComponent } from './player/player.component';
 import { VisgraphComponent } from './visgraph/visgraph.component';
+import { NftsComponent } from './nfts/nfts.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { VisgraphComponent } from './visgraph/visgraph.component';
     HtmlEditorComponent,
     BlogComponent,
     PlayerComponent,
-    VisgraphComponent
+    VisgraphComponent,
+    NftsComponent
   ],
   imports: [
     BrowserModule,

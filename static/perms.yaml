@@ -16,6 +16,9 @@ perms:
   - tag: edit_profil
     description: l'édition de l'ensemble des profils
 
+  - tag: nft_write
+    description: la création du diplôme sous forme de NFT
+
   - tag: delete_pow
     description: la suppression des oeuvres
 

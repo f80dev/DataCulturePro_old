@@ -63,6 +63,8 @@ class Profil(models.Model):
     auto_updates=models.CharField(max_length=300,null=False, default="0,0,0,0,0,0",help_text="Date de mise a jour")
     advices=JSONField(null=True,help_text="Liste de conseils alimenter par l'outil pour augmenter le rayonnement d'une personne")
 
+    blockchain=models.CharField(null=False,blank=True,default="",max_length=50,help_text="Adresse elrond du profil")
+
     class Meta(object):
         ordering=["lastname"]
 
