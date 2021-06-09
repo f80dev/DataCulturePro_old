@@ -46,12 +46,17 @@ export class ProfilesComponent implements OnInit {
   }
 
 
-  detailPerm(perm:string): string {
+  detailPerm(perm:string,format="txt"): string {
     if(!perm)return "";
     let rc="";
+    if(format=="html")rc="<ul>";
     for(let it of perm.split(" ")){
-      rc=rc+this.readPerm(it)+" - ";
+      if(format=="txt")
+        rc=rc+this.readPerm(it)+" - ";
+      else
+        rc=rc+"<li>"+this.readPerm(it)+"</li>";
     }
+    if(format=="html")rc=rc+"</ul>";
     return rc;
   }
 

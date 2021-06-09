@@ -14,7 +14,7 @@ export class NftsComponent implements OnInit {
   constructor(
     public api:ApiService
   ) {
-    this.url_explorer="https://devnet-explorer.elrond.com/address/erd1z32fx8l6wk9tx4j555sxk28fm0clhr0cl88dpyam9zr7kw0hu7hsx2j524";
+    this.url_explorer="https://devnet-explorer.elrond.com/address/erd1z32fx8l6wk9tx4j555sxk28fm0clhr0cl88dpyam9zr7kw0hu7hsx2j524/tokens";
   }
 
   ngOnInit(): void {

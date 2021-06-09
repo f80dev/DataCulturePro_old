@@ -13,8 +13,8 @@
     <p>{{profil.presentation}}</p>
 
     <div *ngIf="this.perms" style="font-size: small;text-align: left;">
-      Vous avez accès:
-      {{detailPerm(profil.perm)}}
+      Ce profil vous donnes accès:<br>
+      <div [innerHTML]="detailPerm(profil.perm,'html')"></div>
       <br>
     </div>
 

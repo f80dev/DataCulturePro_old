@@ -17,7 +17,7 @@ perms:
     description: l'édition de l'ensemble des profils
 
   - tag: nft_write
-    description: la création du diplôme sous forme de NFT
+    description: la création du diplôme sous forme de NFT dans la blockchain
 
   - tag: delete_pow
     description: la suppression des oeuvres
@@ -55,6 +55,12 @@ perms:
   - tag: advanced_search
     description: recherches avancées
 
+  - tag: r_photo
+    description: à voir la photo du profil
+
+  - tag: r_cp
+    description: à voir le code postal de l'adresse
+
   - tag: mobile
     description: au numéro de mobile du candidat
 
@@ -65,4 +71,24 @@ perms:
     description: à l'ajout de nouvelles productions
 
   - tag: dev
-    description: a la documentation des API et l'obtention d'une clé developpeur
+    description: à la documentation des API et l'obtention d'une clé developpeur
+
+  - tag: stats
+    description: à la consultation des statistiques de l'école
+
+  - tag: r_department
+    description: à la formation du profil
+
+  - tag: admin
+    description: à la console d'administration
+
+  - tag: publish
+    description: à la publication d'article
+
+  - tag: r_address
+    description: à l'adresse postale du profil
+
+
+
+
+

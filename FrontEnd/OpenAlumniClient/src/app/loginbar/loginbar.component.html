@@ -87,6 +87,10 @@
   </a>
 
 
+  <br>
+  <hr>
+  <br>
+
   <a title="Changer vos permissions"
      *ngIf="config.user?.user?.email?.length>0"
      mat-list-item
@@ -95,9 +99,8 @@
     <mat-icon>lock</mat-icon>
     &nbsp;&nbsp;Permissions
   </a>
-  <br>
-  <hr>
-  <br>
+
+
   <a title="Effacer votre compte"
      *ngIf="config.user?.user?.email?.length>0"
      mat-list-item (click)="del_user()"
@@ -114,13 +117,6 @@
     &nbsp;&nbsp;&nbsp;Se déconnecter
   </a>
 
-  <a title="Voir les NFTs"
-     routerLink="nfts" mat-list-item
-     id="cmdNFTS">
-    <mat-icon>enhanced_encryption</mat-icon>&nbsp;Voir les NFTs
-  </a>
-
-
 
   <a title="Se connecter"
      *ngIf="!config.user?.user || config.user?.user?.email?.length==0"
@@ -132,6 +128,12 @@
   </a>
   <br>
   <br>
+
+  <a title="Voir les NFTs"
+     routerLink="nfts" mat-list-item
+     id="cmdNFTS">
+    <mat-icon>enhanced_encryption</mat-icon>&nbsp;Certification blockchain
+  </a>
 
   <a title="Aide" routerLink="faqs"
      mat-list-item

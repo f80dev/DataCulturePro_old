@@ -48,7 +48,7 @@ from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, 
 from OpenAlumni.nft import NFTservice
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR, TOKEN_ID, NFT_CONTRACT, BC_PROXY, \
     ADMIN_PEMFILE
-from OpenAlumni.social import create_graph
+from OpenAlumni.social import SocialGraph
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
@@ -228,7 +228,7 @@ def askfriend(request):
 def write_nft(request):
     p=Profil.objects.get(id= request.GET.get("id"))
     if len(p.blockchain)==0:
-        rc=NFTservice().post("FEMIS:"+p.department+" ("+p.promo+")",p.firstname+" "+p.lastname)
+        rc=NFTservice().post("FEMIS:"+p.firstname+" "+p.lastname,p.department+" ("+p.promo+")",nb=10)
         if len(rc)>0:
             if len(rc[0]["result"])>1:
                 p.blockchain=rc[0]["result"][1]
@@ -572,10 +572,14 @@ def social_graph(request,format="json"):
     :param request:
     :return:
     """
+    G=SocialGraph()
+    G.load(request.GET.get("filter"))
+    G.eval(request.GET.get("eval"))
+
     if format=="json":
-        return JsonResponse(create_graph(format))
+        return JsonResponse(G.export(format))
     else:
-        with open(create_graph(format), 'rb') as f:
+        with open(G.export(format), 'rb') as f:
             file_data = f.read()
 
         response = HttpResponse(content=file_data,content_type='plain/text')

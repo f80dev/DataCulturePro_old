@@ -15,6 +15,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatSliderModule} from "@angular/material/slider";
 import { AdminComponent } from './admin/admin.component';
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
@@ -119,7 +120,7 @@ import { NftsComponent } from './nfts/nfts.component';
     ScrollingModule,
     QuillModule.forRoot({
       modules: {
-        syntax:false,
+        syntax: false,
       },
       theme: 'snow',
       format: 'html',
@@ -155,7 +156,8 @@ import { NftsComponent } from './nfts/nfts.component';
     MatRadioModule,
     MatChipsModule,
     MatAutocompleteModule,
-    QuillModule
+    QuillModule,
+    MatSliderModule
   ],
   providers: [
     ApiService,
