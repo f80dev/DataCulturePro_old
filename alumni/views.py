@@ -228,17 +228,17 @@ def askfriend(request):
 def write_nft(request):
     p=Profil.objects.get(id= request.GET.get("id"))
     if len(p.blockchain)==0:
-        rc=NFTservice().post("FEMIS:"+p.firstname+" "+p.lastname,p.department+" ("+p.promo+")",nb=10)
+        rc=NFTservice().post("FEMIS:"+p.firstname+" "+p.lastname,p.department+" ("+p.promo+")",occ=10)
         if len(rc)>0:
             if len(rc[0]["result"])>1:
-                p.blockchain=rc[0]["result"][1]
+                p.blockchain=str(rc[0]["result"][1]).encode().hex()
                 p.save()
+                return JsonResponse({"nft_id":p.blockchain})
             else:
                 return rc[0]["returnMessage"], 500
     else:
-        return JsonResponse({"message":"déjà présent"})
+        return "déjà présent",500
 
-    return JsonResponse(rc)
 
 
 

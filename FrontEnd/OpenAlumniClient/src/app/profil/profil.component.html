@@ -22,6 +22,7 @@
   <mat-card-content name="cardContent">
 
     <ng-content></ng-content>
+    <app-hourglass [message]="profil?.message"></app-hourglass>
 
   </mat-card-content>
 
@@ -93,7 +94,7 @@
             class="small-icon-button"
             title="Générer un NFT"
             name="cmdCreateNFT"
-            *ngIf="config.hasPerm('nft_write')"
+            *ngIf="config.hasPerm('nft_write') && profil.blockchain?.length==0"
             (click)="writeNFT(profil)">
       <mat-icon>enhanced_encryption</mat-icon>
     </button>

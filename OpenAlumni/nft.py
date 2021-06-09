@@ -87,7 +87,7 @@ class NFTservice:
         #rc=self.execute("issueNonFungible@"+str_to_hex("FEMISToken",False)+"@"+str_to_hex("FEMIS",False),self._sender,"5000000000000000000")
         #rc=self.execute("setSpecialRole@"+toHex(token_id)+"@"+self._sender.address.hex()+"@"+toHex("ESDTRoleNFTCreate"))
         hash=0
-        data="ESDTNFTCreate@"+toHex(TOKEN_ID)+"@"+toHex(1)+"@"+toHex(title)+"@"+toHex(occ)+"@"+toHex(hash)+"@"+toHex(content)+"@"+toHex("https://dcp.f80.fr")
-        rc=self.execute(data,receiver=self._sender.address.bech32(),gasLimit=60000000+len(content)*1500+len(title)*1500)
+        data="ESDTNFTCreate@"+toHex(TOKEN_ID)+"@"+toHex(occ)+"@"+toHex(title)+"@"+toHex(0)+"@"+toHex(hash)+"@"+toHex(content)+"@"+toHex("https://dcp.f80.fr")
+        rc=self.execute(data,receiver=self._sender.address.bech32(),gasLimit=60000000+len(content+title)*1200)
 
         return rc

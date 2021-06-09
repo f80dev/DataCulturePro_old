@@ -110,9 +110,11 @@ export class ProfilComponent implements OnInit,OnChanges {
     profil.message="Enregistrement dans la blockchain";
     this.api._get("write_nft","id="+profil.id).subscribe((r:any)=>{
       showMessage(this,"NFT créé");
+      profil.blockchain=r.nft_id;
       profil.message="";
     },(err)=>{
       showError(this,err);
+      profil.message="";
     })
   }
 }
