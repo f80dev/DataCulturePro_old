@@ -104,12 +104,14 @@ class ProfilViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = (SearchFilter,)
     search_fields = ["email"]
+    filter_fields=("school")
+
 
 class ExtraProfilViewSet(viewsets.ModelViewSet):
     queryset = Profil.objects.all()
     serializer_class = ExtraProfilSerializer
     permission_classes = [AllowAny]
-    filter_backends = (SearchFilter,)
+    filter_backends = (SearchFilter,DjangoFilterBackend)
 
 
 
@@ -139,7 +141,7 @@ class ExtraWorkViewSet(viewsets.ModelViewSet):
     queryset = Work.objects.all()
     serializer_class = ExtraWorkSerializer
     permission_classes = [AllowAny]
-    filter_fields = ('job',"pow__id","profil__id","profil__email")
+    filter_fields = ('job',"pow__id","profil__id","profil__email","profil__school")
 
 
 class WorkViewSet(viewsets.ModelViewSet):
@@ -335,7 +337,7 @@ def batch(request):
     filter= request.GET.get("filter", "*")
     profils=Profil.objects.all()
     if filter!="*":
-        profils=Profil.objects.filter(id=filter)
+        profils=Profil.objects.filter(id=filter,school="FEMIS")
         profils.update(auto_updates="0,0,0,0,0,0")
     exec_batch(profils)
     return Response({"message":"ok"})
@@ -823,6 +825,7 @@ def importer(request,format=None):
 
                 profil=Profil(
                     firstname=firstname,
+                    school="FEMIS",
                     lastname=lastname,
                     gender=row[idx("genre,civilite")],
                     mobile=row[idx("mobile,telephone,tel")][:20],
@@ -899,7 +902,7 @@ class ProfilDocumentView(DocumentViewSet):
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
     ]
-    search_fields = ('works__title','works__job','lastname','firstname','department','promo')
+    search_fields = ('works__title','works__job','lastname','firstname','department','promo','school')
     filter_fields = {
         'name': 'name',
         'lastname':'lastname',
@@ -907,6 +910,7 @@ class ProfilDocumentView(DocumentViewSet):
         'cursus':'cursus',
         'title':'works__title',
         'promo':'promo',
+        'school':'school',
         'town':'town',
         'formation':'department'
     }

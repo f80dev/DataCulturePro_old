@@ -2,25 +2,49 @@
   <div id="toolbar" class="toolbar-app"
        style="position:fixed;display:block;padding:3px;width:fit-content;right:0;bottom:0;z-index:100;background-color: #424242;height:70px;vertical-align: middle;line-height: 90%;">
     <mat-slider
-                title="Dispersion"
-                color="primary"
-                class="app-slider"
-                style="width: 30px;margin:0;padding:0"
-                [(ngModel)]="forceProperties.link.distance"
-                (valueChange)="updateForces()"
-                min="5" max="100">
+      title="Dispersion"
+      color="primary"
+      class="app-slider"
+      style="width: 30px;margin:0;padding:0"
+      [(ngModel)]="forceProperties.link.distance"
+      (valueChange)="updateForces()"
+      min="5" max="100">
     </mat-slider>
 
     <div *ngFor="let p of props" style="display: inline-block;margin:0px;padding: 0px;">
       <mat-slider
-                [title]="p"
-                color="primary"
-                class="app-slider"
-                style="width: 30px;margin:0;padding:0"
-                [(ngModel)]="filter[p].value"
-                (valueChange)="updateForces()"
-                [min]="filter[p].min" [max]="filter[p].max" [step]="filter[p].step">
-    </mat-slider>
+        [title]="p"
+        color="primary"
+        class="app-slider"
+        style="width: 30px;margin:0;padding:0"
+        [(ngModel)]="filter[p].value"
+        (valueChange)="updateForces()"
+        [min]="filter[p].min" [max]="filter[p].max" [step]="filter[p].step">
+      </mat-slider>
+
+      <mat-form-field appearance="legacy" style="max-width:50px;font-size: medium;">
+        <mat-label>Promo</mat-label>
+        <mat-select id="selPromoFilter" [(ngModel)]="filter.promo.value" (selectionChange)="updateData()">
+          <mat-option *ngFor="let y of filter.promo.values" [value]="y">
+            {{y}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy" style="max-width:50px;font-size: medium;">
+        <mat-label>Formation</mat-label>
+        <mat-select id="selFormationFilter" [(ngModel)]="filter.department.value" (selectionChange)="updateData()">
+          <mat-option *ngFor="let y of filter.department.values" [value]="y">
+            {{y}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+
+
+
 
     </div>
 

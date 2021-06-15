@@ -13,9 +13,7 @@ class SocialGraph:
 
     def load(self,filter=""):
         ids=[]
-        profils=Profil.objects.all()
-        if filter:
-            if "promo" in filter:profils=Profil.objects.filter(degree_year=int(filter.split("=")[1]))
+        profils=Profil.objects.filter(degree_year=int(filter.split("_")[0]),department=filter.split("_")[1])
 
         for p in profils:
             self.G.add_node(p.id,
@@ -41,8 +39,9 @@ class SocialGraph:
                 if row[0] in ids and row[1] in ids:
                     self.G.add_edge(row[0], row[1], weight=row[2])
 
-
         return len(self.G.nodes)
+
+
 
     def eval(self,critere="pagerank"):
         if "pagerank" in critere:

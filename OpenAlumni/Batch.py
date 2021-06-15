@@ -32,7 +32,7 @@ def extract_profil_from_cnca(title):
 
 
 def extract_film_from_unifrance(url:str,job_for=None):
-    rc=dict()
+    rc=dict({"casting":[]})
     if not url.startswith("http"):
         log("On passe par la page de recherche pour retrouver le titre")
         page=load_page("https://unifrance.org/recherche?q="+parse.quote(url))
@@ -90,21 +90,32 @@ def extract_film_from_unifrance(url:str,job_for=None):
                 for idx in range(len(paras)):
                     links=paras[idx].findAll("a")
                     for l in links:
+                        job=jobs[idx].text.replace("<h2>","").replace("</h2>","").replace(" : ","")
                         if "/personne" in l.get("href"):
                             if l.get("href")==job_for:
-                                rc["job"]=jobs[idx].text.replace(" : ","")
+                                rc["job"]=job
                                 break
+                            else:
+                                #On ajoute l'ensemble du casting au systeme
+                                names = str(l.getText()).split(" ")
+                                lastname =names[len(names)-1]
+                                rc["casting"].append({
+                                    "lastname":lastname,
+                                    "url":l.attrs["href"],
+                                    "source":"unifrance",
+                                    "firstname":l.getText().replace(lastname,"").strip(),
+                                    "job":job})
 
     if not "job" in rc:
         pass
-
-
-
 
     _synopsis = page.find("div", attrs={"itemprop": "description"})
     if not _synopsis is None:rc["synopsis"]=_synopsis.getText(strip=True)
 
     return rc
+
+
+
 
 
 def extract_profil_from_bellefaye(firstname,lastname):
@@ -213,10 +224,23 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
     """
     page=load_page(url)
 
-    rc = dict({"title": title,"nature":translate("film")})
+    rc = dict({"title": title,"nature":translate("film"),"casting":list()})
 
-    zone_info=page.find("div",{"class":"title_block"})
-    if title.startswith("Episode") or "Episode" in zone_info.getText():
+    divs=dict()
+    elts=page.find_all("div",recursive=True)+page.find_all("h1",recursive=True)+page.find_all("ul",recursive=True)+page.find_all("p")
+    for div in elts:
+        if "data-testid" in div.attrs:
+            divs[div.attrs["data-testid"]]=div
+
+    try:
+        cat=translate(divs["genres"].text.lower())
+        title=divs["hero-title-block__title"].text
+        year=divs["hero-title-block__metadata"].text
+        if not year is None:rc["year"]=re.search(r"(\d{4})", year).group(1)
+    except:
+        return None
+
+    if title.startswith("Episode"):
         section_title = page.find("div", {"class": "titleParent"})
         if not section_title is None: title = section_title.find("a").text + " " + title
         #Recherche de l'épisode
@@ -226,47 +250,49 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
             extract_text="S"+zone_info_comp.getText().split("Season")[1].replace("Episode ","E").replace(" | ","").replace(" ","")
             rc["title"]=title+" "+extract_text.split("\n")[0]
 
+    if "storyline-genres" in divs:
+        rc["nature"]=translate(divs["storyline-genres"].text)
+    else:
+        rc["nature"] = MOVIE_NATURE[0]
+    rc["category"]=cat
+    # if not "category" in rc:
+    #     rc["category"]="Inconnue"
+    #     log("Pas de categorie pour "+url)
 
-    for cat in MOVIE_CATEGORIES:
-        if cat.lower() in zone_info.getText().lower():
-            rc["category"]=cat
-    if not "category" in rc:
-        rc["category"]="Inconnue"
-        log("Pas de categorie pour "+url)
-
-    affiche = page.find("div", attrs={"class": "poster"})
+    affiche = divs["hero-media__poster"]
     if not affiche is None and not affiche.find("img") is None: rc["visual"] = affiche.find("img").get("src")
 
-    try:
-        rc["year"]=re.search('[1-2][0-9][0-9][0-9]', page.title.text).group(0)
-    except:
-        try:
-            rc["year"] = re.search('[1-2][0-9][0-9][0-9]', zone_info.getText()).group(0)
-        except:
-            pass
-
-
-    summary_section=page.find("div",attrs={"class":"summary_text"})
-    if not summary_section is None and not "Add a Plot" in summary_section.text:
-        rc["synopsis"]=summary_section.text.replace("\n","").strip()
+    rc["synopsis"]=""
+    if "plot" in divs:
+        rc["synopsis"]=divs["plot"].text.replace("Read all","")
 
     log("Recherche du role sur le film")
 
     credits=load_page(url+"fullcredits")
     if not credits is None:
-        credits=credits.find("div",{"id":"main"})
+        credits=credits.find("div",{"id":"fullcredits_content"})
         if not credits is None:
-            links=credits.find_all("a")
-            for l in links:
-                if name.upper() in l.text.upper():
-                    parent=l.parent.parent.find("td",{"class":"credit"})
-                    if not parent is None:
-                        rc["job"]=str(parent.getText().replace("\n","")).strip()
-                        rc["job"]=rc["job"].split("(")[0]
-                        while "  " in rc["job"]:
-                            rc["job"]=rc["job"].replace("  "," ")
+            jobs=credits.find_all("h4")
+            profils=credits.find_all("table")
 
-                    break
+            for i in range(0,len(jobs)):
+                job = str(jobs[i].getText().replace("\n", "")).replace("by","").strip()
+                if "(in credits order)" in job:job="Actor"
+
+                links=profils[i].find_all("a")
+                for l in links:
+                    if "/name/nm" in l.attrs["href"]:
+                        if name.upper() in l.text.upper():
+                            rc["job"]=job
+                        else:
+                            names=l.text.replace("\n","").split(" ")
+                            lastname=names[len(names)-1]
+                            rc["casting"].append({
+                                "firstname":l.text.replace("\n","").replace(lastname,""),
+                                "lastname":lastname,
+                                "url":l.attrs["href"],
+                                "source":"imdb",
+                                "job":job})
 
     if not "job" in rc: rc["job"]=job
 
@@ -346,6 +372,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 
             if "imdb" in l["url"]:
                 film = extract_film_from_imdb(l["url"], l["text"], name=profil.firstname + " " + profil.lastname,job=l["job"])
+                if film is None:break
                 if not "nature" in film: film["nature"] = l["nature"]
                 source = "auto:IMDB"
 
@@ -380,13 +407,36 @@ def add_pows_to_profil(profil,links,all_links,job_for):
                 log("Impossible d'enregistrer le film: "+str(inst.args))
         else:
             job=l["job"]
-
+            film=dict()
 
         t_job = translate(job)
         if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id,job=t_job).exists():
             log("Ajout de l'experience " + job + " traduit en "+t_job+" sur " + pow.title + " à " + profil.lastname)
             work = Work(pow=pow, profil=profil, job=t_job, source=source)
             work.save()
+
+        #Enregistrement du casting
+        if "casting" in film:
+            for p in film["casting"]:
+                _ps=list(Profil.objects.filter(lastname=p["lastname"],firstname=p["firstname"]))
+                if len(_ps)==0:
+                    log("Ajout de "+p["lastname"]+" comme externe en tant que "+p["job"])
+                    _p=Profil(firstname=p["firstname"],
+                              lastname=p["lastname"],
+                              department="Ext",
+                              cursus="E",
+                              school="",
+                              email=p["firstname"]+"."+p["lastname"]+"@fictif")
+                    _p.add_link(url=p["url"],title=p["source"])
+                    _p.save()
+                else:
+                    _p=_ps[0]
+
+                if not Work.objects.filter(pow_id=pow.id, profil_id=_p.id, job=p["job"]).exists():
+                    work = Work(pow=pow, profil=_p, job=p["job"], source=source)
+                    work.save()
+
+
 
 
 #http://localhost:8000/api/batch

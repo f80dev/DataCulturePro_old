@@ -422,9 +422,9 @@ def load_page(url:str):
     filename=hashlib.sha224(bytes(url,"utf8")).hexdigest()+".html"
 
     if not exists("./Temp/" + filename):
-        with py7zr.SevenZipFile("./Temp/html.7z", 'r') as archive:
-            archive.extract(path="./Temp",targets=filename)
-
+        if exists("./Temp/html.7z"):
+            with py7zr.SevenZipFile("./Temp/html.7z", 'r') as archive:
+                archive.extract(path="./Temp",targets=filename)
 
     if exists("./Temp/"+filename) and datetime.now().timestamp()-stat("./Temp/"+filename).st_mtime<3600*24*31:
         log("Utilisation du cache pour "+url)
@@ -442,8 +442,9 @@ def load_page(url:str):
             f.write(str(rc))
             f.close()
 
-        with py7zr.SevenZipFile("./Temp/html.7z", 'a') as archive:
-            archive.write("./Temp/"+filename,filename)
+        if exists("./Temp/html.7z"):
+            with py7zr.SevenZipFile("./Temp/html.7z", 'a') as archive:
+                archive.write("./Temp/"+filename,filename)
 
         return rc
 

@@ -115,7 +115,7 @@ class ExtraPOWSerializer(serializers.ModelSerializer):
 class ProfilSerializer(serializers.ModelSerializer):
     class Meta:
         model=Profil
-        fields=["id","lastname","firstname","acceptSponsor","sponsorBy",
+        fields=["id","lastname","firstname","acceptSponsor","sponsorBy","school",
                 "mobile","email","photo","gender","job",
                 "facebook","youtube","tiktok","vimeo","instagram","telegram","twitter",
                 "linkedin","degree_year","department",
@@ -190,7 +190,7 @@ class ProfilDocumentSerializer(DocumentSerializer):
     works=serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         document=ProfilDocument
-        fields=("id","firstname","lastname",
+        fields=("id","firstname","lastname","school",
                 "acceptSponsor","sponsorBy",
                 "name","cursus","job","links",
                 "degree_year","public_url","blockchain",

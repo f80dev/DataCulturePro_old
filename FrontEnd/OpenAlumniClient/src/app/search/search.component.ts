@@ -108,7 +108,7 @@ export class SearchComponent implements OnInit {
       //Ajout du tri
       if(this.order)localStorage.setItem("ordering",this.order);
       if(this.order)param=param+"&ordering="+this.order;
-      param=param+"&limit="+this.limit;
+      param=param+"&limit="+this.limit+"&profil__school=FEMIS";
       $$("Appel de la recherche avec param="+param);
       this.api._get("profilsdoc",param).subscribe((r:any) =>{
         this.message="";
@@ -125,7 +125,7 @@ export class SearchComponent implements OnInit {
           else
             item.backgroundColor="#341414";
 
-          if(this.filter_with_pro || item.cursus=="S"){
+          if(item.school=="FEMIS" && (this.filter_with_pro || item.cursus=="S")){
             this.profils.push(item);
           } else {
 

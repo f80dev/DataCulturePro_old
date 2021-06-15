@@ -41,6 +41,7 @@ class Profil(models.Model):
     tiktok=models.URLField(blank=True, null=True)
     youtube = models.URLField(blank=True, null=True)
     vimeo=models.URLField(blank=True, null=True)
+    school=models.CharField(blank=True,max_length=30,null=True,default="FEMIS",help_text="Ecole")
 
     acceptSponsor = models.BooleanField(null=False, default=False)
     sponsorBy = models.ForeignKey('Profil', null=True,on_delete=CASCADE)

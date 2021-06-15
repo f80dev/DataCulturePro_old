@@ -114,7 +114,7 @@ export class PowsComponent implements OnInit {
           pow.visual=r.results[0].pow.visual;
           pow.description=r.results[0].pow.description;
           for(let item of r.results){
-            if(item.public){
+            if(item.public && item.profil.school=="FEMIS"){
               rc.push({
                 job:item.job,
                 name:item.profil.firstname+" "+item.profil.lastname
