@@ -102,12 +102,13 @@ export class ConfigService {
   init_user(func_success=null,func_anonyme=null) {
     $$("Initialisation de l'utilisateur");
     let email=localStorage.getItem("email");
-    this.api.getuser(email).subscribe((r:any)=>{
+    if(email){
+      this.api.getuser(email).subscribe((r:any)=>{
         if(r.count>0){
           $$("Chargement de l'utilisateur ",r.results[0]);
           this.user=r.results[0];
           if(!this.user.profil){
-            this.api._get("search_profil","email="+this.user.user.email).subscribe((rany)=>{
+            this.api._get("update_extrauser","email="+this.user.user.email).subscribe((rany)=>{
               showMessage(this,"Message:"+r.result);
             })
           }
@@ -122,9 +123,12 @@ export class ConfigService {
           if(func_anonyme)func_anonyme();
         }
      });
+    }
   }
 
+
   public raz_user() {
+    localStorage.removeItem("email");
     this.user={email:"",perm:this.profils[0].perm};
   }
 

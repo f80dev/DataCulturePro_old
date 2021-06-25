@@ -23,6 +23,7 @@ class Profil(models.Model):
     Le profil stocke l'ensemble des informations sur les anciens étudiants, issue du cursus standard ou pro
     """
     id=models.AutoField(primary_key=True)
+    company=models.ForeignKey("Company",on_delete=models.DO_NOTHING,null=True)
     firstname=models.CharField(max_length=40, null=False, default='',help_text="Prénom du profil")
     lastname=models.CharField(max_length=70, null=False, default='',help_text="Nom du profil")
     birthdate=models.DateField(null=True,help_text="Date de naissance")
@@ -128,6 +129,12 @@ class Profil(models.Model):
     def name_field_indexing(self):
         return {"name":self.lastname+" "+self.firstname}
 
+
+class Company(models.Model):
+    id = models.AutoField(primary_key=True)
+    name=models.CharField(max_length=100,blank=False,null=False)
+    siret=models.CharField(max_length=14,default="")
+    address=models.CharField(max_length=150,default="")
 
 
 

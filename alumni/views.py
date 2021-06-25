@@ -1,15 +1,13 @@
 import base64
 import csv
-import urllib
+
 from datetime import datetime, timedelta
 from io import StringIO, BytesIO
 from urllib.request import urlopen
 
-import urllib3
+
 import yaml
 import pandas as pd
-from django.contrib.admin.utils import quote
-from django.db import connection
 from django.http import JsonResponse, HttpResponse
 from django.utils.http import urlquote
 from django_elasticsearch_dsl import Index
@@ -41,19 +39,20 @@ from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
 from rest_framework import viewsets, generics
 
-from OpenAlumni import settings
+from OpenAlumni import settings, settings_dev
 from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
-    sendmail, to_xml, translate, levenshtein
+    sendmail, to_xml, translate, levenshtein, getConfig
 from OpenAlumni.nft import NFTservice
 from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR, TOKEN_ID, NFT_CONTRACT, BC_PROXY, \
     ADMIN_PEMFILE
 from OpenAlumni.social import SocialGraph
 from alumni.documents import ProfilDocument, PowDocument
-from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article
+from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article, Company
 from alumni.serializers import UserSerializer, GroupSerializer, ProfilSerializer, ExtraUserSerializer, POWSerializer, \
     WorkSerializer, ExtraPOWSerializer, ExtraWorkSerializer, ProfilDocumentSerializer, \
-    PowDocumentSerializer, WorksCSVRenderer, ArticleSerializer, ExtraProfilSerializer, ProfilsCSVRenderer
+    PowDocumentSerializer, WorksCSVRenderer, ArticleSerializer, ExtraProfilSerializer, ProfilsCSVRenderer, \
+    CompanySerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -64,17 +63,22 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
-    filter_backends = (SearchFilter,)
+    filter_backends = (SearchFilter,DjangoFilterBackend)
     search_fields = ["email","id"]
+    filter_fields =("email",)
 
 
 
 class ExtraUserViewSet(viewsets.ModelViewSet):
+    """
+    Permet la consultation des informations sur le model user enrichie (extra user)
+    """
     queryset = ExtraUser.objects.all()
     serializer_class = ExtraUserSerializer
     permission_classes = (AllowAny,)
-    filter_backends = (SearchFilter,)
-    search_fields = ["user__email","id","user__username"]
+    filter_backends = (SearchFilter,DjangoFilterBackend,)
+    search_fields=["user__email"]
+    filter_fields = ("user__email","id")
 
     def partial_update(self, request, pk=None):
         pass
@@ -99,12 +103,23 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 #http://localhost:8000/api/profils?firstname=aline
 class ProfilViewSet(viewsets.ModelViewSet):
+    """
+    API de gestion des profils
+    """
     queryset = Profil.objects.all()
     serializer_class = ProfilSerializer
     permission_classes = [AllowAny]
-    filter_backends = (SearchFilter,)
+    filter_backends = (SearchFilter,DjangoFilterBackend)
     search_fields = ["email"]
-    filter_fields=("school")
+    filter_fields=("school","email","firstname",)
+
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+    permission_classes = [AllowAny]
+    filter_backends = (SearchFilter,)
+    filter_fields=("name","siret",)
 
 
 class ExtraProfilViewSet(viewsets.ModelViewSet):
@@ -112,6 +127,8 @@ class ExtraProfilViewSet(viewsets.ModelViewSet):
     serializer_class = ExtraProfilSerializer
     permission_classes = [AllowAny]
     filter_backends = (SearchFilter,DjangoFilterBackend)
+    search_fields = ["lastname","email","degree_year","department"]
+    filter_fields=("lastname","firstname","email","degree_year","department")
 
 
 
@@ -162,6 +179,11 @@ class ExtraPOWViewSet(viewsets.ModelViewSet):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def getyaml(request):
+    """
+    Permet la récupération d'un fichier yaml
+    :param request:
+    :return:
+    """
     url=request.GET.get("url","")
     if len(url)==0:
         name=request.GET.get("name","profil")
@@ -172,22 +194,29 @@ def getyaml(request):
     return JsonResponse(result,safe=False)
 
 
+
+
+
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def search_profil(request):
+def update_extrauser(request):
+    """
+
+    :param request:
+    :return:
+    """
     email=request.GET.get("email","")
     if len(email)>0:
         profils=Profil.objects.filter(email__exact=email)
         if len(profils)>0:
+            log("Mise a jour du profil de l'utilisateur se connectant")
             user=ExtraUser.objects.get(user__email=email)
             if not user is None:
                 user.profil=profils.first()
                 user.save()
-                return Response({"message":"User update"})
+                return JsonResponse({"message":"User update"})
 
-    Response({"message": "No update"})
-
-
+    return JsonResponse({"message": "No update"})
 
 
 
@@ -365,6 +394,7 @@ def helloworld(request):
 
 
 #test: http://localhost:8000/api/set_perms/?user=6&perm=statistique&response=accept
+#Accepter la demande de changement de status
 @api_view(["GET"])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def set_perms(request):
@@ -377,7 +407,7 @@ def set_perms(request):
             perms = yaml.safe_load(open(settings.STATIC_ROOT + "/profils.yaml", "r", encoding="utf-8").read())
             for p in perms["profils"]:
                 if p["id"]==profil_id:
-                    ext_user.perms=p["perm"]
+                    ext_user.perm=p["perm"]
                     ext_user.save()
                     sendmail("Acces à '" + profil_id + "'", ext_user.user.email,"accept_perm",
                              dict(
@@ -410,19 +440,26 @@ def ask_perms(request):
     perm_id=request.GET.get("perm")
     ext_user = ExtraUser.objects.filter(id=request.GET.get("user")).first()
 
-    detail_perm=""
+    sel_profil=dict()
     profils = yaml.safe_load(open(settings.STATIC_ROOT + "/profils.yaml", "r", encoding="utf-8").read())
     for p in profils["profils"]:
         if p["id"]==perm_id:
-            detail_perm=p["perm"]
+            sel_profil=p
+            break
+
+    sendmail("Votre demande d'acces à DataCulturePro'", ext_user.user.email, "confirm_ask_perm", dict(
+        {
+            "profil":sel_profil["title"]
+        }
+    ))
 
     sendmail("Demande d'acces '"+perm_id+"' pour "+ext_user.user.email,EMAIL_PERM_VALIDATOR,"ask_perm",dict(
                              {
                                 "ask_user":ext_user.user.email,
                                 "ask_perm":perm_id,
-                                 "detail_perm":detail_perm,
-                                "url_ok":settings.DOMAIN_SERVER+"/api/set_perms/?user="+str(ext_user.user.id)+"&perm="+perm_id+"&response=accept",
-                                "url_cancel": settings.DOMAIN_SERVER + "/api/set_perms/?user=" + str(ext_user.user.id) + "&perm=" + perm_id + "&response=refuse"
+                                "detail_perm":sel_profil["perm"],
+                                "url_ok":getConfig("API_SERVER")+"/api/set_perms/?user="+str(ext_user.user.id)+"&perm="+perm_id+"&response=accept",
+                                "url_cancel": getConfig("API_SERVER") + "/api/set_perms/?user=" + str(ext_user.user.id) + "&perm=" + perm_id + "&response=refuse"
                               })
              )
 

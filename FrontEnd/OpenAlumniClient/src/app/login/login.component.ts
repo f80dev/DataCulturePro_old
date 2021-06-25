@@ -14,7 +14,6 @@ import {PromptComponent} from "../prompt/prompt.component";
 
 
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -47,8 +46,8 @@ export class LoginComponent implements OnInit {
     //   $$("L'usage des plateformes d'authentification n'est pas compatible avec Opera pour smarphone");
     //   this.showAuthentPlatform=false;
     // }
-
   }
+
 
 
   ngOnInit() {
@@ -68,11 +67,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("lastEmail", addr);
         this.email_login();
       }
-    })
-
-
-
-
+    });
   }
 
 
@@ -101,10 +96,14 @@ export class LoginComponent implements OnInit {
     }
   }
 
+
+
   quit() {
     this.router.navigate(["search"],{replaceUrl:true});
     //this._location.back();
   }
+
+
 
   updateUser() {
     // this.api.setuser(this.data.user).subscribe((res:any)=>{
@@ -112,6 +111,7 @@ export class LoginComponent implements OnInit {
     //   this.dialogRef.close({user:res.user,message:"Vous êtes maintenant authentifier",code:200,force_refresh:true});
     // },(err)=>{showError(this,err)});
   }
+
 
   email_login() {
     $$("Ouverture du login par email");
@@ -128,7 +128,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("lastEmail", email);
         this.email=email;
         $$("Recherche d'un compte déjà existant a l'email="+email);
-        this.wait_message="Recherche du compte";
+        this.wait_message="Recherche du compte";7
         this.api.getuser(email).subscribe((result: any) => {
           this.wait_message="";
           if (result.count>0) {
@@ -191,7 +191,6 @@ export class LoginComponent implements OnInit {
     if(typeof(code)=="object")code=code.target.value;
     $$("Vérification du code");
     this.wait_message="Vérification du code";
-
     this.api.checkCode(this.email, code).subscribe((r: any) => {
       this.wait_message="";
       if (r != null) {
@@ -200,8 +199,9 @@ export class LoginComponent implements OnInit {
         if(this.email)localStorage.setItem("email",this.email);
         showMessage(this, "Connexion à votre compte");
         this.messageCode="";
-        this.config.init_user(()=>{this.quit();});
+        this.config.init_user(()=>{this.quit();},()=>{});
       } else {
+        $$("Problème technique");
         this.config.raz_user();
         this.messageCode="";
         this.quit();
@@ -219,7 +219,7 @@ export class LoginComponent implements OnInit {
   initUser(data:any,askForCode=false){
     $$("Recherche d'un compte ayant ce mail",data);
     this.wait_message="Récupération de l'utilisateur";
-    this.api.getuser(data.email).subscribe((result:any)=> {
+    this.api.existuser(data.email).subscribe((result:any)=> {
         if (result.results.length > 0) {
           this.email = data.email;
           this.updateCode(data.provider_id)
@@ -241,7 +241,6 @@ export class LoginComponent implements OnInit {
           });
         }
       }
-
     );
   }
 
@@ -276,7 +275,6 @@ export class LoginComponent implements OnInit {
         } else {
           this.wait_message="";
           showError(this,err);
-
         }
       }
     );

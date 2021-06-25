@@ -1,5 +1,6 @@
 import hashlib
 import html
+import os
 from time import sleep
 from os import remove, scandir, stat
 from os.path import exists
@@ -18,7 +19,8 @@ from django.core.mail import send_mail
 
 from OpenAlumni import settings
 from OpenAlumni.settings import LINKEDIN_API_KEY, LINKEDIN_RETURN_URL, LINKEDIN_API_SECRET, DOMAIN_APPLI, DOMAIN_SERVER, \
-    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER,MYDICT
+    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER, MYDICT, DEBUG
+
 
 # authentication = linkedin.LinkedInAuthentication(
 #     LINKEDIN_API_KEY,
@@ -416,6 +418,10 @@ def clear_directory(dir, ext):
         if file.name.endswith("."+ext):
             remove(file.path)
 
+
+def getConfig(varname=""):
+    rc=os.environ[varname]
+    return rc
 
 
 def load_page(url:str):

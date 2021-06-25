@@ -3,6 +3,7 @@
 $darkgray: #303030
 $darkdarkgray: #1c1a1a
 $grayinput: #303030
+$mediumgray: #747474
 $button-color: #3a293c
 $primary-color: #ff059b
 
@@ -59,7 +60,7 @@ html, body, app-root
   margin: 0 !important
   padding: 0 !important
   color: white
-  background-color: $darkdarkgray !important
+  background-color: $mediumgray !important
   font-family: Roboto, "Helvetica Neue", sans-serif
   overflow: hidden
 
@@ -77,9 +78,9 @@ html, body, app-root
 
 
 .sidemenu
-  background-color: $darkgray
-  margin: 0px !important
-  padding: 0px !important
+  background-color: $darkdarkgray
+  padding: 10px !important
+  height: 100%
   z-index: 1
   display: inline-block
   overflow: hidden
@@ -91,7 +92,7 @@ html, body, app-root
   text-align: center
   padding: 0
   margin: 0
-  background-color: $darkdarkgray
+  background-color: $mediumgray
 
 .container
   width: 100vw
@@ -103,7 +104,7 @@ html, body, app-root
 
 .sidenav
   background-color: $darkgray
-  padding: 5px
+  padding: 0px
   display: inline-block
   z-index: 0
 
@@ -124,8 +125,16 @@ h3
 
 .bottom-bar
   width: 98%
-  margin: 1%
+  z-index: 100
+  background-color: $mediumgray
+  margin: 0
   text-align: right
+  position: absolute
+  display: block
+  bottom: 0px
+  right: 0px
+  height: 80px
+
 
 .h-zone
   margin-top: 5px

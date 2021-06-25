@@ -44,7 +44,7 @@ profils:
         w_linkedin admin write_email r_address r_lastname
         publish validate nft_write r_department stats delete_profil delete_pow ask_friend edit_profil add_movies share ask_tutor
     price: 0
-    subscription: online
+    subscription: secure
 
   - id: statistique
     title: Statisticien
@@ -65,7 +65,7 @@ profils:
       r_photo r_linkedin w_cp w_firstname w_linkedin edit_profil
       write_email r_mobile r_address r_department share advanced_search delete_profil nft_write
     price: 0
-    subscription: online
+    subscription: secure
 
   - id: student
     title: Eleve / ancien
@@ -77,6 +77,7 @@ profils:
       r_department advanced_search ask_friend ask_tutor publish
     price: 0
     subscription: email
+
 
   - id: dev
     title: Developpeur

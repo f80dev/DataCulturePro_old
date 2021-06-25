@@ -125,6 +125,10 @@ export class ApiService {
     return this._get("extrausers","search="+email);
   }
 
+  existuser(email: string) {
+    return this._get("users","email="+email);
+  }
+
 
   register(body:any) {
     return this._post("users/register","",body);

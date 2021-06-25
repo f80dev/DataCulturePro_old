@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1623774178894,
+  "timestamp": 1624611070309,
   "index": "https://testdcp.f80.fr/index.html",
   "assetGroups": [
     {
@@ -54,6 +54,7 @@
         "https://testdcp.f80.fr/assets/img/tips.png",
         "https://testdcp.f80.fr/assets/jobs.json",
         "https://testdcp.f80.fr/assets/jobs_old.json",
+        "https://testdcp.f80.fr/assets/modele_import.csv",
         "https://testdcp.f80.fr/assets/reporting.pbix"
       ],
       "patterns": []
@@ -128,14 +129,15 @@
     "https://testdcp.f80.fr/assets/img/tips.png": "b7832ac8a831f94cd9b656f48bc0d75a5cd587ca",
     "https://testdcp.f80.fr/assets/jobs.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
     "https://testdcp.f80.fr/assets/jobs_old.json": "e6e9d50780d2f6381fddf00f26635b5c9d285bbe",
+    "https://testdcp.f80.fr/assets/modele_import.csv": "25b9bd8f6041368b45010c31c9f527fab9359e3b",
     "https://testdcp.f80.fr/assets/reporting.pbix": "2b95ac35c6fee4fa408666be84d70943d4604ae8",
     "https://testdcp.f80.fr/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "https://testdcp.f80.fr/index.html": "7ceea3a9c3a2846292d6d1810f3439b8d691623e",
-    "https://testdcp.f80.fr/main.js": "eed62dcc4eac3751f1642a039cff7901723a8b2d",
+    "https://testdcp.f80.fr/main.js": "2da26d0fe9848925d954c944adec2e04ee87caea",
     "https://testdcp.f80.fr/manifest.webmanifest": "5430bb03fa346e338146a0956939e110243e7d40",
     "https://testdcp.f80.fr/polyfills.js": "3330d32f2d183bee4bd491b0a9ae9d2413cc9981",
     "https://testdcp.f80.fr/runtime.js": "5264a6daea6ec0713f2b8ce8dc4c29df11c5924e",
-    "https://testdcp.f80.fr/styles.css": "bbe57c0fc091b026d9e73fe1aa593c112ba15503"
+    "https://testdcp.f80.fr/styles.css": "a941337f90d9545c5bdf9a4a799545104fea8c3c"
   },
   "navigationUrls": [
     {

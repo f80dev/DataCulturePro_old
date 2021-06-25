@@ -31,7 +31,7 @@ def extract_profil_from_cnca(title):
 
 
 
-def extract_film_from_unifrance(url:str,job_for=None):
+def extract_film_from_unifrance(url:str,job_for=None,all_casting=False):
     rc=dict({"casting":[]})
     if not url.startswith("http"):
         log("On passe par la page de recherche pour retrouver le titre")
@@ -60,7 +60,7 @@ def extract_film_from_unifrance(url:str,job_for=None):
                     log("Enregistrement de l'affiche "+src)
 
     _real=page.find("div",attrs={"itemprop":"director"})
-    if not _real is None:
+    if not _real is None and not _real.find("a",attrs={"itemprop":"name"}) is None:
         rc["real"]=_real.find("a",attrs={"itemprop":"name"}).get("href")
 
     idx_div=0
@@ -78,7 +78,7 @@ def extract_film_from_unifrance(url:str,job_for=None):
 
 
     if not job_for is None:
-        if rc["real"]==job_for:
+        if "real" in rc and rc["real"]==job_for:
             rc["job"]="Réalisation"
         else:
             section=page.find("section",{"id":"casting"})
@@ -96,15 +96,16 @@ def extract_film_from_unifrance(url:str,job_for=None):
                                 rc["job"]=job
                                 break
                             else:
-                                #On ajoute l'ensemble du casting au systeme
-                                names = str(l.getText()).split(" ")
-                                lastname =names[len(names)-1]
-                                rc["casting"].append({
-                                    "lastname":lastname,
-                                    "url":l.attrs["href"],
-                                    "source":"unifrance",
-                                    "firstname":l.getText().replace(lastname,"").strip(),
-                                    "job":job})
+                                if all_casting:
+                                    #On ajoute l'ensemble du casting au systeme
+                                    names = str(l.getText()).split(" ")
+                                    lastname =names[len(names)-1]
+                                    rc["casting"].append({
+                                        "lastname":lastname,
+                                        "url":l.attrs["href"],
+                                        "source":"unifrance",
+                                        "firstname":l.getText().replace(lastname,"").strip(),
+                                        "job":job})
 
     if not "job" in rc:
         pass
@@ -217,7 +218,7 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
 
 
 #http://localhost:8000/api/batch
-def extract_film_from_imdb(url:str,title:str,name="",job="",):
+def extract_film_from_imdb(url:str,title:str,name="",job="",all_casting=False):
     """
 
     :return:
@@ -285,14 +286,15 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",):
                         if name.upper() in l.text.upper():
                             rc["job"]=job
                         else:
-                            names=l.text.replace("\n","").split(" ")
-                            lastname=names[len(names)-1]
-                            rc["casting"].append({
-                                "firstname":l.text.replace("\n","").replace(lastname,""),
-                                "lastname":lastname,
-                                "url":l.attrs["href"],
-                                "source":"imdb",
-                                "job":job})
+                            if all_casting:
+                                names=l.text.replace("\n","").split(" ")
+                                lastname=names[len(names)-1]
+                                rc["casting"].append({
+                                    "firstname":l.text.replace("\n","").replace(lastname,""),
+                                    "lastname":lastname,
+                                    "url":l.attrs["href"],
+                                    "source":"imdb",
+                                    "job":job})
 
     if not "job" in rc: rc["job"]=job
 

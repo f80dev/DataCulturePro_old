@@ -52,7 +52,7 @@ urlpatterns = [
     path('api/search/', views.search),
     path('api/reindex/', views.rebuild_index),
     path('api/getyaml/', views.getyaml),
-    path('api/search_profil/', views.search_profil),
+    path('api/update_extrauser/', views.update_extrauser),
     path('api/initdb/', views.initdb),
     path('api/helloworld/', views.helloworld),
     path('api/ask_perms/', views.ask_perms),

@@ -62,15 +62,15 @@ export class ProfilesComponent implements OnInit {
 
 
   sel_profil(p) {
-    if(!this.config.isProd()){
+    if(false && !this.config.isProd()){
       this.config.user.perm = p.perm;
       this.config.user.profil_name = p.id;
        this._location.back();
     } else {
-      if(p.subscription=="email") {
+      if(p.subscription=="secure") {
         this.dialog.open(PromptComponent, {
           data: {
-            title: 'Acces',
+            title: 'Ce profil nécessite un code d\'accès',
             question: "Code d'accès ?",
             onlyConfirm: false,
             lbl_ok: 'Valider',
@@ -88,10 +88,9 @@ export class ProfilesComponent implements OnInit {
             });
           }
         });
-      }
-      else{
+      }else{
         this.api.ask_perm(this.config.user,p.id).subscribe(()=>{
-          showMessage(this,"Demande de souscription transmise");
+          showMessage(this,"Votre demande d'accès au profil a été transmise.");
           this.router.navigate(["search"]);
         })
       }

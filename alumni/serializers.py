@@ -17,7 +17,7 @@ from OpenAlumni import settings
 from OpenAlumni.Tools import reset_password, log, sendmail
 from OpenAlumni.settings import APPNAME
 from alumni.documents import ProfilDocument, PowDocument
-from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article
+from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article, Company
 
 
 class UserSerializer(HyperlinkedModelSerializer):
@@ -84,6 +84,13 @@ class ExtraUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraUser
         fields  = ['id','user','perm','profil',"ask","friends","profil_name"]
+
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields  = ['id','name','siret','address']
 
 
 

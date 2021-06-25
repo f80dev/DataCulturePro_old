@@ -6,8 +6,7 @@
 </app-tuto>
 
 
-<mat-toolbar class="mat-elevation-z2 toolbar-app"
-             (mousedown)="closeMenu()">
+<mat-toolbar class="mat-elevation-z2 toolbar-app" (mousedown)="closeMenu()">
   <mat-icon
     id="cmdMenu"
     (click)="drawer.toggle()"
@@ -30,6 +29,7 @@
             (click)="_location.back()">navigate_before</mat-icon>
 
 </mat-toolbar>
+
 
 <mat-drawer-container class="container" autosize>
   <mat-drawer #drawer class="sidenav" [mode]="sidemenu_mode">

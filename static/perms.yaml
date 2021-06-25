@@ -53,7 +53,7 @@ perms:
     description: aux annonces
 
   - tag: advanced_search
-    description: recherches avancées
+    description: à la recherche avancée
 
   - tag: r_photo
     description: à voir la photo du profil

@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import datetime
+import sys
 
 from django.contrib import admindocs
 
@@ -248,6 +249,7 @@ APPNAME="Data Culture Pro"
 DOMAIN_APPLI="https://dcp.f80.fr"
 DOMAIN_SERVER="https://server.f80.fr:8000"
 
+DEBUG = (sys.argv[1] == 'runserver')
 
 LINKEDIN_API_KEY="86sko2r66j8l8k"
 LINKEDIN_API_SECRET="5daYMxKMEvWvfiuX"

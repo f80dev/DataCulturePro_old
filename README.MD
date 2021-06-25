@@ -38,12 +38,25 @@ puis on execute
 <pre>python manage.py migrate</pre><br>
 
 ##Création du compte admin
-<pre>python manage.py createsuperuser</pre>
+Le compte de super utilisateur permet une gestion fine de la plateforme d'exposition des API
+
+voir https://docs.djangoproject.com/fr/1.8/intro/tutorial02/
+
+python manage.py createsuperuser --settings OpenAlumni.settings
+
+Pour l'environnement de développement on utilisera
+python manage.py createsuperuser --settings OpenAlumni.settings_dev
+ 
+
+
+
 
 
 #Tester la sécurisation
 ##Tester l'obtention des token
 <pre>http://127.0.0.1:8000/api/token/</pre>
+
+
 
 
 
@@ -176,9 +189,13 @@ sudo systemctl enable --now docker
 #Déploiement de la version de production
 Produire le fichier 
 
+#Chargement des données
+
+
 
 #Références
 ##Analyse du graph social
 Utilisation de l'appli Gephi
 Manuel : http://gephi.michalnovak.eu/Mastering%20Gephi%20Network%20Visualization.pdf
+
 

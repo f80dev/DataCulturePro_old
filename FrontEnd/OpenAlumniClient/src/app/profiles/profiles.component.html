@@ -30,7 +30,7 @@
               class="app-button"
           (click)="sel_profil(profil)">
 
-          <span *ngIf="profil.subscription=='online'">Souscrire</span>
+          <span *ngIf="profil.subscription=='online' || profil.subscription=='secure'">Souscrire</span>
           <span *ngIf="profil.subscription=='email'">Demander</span>
 
         </button>
@@ -51,8 +51,8 @@
     <br><br>
   </div>
 
-
-  <div class="bottom-bar">
+</div>
+<div class="bottom-bar">
     <hr>
      <button mat-button mat-raised-button
           class="app-button" id="cmdShowPerms"
@@ -60,5 +60,4 @@
           Voir vos permissions
     </button>
   </div>
-</div>
 

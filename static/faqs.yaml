@@ -75,6 +75,9 @@ content:
       </p>
       "
 
+- index: obsolescence
+
+
   - index: obsolescence
     title: comment se font les rappels de mise a jour de profil ?
     format: html
