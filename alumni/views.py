@@ -722,7 +722,7 @@ def movie_importer(request):
                 title:str=row[1].replace("(le)","").replace("(la)","").replace("(les)","")
                 pows=list(PieceOfWork.objects.filter(title__icontains=title))
                 for pow in pows:
-                    if levenshtein(title.lower(),pow.title.lower())<3:
+                    if levenshtein(title.lower(),pow.title.lower())<4:
                         pow.reference=row[0]
                         pow.production=row[3]
                         pow.budget=int(row[4])

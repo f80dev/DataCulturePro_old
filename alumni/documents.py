@@ -57,4 +57,4 @@ class PowDocument(Document):
 
     class Django(object):
         model=PieceOfWork
-        fields=["id","year","visual","title","nature","category"]
+        fields=["id","year","visual","title","nature","category","production","reference"]

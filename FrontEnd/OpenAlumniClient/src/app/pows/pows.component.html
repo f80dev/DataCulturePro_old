@@ -64,6 +64,10 @@
               </td>
               <td style="font-size: small;line-height: 97%;text-align: left;padding:5px;width: 90%;display: inline-block;">
                 {{pow.description}}
+                <p *ngIf="pow.reference?.length>0">
+                  Budget: {{pow.budget}} €<br>
+                  Prod : {{pow.production}}
+                </p>
               </td>
             </tr>
           </table>
