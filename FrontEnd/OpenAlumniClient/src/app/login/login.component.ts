@@ -220,6 +220,8 @@ export class LoginComponent implements OnInit {
     $$("Recherche d'un compte ayant ce mail",data);
     this.wait_message="Récupération de l'utilisateur";
     this.api.existuser(data.email).subscribe((result:any)=> {
+      debugger
+        localStorage.setItem("email",data.email);
         if (result.results.length > 0) {
           this.email = data.email;
           this.updateCode(data.provider_id)

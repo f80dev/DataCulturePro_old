@@ -1,22 +1,23 @@
 
-<div class="flip-card" >
+<div class="flip-card">
   <div class="flip-card-inner mat-elevation-z8" [ngStyle]="{backgroundColor:backgroundColor}" >
     <div class="flip-card-front">
-      <table style="width:94%;margin:3%;margin-bottom: 0px;"><tr>
-        <td style="text-align: left;color: white;" *ngIf="config.hasPerm('r_department')">
-          {{profil.department}}
+      <table style="width:94%;margin:3%;margin-bottom: 0px;color: white;"><tr>
+        <td style="text-align: left;" *ngIf="config.hasPerm('r_department')">
+
         </td>
 
         <td style="text-align: right">
+          {{profil.department}}<br>
           <div *ngIf="config.hasPerm('r_promo')">
-        <span *ngIf="profil?.cursus=='P'" name="lblCursus">Cursus Pro - </span>
-        <span style='cursor: pointer'
-              name="lblPromo"
-              title="Rechercher par promotion"
-              (click)="onclick.emit(profil?.degree_year)">
+            <span *ngIf="profil?.cursus=='P'" name="lblCursus">Cursus Pro - </span>
+            <span style='cursor: pointer'
+                  name="lblPromo"
+                  title="Rechercher par promotion"
+                  (click)="onclick.emit(profil?.degree_year)">
         {{profil?.degree_year}}
       </span>
-      </div>
+          </div>
 
         </td>
       </tr>
@@ -24,11 +25,14 @@
 
       <div>
         <div *ngIf="!config.hasPerm('r_photo')"><br></div>
-        <div *ngIf="config.hasPerm('r_photo')">
-          <img *ngIf="config.hasPerm('r_photo')" [src]="profil?.photo" class="icon-profil">
-          <br>
+        <div *ngIf="config.hasPerm('r_photo') && profil?.photo.indexOf('anonymous')==-1">
+          <img [src]="profil?.photo"
+               class="icon-profil avatar-blur avatar-photo">
         </div>
 
+      </div>
+
+      <div class="avatar-name">
         <span *ngIf="config.hasPerm('r_firstname')">{{profil?.firstname}}</span>
         <span *ngIf="config.hasPerm('r_lastname')"> {{profil?.lastname}}</span>
       </div>
@@ -64,15 +68,6 @@
                 *ngIf="profil?.works?.length>0 && config.hasPerm('r_works')"
                 (click)="openWork(profil)">
           <mat-icon>videocam</mat-icon>
-        </button>
-
-        <button mat-button mat-icon-button
-                name="cmdLink"
-                class="small-icon-button"
-                *ngIf="profil?.links?.length==1"
-                [title]="profil?.links[0].text"
-                (click)="openLink(profil)">
-          <mat-icon>link</mat-icon>
         </button>
 
         <button mat-icon-button mat-button
@@ -151,7 +146,7 @@
         </button>
 
         <br><br>
-        Références<br>
+        <small>Références</small><br>
         <a *ngFor="let link of profil?.links" [href]="link.url" target="_blank" style="margin: 5px">{{link.text}}</a>
 
 

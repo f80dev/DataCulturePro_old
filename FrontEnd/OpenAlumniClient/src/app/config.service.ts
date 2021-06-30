@@ -22,38 +22,39 @@ export class ConfigService {
   jobs: any[]=[];
   query_cache: any[]; //Conserve le contenu de la dernière requete
 
-    constructor(private location: Location,
+  constructor(private location: Location,
               private http: HttpClient,
               public platform:Platform,
               public api:ApiService) {
-
-    }
-
-
-
-   public async getJson(jsonFile:string): Promise<any> {
-    return Promise.resolve((await this.http.get(jsonFile).toPromise()));
-    }
-
-
-    public hasPerm(perms:string,comments=""):boolean {
-      if(!this.user)return false;
-      if(!this.user.perm)return false;
-      for(let p of perms.split(" ")){
-        if(this.user.perm.indexOf(p)==-1){
-          return false;
-        }
-      }
-      return true;
-    }
-
-
-   private async getConfig(): Promise<any> {
-      if (!this.config) {
-        this.config = (await this.api.getyaml("",environment.config_file).toPromise());
-      }
-      return Promise.resolve(this.config);
   }
+
+
+  public async getJson(jsonFile:string): Promise<any> {
+    return Promise.resolve((await this.http.get(jsonFile).toPromise()));
+  }
+
+
+  public hasPerm(perms:string,comments=""):boolean {
+    if(!this.user)return false;
+    if(!this.user.perm)return false;
+    for(let p of perms.split(" ")){
+      if(this.user.perm.indexOf(p)==-1){
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+
+  private async getConfig(): Promise<any> {
+    if (!this.config) {
+      this.config = (await this.api.getyaml("",environment.config_file).toPromise());
+    }
+    return Promise.resolve(this.config);
+  }
+
+
 
   /**
    * Initialisation des principaux paramètres
@@ -80,7 +81,6 @@ export class ConfigService {
         this.api.getyaml("", "profils").subscribe((r: any) => {
           this.profils = r.profils;
           this.raz_user();
-
           this.getConfig().then(r => {
             this.values = r;
             this.ready = true;
@@ -91,11 +91,7 @@ export class ConfigService {
           });
         })
       }
-    })
-
-
-
-
+    });
   }
 
 
@@ -122,13 +118,12 @@ export class ConfigService {
           this.user.profil=this.values.anonymousOffer;
           if(func_anonyme)func_anonyme();
         }
-     });
+      });
     }
   }
 
 
   public raz_user() {
-    localStorage.removeItem("email");
     this.user={email:"",perm:this.profils[0].perm};
   }
 

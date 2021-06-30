@@ -42,7 +42,7 @@ export class LoginbarComponent implements OnInit,OnChanges {
   }
 
   help() {
-    debugger
+
   }
 
   del_user() {
