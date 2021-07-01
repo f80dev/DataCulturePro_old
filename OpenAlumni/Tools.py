@@ -441,16 +441,22 @@ def load_page(url:str):
         return wikipedia.BeautifulSoup(html)
     else:
         log("Chargement de la page "+url)
-        sleep(random.randint(1000,2000)/1000)
-        rc= wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text, "html5lib")
+        for itry in range(5):
+            try:
+                sleep(random.randint(1000, 2000) / 1000)
+                rc= wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text, "html5lib")
+                break
+            except:
+                pass
 
-        with open("./Temp/"+filename, 'w', encoding='utf8') as f:
-            f.write(str(rc))
-            f.close()
+        if not rc is None:
+            with open("./Temp/"+filename, 'w', encoding='utf8') as f:
+                f.write(str(rc))
+                f.close()
 
-        if exists("./Temp/html.7z"):
-            with py7zr.SevenZipFile("./Temp/html.7z", 'a') as archive:
-                archive.write("./Temp/"+filename,filename)
+            if exists("./Temp/html.7z"):
+                with py7zr.SevenZipFile("./Temp/html.7z", 'a') as archive:
+                    archive.write("./Temp/"+filename,filename)
 
         return rc
 
