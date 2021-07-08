@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import {ApiService} from "../api.service";
 import {Router} from "@angular/router";
+import {$$} from "../tools";
 
 @Component({
   selector: 'app-visgraph',
@@ -58,7 +59,7 @@ export class VisgraphComponent implements OnInit {
   filter={
     pagerank:{value:0.0005,min:1000,max:-1000,step:0},
     centrality:{value:0.0005,min:1000,max:-1000,step:0},
-    promo:{value:2020,values:[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023]},
+    promo:{value:0,values:[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023]},
     department:{value:"",values:["Image","Son","Réalisation","Montage","Décor"]}
   };
   message: string="";
@@ -83,6 +84,7 @@ export class VisgraphComponent implements OnInit {
 
 
   initializeForces(data,svg) {
+    $$("Données traitées ",data);
     var link = svg
       .selectAll("line")
       .data(data.edges)

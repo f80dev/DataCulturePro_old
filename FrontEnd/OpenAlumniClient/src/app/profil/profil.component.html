@@ -38,13 +38,10 @@
       </div>
 
 
-
-
-      <div name="cardContent">
+      <div name="cardContent" style="display:inline-block;position:absolute;left:0;top:0;height:100%;width:100%;z-index:100;">
         <ng-content></ng-content>
         <app-hourglass [message]="profil?.message"></app-hourglass>
       </div>
-
 
 
     </div>
@@ -70,7 +67,7 @@
           <mat-icon>videocam</mat-icon>
         </button>
 
-        <button mat-icon-button mat-button
+        <button mat-button mat-icon-button
                 title="Partager / Envoyer ce profil"
                 name="cmdShareProfil"
                 class="small-icon-button"

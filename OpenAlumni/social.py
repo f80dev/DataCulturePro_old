@@ -13,7 +13,12 @@ class SocialGraph:
 
     def load(self,filter=""):
         ids=[]
-        profils=Profil.objects.filter(degree_year=int(filter.split("_")[0]),department=filter.split("_")[1])
+        degree_filter=filter.split("_")[0]
+        department_filter=filter.split("_")[1]
+
+        profils=Profil.objects.filter(department=department_filter)
+        if degree_filter!="0":
+            profils=Profil.objects.filter(degree_filter=int(degree_filter),department=department_filter)
 
         for p in profils:
             self.G.add_node(p.id,
@@ -24,20 +29,21 @@ class SocialGraph:
                             )
             ids.append(p.id)
 
-        with connection.cursor() as cursor:
-            cursor.execute("DROP TABLE IF EXISTS social_matrix")
-            cursor.execute("""
-                   CREATE TABLE Social_Matrix AS
-                   SELECT alumni_work.profil_id AS Profil1, alumni_work1.profil_id AS Profil2, Count(alumni_work.pow_id) AS CountOfFilm
-                   FROM alumni_work INNER JOIN alumni_work AS alumni_work1 ON alumni_work.pow_id = alumni_work1.pow_id
-                   GROUP BY alumni_work.profil_id, alumni_work1.profil_id
-                   HAVING (((alumni_work.profil_id)<>alumni_work1.profil_id));
-               """)
+        if len(ids)>0:
+            with connection.cursor() as cursor:
+                cursor.execute("DROP TABLE IF EXISTS social_matrix")
+                cursor.execute("""
+                       CREATE TABLE Social_Matrix AS
+                       SELECT alumni_work.profil_id AS Profil1, alumni_work1.profil_id AS Profil2, Count(alumni_work.pow_id) AS CountOfFilm
+                       FROM alumni_work INNER JOIN alumni_work AS alumni_work1 ON alumni_work.pow_id = alumni_work1.pow_id
+                       GROUP BY alumni_work.profil_id, alumni_work1.profil_id
+                       HAVING (((alumni_work.profil_id)<>alumni_work1.profil_id));
+                   """)
 
-            cursor.execute("SELECT * FROM Social_Matrix")
-            for row in cursor.fetchall():
-                if row[0] in ids and row[1] in ids:
-                    self.G.add_edge(row[0], row[1], weight=row[2])
+                cursor.execute("SELECT * FROM Social_Matrix")
+                for row in cursor.fetchall():
+                    if row[0] in ids and row[1] in ids:
+                        self.G.add_edge(row[0], row[1], weight=row[2])
 
         return len(self.G.nodes)
 

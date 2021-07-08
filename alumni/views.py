@@ -11,7 +11,6 @@ import pandas as pd
 from django.http import JsonResponse, HttpResponse
 from django.utils.http import urlquote
 from django_elasticsearch_dsl import Index
-from django_elasticsearch_dsl_drf import serializers
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, \
     SUGGESTER_COMPLETION, LOOKUP_FILTER_TERMS, \
     LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE, LOOKUP_FILTER_TERM
@@ -24,7 +23,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 from erdpy.accounts import Account
 from rest_framework.decorators import api_view,  permission_classes, renderer_classes
-from rest_framework.fields import JSONField
+
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -39,13 +38,21 @@ from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
 from rest_framework import viewsets, generics
 
-from OpenAlumni import settings, settings_dev
-from OpenAlumni.Batch import exec_batch, extract_film_from_unifrance
+
+from OpenAlumni import settings
+
+from OpenAlumni.Batch import exec_batch
 from OpenAlumni.Tools import dateToTimestamp, stringToUrl, reset_password, log, extract_text_from_pdf, open_html_file, \
     sendmail, to_xml, translate, levenshtein, getConfig
 from OpenAlumni.nft import NFTservice
-from OpenAlumni.settings import APPNAME, DOMAIN_APPLI, EMAIL_PERM_VALIDATOR, TOKEN_ID, NFT_CONTRACT, BC_PROXY, \
-    ADMIN_PEMFILE
+import os
+
+if os.environ.get("DEBUG"):
+    from OpenAlumni.settings_dev import *
+else:
+    from OpenAlumni.settings import *
+
+
 from OpenAlumni.social import SocialGraph
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article, Company
@@ -187,7 +194,7 @@ def getyaml(request):
     url=request.GET.get("url","")
     if len(url)==0:
         name=request.GET.get("name","profil")
-        f=open(settings.STATIC_ROOT+"/"+name+".yaml", "r",encoding="utf-8")
+        f=open(STATIC_ROOT+"/"+name+".yaml", "r",encoding="utf-8")
     else:
         f=urlopen(url)
     result=yaml.safe_load(f.read())
@@ -320,6 +327,12 @@ def refresh_jobsites(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def update_dictionnary(request):
+    """
+    Consiste à uniformiser la terminologie des métiers en fonction de l'état du dictionnaire
+    :param request:
+    :return:
+    """
+    log("Application du dictionnaire sur les métiers")
     for w in Work.objects.all():
         job=translate(w.job)
         if job!=w.job:
@@ -327,9 +340,11 @@ def update_dictionnary(request):
             w.job=job
             w.save()
 
+    log("Application du dictionnaire sur les oeuvres")
     for p in PieceOfWork.objects.all():
         category=translate(p.category)
         if category!=p.category:
+            log("Traitement de " + str(p.title))
             p.category=category
             p.save()
 
@@ -350,8 +365,17 @@ def search(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def rebuild_index(request):
+    """
+    Relance l'indexation d'elasticsearch
+    :param request:
+    :return:
+    """
     p=ProfilDocument()
-    p.init(index="profils")
+    p.init("profils")
+
+    m=PowDocument()
+    m.init("pows")
+
     return JsonResponse({"message":"Re-indexage terminé"})
 
 
@@ -666,11 +690,16 @@ from dict2xml import dict2xml as xmlify
 @renderer_classes((WorksCSVRenderer,))
 @permission_classes([AllowAny])
 def export_all(request):
+    """
+    Exportation statistiques pour consolidation
+    :param request:
+    :return:
+    """
     headers=WorksCSVRenderer.header
     works=Work.objects.all()
     df:pd.DataFrame = pd.DataFrame.from_records(list(works.values(
         "profil__id","profil__gender","profil__lastname","profil__firstname","profil__department","profil__cursus","profil__degree_year","profil__cp","profil__town",
-        "pow__id","pow__title","pow__nature","pow__category","pow__year",
+        "pow__id","pow__title","pow__nature","pow__category","pow__year","pow__budget","pow__production",
         "id","job","comment","validate","source","state"
     )))
     df.columns=headers

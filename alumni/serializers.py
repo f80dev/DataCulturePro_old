@@ -1,23 +1,23 @@
-from hashlib import sha256
-from urllib.request import urlopen
 
 import yaml
-from django.utils.timezone import now
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
-from rest_framework.relations import PrimaryKeyRelatedField, StringRelatedField
 from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework_csv.renderers import CSVRenderer
-from rsa import encrypt
 
 from OpenAlumni import settings
 from OpenAlumni.Tools import reset_password, log, sendmail
-from OpenAlumni.settings import APPNAME
 from alumni.documents import ProfilDocument, PowDocument
 from alumni.models import Profil, ExtraUser, PieceOfWork, Work, Article, Company
+
+import os
+if os.environ.get("DEBUG"):
+    from OpenAlumni.settings_dev import *
+else:
+    from OpenAlumni.settings import *
 
 
 class UserSerializer(HyperlinkedModelSerializer):
@@ -39,7 +39,7 @@ class UserSerializer(HyperlinkedModelSerializer):
             data["username"]=data["email"]
             sendmail("Voici votre code de connexion via mail", [data["email"]], "welcome_google", dict({
                 "email": data["email"],
-                "url_appli": settings.DOMAIN_APPLI + "/?email=" + data["email"],
+                "url_appli": DOMAIN_APPLI + "/?email=" + data["email"],
                 "firstname":data["first_name"],
                 "code": password,
                 "appname": APPNAME
@@ -179,7 +179,7 @@ class WorkSerializer(serializers.ModelSerializer):
 class WorksCSVRenderer (CSVRenderer):
     header = [
         "profil_id", "profil_genre","profil_nom", "profil_prenom", "profil_formation", "profil_cursus","profil_promotion","profil_code_postal", "profil_ville",
-        "film_id","film_titre", "film_catégorie", "film_genre","film_annee",
+        "film_id","film_titre", "film_catégorie", "film_genre","film_annee","film_budget","film_production",
         "work_id", "work_job","work_comment","work_validate","work_source","work_state"
     ]
 

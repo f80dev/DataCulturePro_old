@@ -17,9 +17,11 @@ from django.core.mail import send_mail
 # from linkedin_v2 import linkedin
 # from linkedin_v2.linkedin import LinkedInApplication
 
-from OpenAlumni import settings
-from OpenAlumni.settings import LINKEDIN_API_KEY, LINKEDIN_RETURN_URL, LINKEDIN_API_SECRET, DOMAIN_APPLI, DOMAIN_SERVER, \
-    APPNAME, EMAIL_HOST_USER, STATIC_ROOT, EMAIL_TESTER, MYDICT, DEBUG
+if os.environ.get("DEBUG"):
+    from OpenAlumni.settings_dev import *
+else:
+    from OpenAlumni.settings import *
+
 
 
 # authentication = linkedin.LinkedInAuthentication(
@@ -90,7 +92,7 @@ def reset_password(email,username):
 
     sendmail("Voici votre code",[email],"welcome",dict({
         "email": email,
-        "url_appli":settings.DOMAIN_APPLI+"/?email="+email,
+        "url_appli":DOMAIN_APPLI+"/?email="+email,
         "username": username,
         "code": password,
         "appname": APPNAME
@@ -212,8 +214,8 @@ def sendmail(subject, _to, template, field):
             _dest.append(c)
 
     send_mail(subject,message="",from_email=EMAIL_HOST_USER,recipient_list=_dest,
-              auth_user=settings.EMAIL_HOST_USER,html_message=html,
-              auth_password=settings.EMAIL_HOST_PASSWORD + "!!")
+              auth_user=EMAIL_HOST_USER,html_message=html,
+              auth_password=EMAIL_HOST_PASSWORD + "!!")
 
 
 def open_html_file(name:str,replace=dict(),domain_appli=DOMAIN_APPLI):
@@ -296,7 +298,7 @@ def tirage(indice_sup,indice_inf=0):
 
 
 def now():
-    rc= datetime.now(tz=None).timestamp()
+    rc= datetime.datetime.now(tz=None).timestamp()
     return rc
 
 

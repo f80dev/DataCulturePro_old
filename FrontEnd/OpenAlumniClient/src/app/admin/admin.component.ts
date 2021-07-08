@@ -75,4 +75,11 @@ export class AdminComponent implements OnInit {
     debugger
     open(url);
   }
+
+  apply_dict() {
+    this.message="Uniformise la terminoloie"
+    this.api._get("update_dictionnary").subscribe(()=>{
+      this.message="";
+    })
+  }
 }

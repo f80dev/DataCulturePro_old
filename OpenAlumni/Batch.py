@@ -452,55 +452,61 @@ def exec_batch(profils):
             all_links.append(l["url"])
 
     for profil in profils:
-        links=[]
-        job_for=None
+        try:
+            links=[]
+            job_for=None
 
-        log("Traitement de " + profil.firstname+" "+profil.lastname)
-        transact = Profil.objects.filter(id=profil.id)
-        if profil.delay_lastsearch() > DELAY_TO_AUTOSEARCH or len(profils)==1:
-            log("Hors délai ==> mise a jour")
-            profil.dtLastSearch=datetime.now()
+            log("Traitement de " + profil.firstname+" "+profil.lastname)
+            transact = Profil.objects.filter(id=profil.id)
+            if profil.delay_lastsearch() > DELAY_TO_AUTOSEARCH or len(profils)==1:
+                log("mise a jour de "+profil.lastname)
+                profil.dtLastSearch=datetime.now()
 
-            #infos = extract_profil_from_bellefaye(firstname=profil.firstname, lastname=profil.lastname)
-            #log("Extraction bellefaye " + str(infos))
+                #infos = extract_profil_from_bellefaye(firstname=profil.firstname, lastname=profil.lastname)
+                #log("Extraction bellefaye " + str(infos))
 
-            infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname)
-            log("Extraction d'imdb " + str(infos))
-            if "url" in infos:profil.add_link(infos["url"], "IMDB")
-            if "photo" in infos and len(profil.photo)==0:profil.photo=infos["photo"]
-            if "links" in infos: links=links+infos["links"]
+                infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname)
+                log("Extraction d'imdb " + str(infos))
+                if "url" in infos:profil.add_link(infos["url"], "IMDB")
+                if "photo" in infos and len(profil.photo)==0:profil.photo=infos["photo"]
+                if "links" in infos: links=links+infos["links"]
 
-            infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
-            log("Extraction d'un profil d'unifrance "+str(infos))
-            if infos is None:
-                advices = dict({"ref": "Vous devriez créer votre profil sur UniFrance"})
-                transact.update(advices=advices)
+                infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
+                log("Extraction d'un profil d'unifrance "+str(infos))
+                if infos is None:
+                    advices = dict({"ref": "Vous devriez créer votre profil sur UniFrance"})
+                    transact.update(advices=advices)
+                else:
+                    if len(infos["photo"]) > 0 and not profil.photo.startswith("http"): transact.update(photo=infos["photo"])
+                    transact.update(links=profil.add_link(infos["url"], "UniFrance"))
+                    if "links" in infos:
+                        links=links+infos["links"]
+                    job_for=infos["url"]
+
+
+                add_pows_to_profil(profil,links,all_links,job_for=job_for)
+
+
+
+                # log("Extraction de wikipedia")
+                # try:
+                #     infos = extract_actor_from_wikipedia(firstname=profil.firstname,lastname=profil.lastname)
+                #     sleep(random() * 5)
+                #     if not infos is None:
+                #         if "photo" in infos and profil.photo is None: transact.update(photo=infos["photo"])
+                #         if "summary" in infos and profil.biography is None: transact.update(biography=infos["summary"])
+                #         if "links" in infos and len(infos["links"])>0:
+                #             links=profil.add_link(url=infos["links"][0]["url"], title=infos["links"][0]["title"],description="")
+                #             transact.update(links=links)
+                # except:
+                #     pass
+
+                transact.update(dtLastSearch=profil.dtLastSearch)
             else:
-                if len(infos["photo"]) > 0 and not profil.photo.startswith("http"): transact.update(photo=infos["photo"])
-                transact.update(links=profil.add_link(infos["url"], "UniFrance"))
-                if "links" in infos:
-                    links=links+infos["links"]
-                job_for=infos["url"]
-
-
-            add_pows_to_profil(profil,links,all_links,job_for=job_for)
-
-
-
-            # log("Extraction de wikipedia")
-            # try:
-            #     infos = extract_actor_from_wikipedia(firstname=profil.firstname,lastname=profil.lastname)
-            #     sleep(random() * 5)
-            #     if not infos is None:
-            #         if "photo" in infos and profil.photo is None: transact.update(photo=infos["photo"])
-            #         if "summary" in infos and profil.biography is None: transact.update(biography=infos["summary"])
-            #         if "links" in infos and len(infos["links"])>0:
-            #             links=profil.add_link(url=infos["links"][0]["url"], title=infos["links"][0]["title"],description="")
-            #             transact.update(links=links)
-            # except:
-            #     pass
-
-            transact.update(dtLastSearch=profil.dtLastSearch)
+                log(profil.lastname+" est déjà à jour")
+        except:
+            log("Problème de mise a jour de "+profil.lastname)
+            sleep(10)
 
     clear_directory("./Temp","html")
 

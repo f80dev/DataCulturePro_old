@@ -151,11 +151,11 @@ jobs:
   Réalisateur chef-op auteur compositeur: Auteur/Réalisateur
   Narration: Scénario
   Interprètes de la musique: Musique
-  Chef décoratrice: Décors
+  Chef décoratrice: Décorateur/trice
   Interprète de la musique: Musique
   Intern: Diver
   Segment team: Divers
-  Assistante décoratrice: Décors
+  Assistante décoratrice: Décorateur/trice
   Auteur réalisateur: Auteur/Réalisateur
   Post: Postprod
   Assistant set manager: Diver
@@ -165,4 +165,45 @@ jobs:
   Participantes: Autre
   Post-audio supervisor: Postprod
   Assistant set manager - uncredited: Autre
-
+  Cast: Casting
+  Directed: Réalisation
+  Series directed: Réalisation
+  Music: Son
+  Casting by: Casting
+  Production management: Production
+  Writing credits: Scénariste
+  Series additional crew: Acteur(trice)
+  Series script and continuity department: Scénariste
+  Series art department: Décorateur/trice
+  Series produced: Production
+  Set decoration: Décorateur/trice
+  Series production management: Production
+  Visual effects: Effets spéciaux
+  Production design: Production
+  Assistants de production: Production
+  Series production desig: Production
+  Series sound department: Son
+  Series editorial department: Scénariste
+  Costume design: Costumes
+  Attachée de presse film: Relations presse
+  Idées originales: Scénariste
+  Coproductrices: Production
+  Productrices déléguées: Production
+  Production coordinator: Production
+  Production staff: Production
+  Screenplay assistant: Montage
+  Costume_designer: Costumes
+  Assistant to jean labadie: Autres
+  Lui-même: Acteur(trice)
+  Series second unit director or assistant director: Assistant réalisation
+  Directrice/responsable des ventes: Production
+  Series cinematography: Photographie
+  Dialogue coach: Dialoguiste
+  Head of legal and business affairs: Production
+  Compositeur réalisateur: Réalisateur
+  Dialoguistes: Dialoguiste
+  Monteuse-  réalisatrice: Montage
+  Production secretary: france
+  Series writing credits: Scénario
+  Film editing: Montage
+  Cinematography: Direction photo

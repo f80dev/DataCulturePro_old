@@ -50,7 +50,7 @@ urlpatterns = [
     path('api/nfts/', views.nfts),
     path('api/batch/', views.batch),
     path('api/search/', views.search),
-    path('api/reindex/', views.rebuild_index),
+    path('api/rebuild_index/', views.rebuild_index),
     path('api/getyaml/', views.getyaml),
     path('api/update_extrauser/', views.update_extrauser),
     path('api/initdb/', views.initdb),

@@ -14,6 +14,8 @@ from django.dispatch import receiver
 from django_elasticsearch_dsl.registries import registry
 
 from OpenAlumni.Tools import now
+
+
 from OpenAlumni.settings import DOMAIN_APPLI
 
 

@@ -22,7 +22,7 @@
         [min]="filter[p].min" [max]="filter[p].max" [step]="filter[p].step">
       </mat-slider>
 
-      <mat-form-field appearance="legacy" style="max-width:50px;font-size: medium;">
+      <mat-form-field appearance="legacy" style="max-width:100px;font-size: medium;">
         <mat-label>Promo</mat-label>
         <mat-select id="selPromoFilter" [(ngModel)]="filter.promo.value" (selectionChange)="updateData()">
           <mat-option *ngFor="let y of filter.promo.values" [value]="y">
@@ -31,7 +31,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="legacy" style="max-width:50px;font-size: medium;">
+      <mat-form-field appearance="legacy" style="max-width:100px;font-size: medium;">
         <mat-label>Formation</mat-label>
         <mat-select id="selFormationFilter" [(ngModel)]="filter.department.value" (selectionChange)="updateData()">
           <mat-option *ngFor="let y of filter.department.values" [value]="y">
@@ -39,12 +39,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
-
-
-
-
-
 
     </div>
 

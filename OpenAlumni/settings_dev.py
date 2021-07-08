@@ -244,10 +244,10 @@ EMAIL_HOST_PASSWORD ="Hh42714280"
 
 APPNAME="Data Culture Pro"
 
-#DOMAIN_APPLI="http://localhost:4200"
-#DOMAIN_SERVER="http://localhost:8000"
-DOMAIN_APPLI="https://dcp.f80.fr"
-DOMAIN_SERVER="https://server.f80.fr:8000"
+DOMAIN_APPLI="http://localhost:4200"
+DOMAIN_SERVER="http://localhost:8000"
+#DOMAIN_APPLI="https://dcp.f80.fr"
+#DOMAIN_SERVER="https://server.f80.fr:8000"
 
 DEBUG = (sys.argv[1] == 'runserver')
 
