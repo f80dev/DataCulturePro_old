@@ -1,6 +1,5 @@
 <div class="mainform" style="overflow: hidden;">
-  <div id="toolbar" class="toolbar-app"
-       style="position:fixed;display:block;padding:3px;width:fit-content;right:0;bottom:0;z-index:100;background-color: #424242;height:70px;vertical-align: middle;line-height: 90%;">
+  <div id="toolbar" class="toolbar-app" style="position:fixed;display:block;padding:3px;width:fit-content;right:0;bottom:0;z-index:100;background-color: #424242;height:90px;vertical-align: middle;line-height: 90%;">
     <mat-slider
       title="Dispersion"
       color="primary"
@@ -22,7 +21,7 @@
         [min]="filter[p].min" [max]="filter[p].max" [step]="filter[p].step">
       </mat-slider>
 
-      <mat-form-field appearance="legacy" style="max-width:100px;font-size: medium;">
+      <mat-form-field appearance="legacy" style="max-width:120px;font-size: medium;margin:3px;">
         <mat-label>Promo</mat-label>
         <mat-select id="selPromoFilter" [(ngModel)]="filter.promo.value" (selectionChange)="updateData()">
           <mat-option *ngFor="let y of filter.promo.values" [value]="y">
@@ -31,7 +30,8 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="legacy" style="max-width:100px;font-size: medium;">
+
+      <mat-form-field appearance="legacy" style="max-width:120px;font-size: medium;margin:3px;">
         <mat-label>Formation</mat-label>
         <mat-select id="selFormationFilter" [(ngModel)]="filter.department.value" (selectionChange)="updateData()">
           <mat-option *ngFor="let y of filter.department.values" [value]="y">

@@ -1,16 +1,16 @@
 <div class="mainform" style="padding:10px;">
   <br>
-  <app-profil [profil]="profil" [showAction]="false" width="90vw" style="display: inline-block">
 
-    <table>
+
+    <table style="text-align: left;">
       <tr *ngIf="config.hasPerm('r_address r_cp') && profil?.address?.length>0">
         <td>
-          Adresse postale:
+          <strong>Adresse postale:</strong>
         </td>
         <td>{{profil?.address}} {{profil?.cp}}</td>
       </tr>
       <tr *ngIf="config.hasPerm('r_mobile') && profil?.mobile?.length>4">
-        <td>Mobile: </td>
+        <td><strong>Mobile:</strong></td>
         <td>{{profil?.mobile}}</td>
       </tr>
     </table>
@@ -59,7 +59,5 @@
 
     </div>
 
-
-  </app-profil>
 
 </div>

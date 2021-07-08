@@ -24,7 +24,7 @@
 
 
 <!-- Affichage de la liste -->
-  <div class="wrap-list" *ngIf="works?.length>0">
+  <div class="wrap-list" *ngIf="works?.length>0" style="align-items: stretch">
     <div *ngFor="let wrk of works | filter:['filter',cat_filter] | filter:['job',job_filter]" style="max-width: 400px;margin:1%;">
 
       <app-work [work]="wrk" height="120px" [showAction]="true">
@@ -32,7 +32,7 @@
           <div *ngIf="wrk.pow?.visual?.length>0" style="flex: 15%">
              <img [src]="wrk.pow?.visual"
                    class="image-photo"
-                   style="height: 120px;margin:0px;padding: 0px;"
+                   style="height: 120px;margin-right:10px;padding: 0px;"
               >
           </div>
           <div style="flex: 65%;height:80%;overflow: hidden;line-height: 95%;">

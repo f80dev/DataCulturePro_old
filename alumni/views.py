@@ -636,8 +636,9 @@ def social_graph(request,format="json"):
     :return:
     """
     G=SocialGraph()
-    G.load(request.GET.get("filter"))
+    G.load(request.GET.get("filter"),request.GET.get("film")!="false")
     G.eval(request.GET.get("eval"))
+    G.filter("pagerank",0.0005)
 
     if format=="json":
         return JsonResponse(G.export(format))

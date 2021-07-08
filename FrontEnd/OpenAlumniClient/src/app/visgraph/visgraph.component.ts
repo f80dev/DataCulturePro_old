@@ -63,6 +63,7 @@ export class VisgraphComponent implements OnInit {
     department:{value:"",values:["Image","Son","Réalisation","Montage","Décor"]}
   };
   message: string="";
+  edge_props: any;
 
   constructor(
     public api:ApiService,
@@ -90,6 +91,8 @@ export class VisgraphComponent implements OnInit {
       .data(data.edges)
       .enter()
       .append("line")
+      .property("edgeid",(d) => {return d.id;})
+      .on("click", (d)=>{this.sel_edge(d);})
       .style("stroke", "#aaa")
 
     var nodeEnter = svg
@@ -198,6 +201,11 @@ export class VisgraphComponent implements OnInit {
     // this.updateForces();
   }
 
+  sel_edge(d:any){
+    let prop=this.edge_props[d.target.__data__.index];
+    this.router.navigate(["pows"],{queryParams:{id:prop}})
+  }
+
 
   ngOnInit(): void {
     this.svg=this.createSvg();
@@ -207,7 +215,7 @@ export class VisgraphComponent implements OnInit {
 
 
   sel(d: any) {
-    this.router.navigate(["search"],{queryParams:{filter:d.target.__data__.label}})
+    this.router.navigate(["search"],{queryParams:{filter:d.target.__data__.lastname}})
   }
 
 
@@ -235,11 +243,12 @@ export class VisgraphComponent implements OnInit {
 
   refresh(promo_filter=2021,department_filter="") {
     let filter=promo_filter+"_"+department_filter;
-    this.api._get("social_graph/json/","eval="+this.props.join(",")+"&filter="+filter,120,"").subscribe((data:any)=>{
+    this.api._get("social_graph/json/","film&eval="+this.props.join(",")+"&filter="+filter,120,"").subscribe((data:any)=>{
       this.message="";
-      this.data=data;
-      this.update_filter(data);
-      this.initializeForces(data,this.svg);
+      this.data=data.graph;
+      this.edge_props=data.edge_props;
+      this.update_filter(data.graph);
+      this.initializeForces(data.graph,this.svg);
     });
   }
 }

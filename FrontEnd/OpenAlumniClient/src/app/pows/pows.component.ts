@@ -18,6 +18,7 @@ export class PowsComponent implements OnInit {
   query: any={value:""};
   limit=50;
   @ViewChild('powAccordion') powAccordion: MatAccordion;
+  filter_id: number;
 
   constructor(public api:ApiService,
               public ngNavigatorShareService:NgNavigatorShareService,
@@ -27,8 +28,8 @@ export class PowsComponent implements OnInit {
               public config:ConfigService) { }
 
   ngOnInit(): void {
-    if(this.routes.snapshot.queryParamMap.has("filter"))
-      this.query.value=this.routes.snapshot.queryParamMap.get("filter");
+    if(this.routes.snapshot.queryParamMap.has("filter"))this.query.value=this.routes.snapshot.queryParamMap.get("filter");
+    if(this.routes.snapshot.queryParamMap.has("id"))this.filter_id=Number(this.routes.snapshot.queryParamMap.get("id"));
     this.refresh();
   }
 
@@ -57,7 +58,6 @@ export class PowsComponent implements OnInit {
 
 
   refresh() {
-
     let param=translateQuery(this.query.value,this.all);
     param=param.replace("works__title","title__terms");
     param=param+"&limit="+this.limit;
@@ -66,17 +66,8 @@ export class PowsComponent implements OnInit {
       this.message="";
       this.pows=[];
       for(let i of r.results){
-        let tmp=[];
-        // if(i.hasOwnProperty("works") && i.works!={}){
-        //   for(let w of i.works){
-        //     while(w.indexOf("'")>-1){
-        //       w=w.replace("'","\"");
-        //     }
-        //     tmp.push(JSON.parse(w));
-        //   }
-        // }
-        // i.works=tmp;
-        this.pows.push(i);
+        if(!this.filter_id || this.filter_id==i.id)
+          this.pows.push(i);
       }
       if(r.results.length<10){
         this.powAccordion.openAll();
