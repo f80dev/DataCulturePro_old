@@ -2,6 +2,7 @@
 
 import networkx as nx
 from django.db import connection
+from networkx import shortest_path
 
 from alumni.models import Profil
 
@@ -19,6 +20,9 @@ class SocialGraph:
                 _G.remove_node(idx)
         self.G=_G
 
+
+    def extract_subgraph(self):
+        res=shortest_path(self.G)
 
     def load(self,filter="",with_film=False):
         ids=[]

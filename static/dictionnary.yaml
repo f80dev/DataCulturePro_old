@@ -33,21 +33,21 @@ jobs:
   Production_manager: Producteur
   Music_department: Musique
   Assistant_director: Assistant réalisateur
-  Script_department: Scénario
+  Script_department: Scénariste
   Soundtrack: Compositeur
   Sound department: son
   Second unit director or assistant director: Assistant réalisateur
   Editor: Montage
   Monteur: Montage
-  Scénaristes: Scénario
+  Scénaristes: Scénariste
   Director: Réalisation
   Réalisateur: Réalisation
   Réalisatrice: Réalisation
-  Writer: Scénario
+  Writer: Scénariste
   Monitor technician: Technicien
   Set_decorator: Décors
   Production_designer: Production
-  Head writer: Scénario
+  Head writer: Scénariste
   Visual_effects: Effets spéciaux
   Craft service: Effets spéciaux
   Title designer: Designer
@@ -84,11 +84,11 @@ jobs:
   Décoratrice: Décorateur/trice
   Décoratrices: Décorateur/trice
   Additional crew: Equipe Supplémentaire
-  Scénariste: Scénario
+  Scénariste: Scénariste
   Mixeur monteur son: Mixeur
   Attachées de presse (film): Relations presse
   Attachés de presse (film): Relations presse
-  Chef opérateur du son et monteur son: Chef(fe) op son
+  Chef opérateur du son et monteur son: Son
   Directrice de production: Direction de production
   Production designer: Production
   Responsable de la post-production: Post-production
@@ -149,7 +149,7 @@ jobs:
   Assistante opératrice:
   Régisseuse générale: Régisseur
   Réalisateur chef-op auteur compositeur: Auteur/Réalisateur
-  Narration: Scénario
+  Narration: Scénariste
   Interprètes de la musique: Musique
   Chef décoratrice: Décorateur/trice
   Interprète de la musique: Musique
@@ -159,7 +159,7 @@ jobs:
   Auteur réalisateur: Auteur/Réalisateur
   Post: Postprod
   Assistant set manager: Diver
-  Adaptation: Scénario
+  Adaptation: Scénariste
   Productrice étrangère: Production
   Visual consultant: Effets spéciaux
   Participantes: Autre
@@ -198,13 +198,51 @@ jobs:
   Series second unit director or assistant director: Assistant réalisation
   Directrice/responsable des ventes: Production
   Series cinematography: Photographie
-  Dialogue coach: Dialoguiste
+  Dialogue coach: Scripte
   Head of legal and business affairs: Production
   Compositeur réalisateur: Réalisateur
-  Dialoguistes: Dialoguiste
+  Dialoguistes: Scripte
+  Dialoguiste: Scripte
   Monteuse-  réalisatrice: Montage
   Production secretary: france
-  Series writing credits: Scénario
+  Series writing credits: Scénariste
   Film editing: Montage
   Cinematography: Direction photo
   Assistant montage: Assitant(e) montage
+  Produced: Production
+  Series       cast: Casting
+  Series production design: Production
+  Autre: Autres
+  Prise de son: Son
+  Assistanat réalisation: Assistant réalisation
+  Postprod: Post-production
+  Art direction: Direction artistique
+  Series art direction: Direction artistique
+  Series camera and electrical department: Materiel
+  Acteurtrice: Acteur(trice)
+  Story consultant: Scénariste
+  Responsables de la post-production: Post-production
+  Productrices associées: Production
+  Office production assistant: Autres
+  France: Autres
+  Cheffe op: Chef(fe) op
+  Photographe: Photographie
+  Series casting department: Casting
+  Legal counsel: Droits
+  Series casting by: Casting
+  Series film editing:
+  Series thanks: Autres
+  Translation assistant: Scripte
+  Ingénieures du son: Son
+  Assistant to producer: Assistant de production
+  Thanks: Autres
+  Casting department: Casting
+  Editorial_department: Scénariste
+  Caméra: Caméra
+  Assistant son: Son
+  Location_management: Décors
+  Writing credits        in alphabetical order: Autres
+  Assitant(e) montage: Assistant montage
+  Photographie: Photo
+  Décors: Décorateur/trice
+

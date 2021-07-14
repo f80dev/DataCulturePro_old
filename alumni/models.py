@@ -266,6 +266,8 @@ class PieceOfWork(models.Model):
 
     def add_link(self, url, title, description=""):
         if self.links is None: self.links = []
+        if url is None:return self.links
+
         obj = {"url": url, "text": title, "update": now(), "desc": description}
         for l in self.links:
             if l["url"] == url:

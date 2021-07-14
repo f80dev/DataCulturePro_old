@@ -22,7 +22,8 @@
       <button mat-raised-button mat-button class="app-button" (click)="openDjangoAdmin()">Admin Serveur</button>
       <button mat-raised-button mat-button class="app-button" (click)="initdb()">Initialisation</button>
 
-      <button mat-raised-button mat-button class="app-button" (click)="apply_dict()">Terminologie</button>
+      <button mat-raised-button mat-button class="app-button" (click)="apply_dict()"
+              title="Uniformiser la terminologie en réappliquant le dictionnaire">Terminologie</button>
 
 
 
@@ -44,6 +45,9 @@
       <button mat-raised-button mat-button class="app-button" (click)="export_profils('S')">Export FI</button>
       <button mat-raised-button mat-button class="app-button" (click)="export_profils('P')">Export FPro</button>
       <button mat-raised-button mat-button class="app-button" (click)="raz('profils')">Effacer les profils</button>
+       <button mat-raised-button mat-button
+              class="app-button" (click)="router.navigate(['import'])">Importation
+      </button>
     </mat-expansion-panel>
 
 
@@ -64,9 +68,7 @@
               class="app-button" (click)="batch()">Batch de traitement
       </button>
 
-      <button mat-raised-button mat-button
-              class="app-button" (click)="router.navigate(['import'])">Importation
-      </button>
+
 
       <button mat-raised-button mat-button
               title="Réindexation elasticsearch"

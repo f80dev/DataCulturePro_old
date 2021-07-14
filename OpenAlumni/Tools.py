@@ -434,7 +434,7 @@ def load_page(url:str):
             with py7zr.SevenZipFile("./Temp/html.7z", 'r') as archive:
                 archive.extract(path="./Temp",targets=filename)
 
-    if exists("./Temp/"+filename) and datetime.now().timestamp()-stat("./Temp/"+filename).st_mtime<3600*24*31:
+    if exists("./Temp/"+filename) and datetime.datetime.now().timestamp()-stat("./Temp/"+filename).st_mtime<3600*24*31:
         log("Utilisation du cache pour "+url)
         with open("./Temp/"+filename, 'r', encoding='utf8') as f:
             html=f.read()

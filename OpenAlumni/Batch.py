@@ -1,9 +1,9 @@
 from asyncio import sleep
-from os import remove, scandir, unlink
 from urllib import parse
 from urllib.parse import urlparse
 
 #import numpy as np
+from django.template.defaultfilters import urlencode
 from django.utils.datetime_safe import datetime
 from imdb import IMDb
 from wikipedia import wikipedia, re
@@ -215,6 +215,21 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
 
     return infos
 
+def extract_film_from_senscritique(title:str):
+    url="https://www.senscritique.com/search?q="+urlencode(title.lower())
+    log("Recherche sur sens-critique : "+url)
+    pages=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text, "html5lib").find_all("div",{"data-qa":"hits"})
+    links=pages[0].find_all("a")
+    url=""
+    for l in links:
+        if "href" in l.attrs and l.attrs["href"].startswith("https://www.senscritique.com/film/"):
+            if l.getText().lower()==title.lower():
+                url=l["href"]
+                log("Extraction de " + url)
+                page = load_page(url)
+                return url
+    return None
+
 
 
 #http://localhost:8000/api/batch
@@ -368,6 +383,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
                     break
 
         if not pow:
+
             if "unifrance" in l["url"]:
                 film = extract_film_from_unifrance(l["url"], job_for=job_for)
                 source = "auto:unifrance"
@@ -378,10 +394,13 @@ def add_pows_to_profil(profil,links,all_links,job_for):
                 if not "nature" in film: film["nature"] = l["nature"]
                 source = "auto:IMDB"
 
+
+
             log("Traitement de " + film["title"] + " à l'adresse " + l["url"])
 
             pow = PieceOfWork(title=film["title"])
             pow.add_link(url=l["url"], title=source)
+            pow.add_link(extract_film_from_senscritique(film["title"]),title="Sens-critique")
             if "nature" in film:
                 pow.nature=translate(film["nature"])
             else:
@@ -508,7 +527,7 @@ def exec_batch(profils):
             log("Problème de mise a jour de "+profil.lastname)
             sleep(10)
 
-    clear_directory("./Temp","html")
+    #clear_directory("./Temp","html")
 
     return True
 

@@ -367,6 +367,7 @@ def search(request):
 def rebuild_index(request):
     """
     Relance l'indexation d'elasticsearch
+    TODO: en chantier
     :param request:
     :return:
     """
@@ -388,7 +389,7 @@ def rebuild_index(request):
 @permission_classes([AllowAny])
 def batch(request):
     filter= request.GET.get("filter", "*")
-    profils=Profil.objects.all()
+    profils=Profil.objects.order_by("dtLastSearch").all()
     if filter!="*":
         profils=Profil.objects.filter(id=filter,school="FEMIS")
         profils.update(auto_updates="0,0,0,0,0,0")
