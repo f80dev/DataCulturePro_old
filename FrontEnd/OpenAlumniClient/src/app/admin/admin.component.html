@@ -53,6 +53,18 @@
 
 
 
+  <mat-expansion-panel class="app-panel" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          NFT
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <button mat-raised-button mat-button class="app-button" (click)="init_nft()">Init NFT</button>
+    </mat-expansion-panel>
+
+
+
+
 
 
 
@@ -75,7 +87,7 @@
               class="app-button" (click)="update_index()">Réindexer
       </button>
 
-      <br>
+      &nbsp;
 
       <button mat-raised-button mat-button class="app-button" (click)="raz('pows')">Effacer les Films</button>
 

@@ -32,7 +32,7 @@ export class SearchComponent implements OnInit {
               public _location:Location,
               public routes:ActivatedRoute,
               public router: Router,
-              public config:ConfigService) { }
+              public config:ConfigService) {}
 
 
   ngOnInit(): void {

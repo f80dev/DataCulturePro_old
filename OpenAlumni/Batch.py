@@ -8,7 +8,7 @@ from django.utils.datetime_safe import datetime
 from imdb import IMDb
 from wikipedia import wikipedia, re
 
-from OpenAlumni.Tools import log, translate, load_page, clear_directory
+from OpenAlumni.Tools import log, translate, load_page
 from OpenAlumni.settings import MOVIE_CATEGORIES, MOVIE_NATURE, DELAY_TO_AUTOSEARCH
 from alumni.models import Profil, Work, PieceOfWork
 
@@ -31,11 +31,11 @@ def extract_profil_from_cnca(title):
 
 
 
-def extract_film_from_unifrance(url:str,job_for=None,all_casting=False):
+def extract_film_from_unifrance(url:str,job_for=None,all_casting=False,refresh_delay=30):
     rc=dict({"casting":[]})
     if not url.startswith("http"):
         log("On passe par la page de recherche pour retrouver le titre")
-        page=load_page("https://unifrance.org/recherche?q="+parse.quote(url))
+        page=load_page("https://unifrance.org/recherche?q="+parse.quote(url),refresh_delay=refresh_delay)
         _link=page.find("a",attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]")})
         if _link is None:return rc
 
@@ -43,7 +43,7 @@ def extract_film_from_unifrance(url:str,job_for=None,all_casting=False):
 
     #r=wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0',"accept-encoding": "gzip, deflate"})
     #page = wikipedia.BeautifulSoup(str(r.content,encoding="utf-8"),"html5lib")
-    page=load_page(url)
+    page=load_page(url,refresh_delay)
     _title=page.find('h1', attrs={'itemprop': "name"})
     if not _title is None:
         rc["title"]=_title.text
@@ -145,8 +145,8 @@ def extract_profil_from_bellefaye(firstname,lastname):
 
 
 
-def extract_actor_from_unifrance(name="céline sciamma"):
-    page=load_page("https://www.unifrance.org/recherche/personne?q=$query&sort=pertinence".replace("$query",parse.quote(name)))
+def extract_actor_from_unifrance(name="céline sciamma",refresh_delay=31):
+    page=load_page("https://www.unifrance.org/recherche/personne?q=$query&sort=pertinence".replace("$query",parse.quote(name)),refresh_delay=refresh_delay)
     links=page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/annuaires/personne/")})
 
     rc=list()
@@ -160,7 +160,7 @@ def extract_actor_from_unifrance(name="céline sciamma"):
 
         links_film=page.findAll('a', attrs={'href': wikipedia.re.compile("^https://www.unifrance.org/film/[0-9][0-9]*/")})
         for l in links_film:
-            rc.append({"url":l.get("href"),"text":l.get("text")})
+            rc.append({"url":l.get("href"),"text":l.get("text"),"nature":""})
     else:
         return None
 
@@ -168,7 +168,7 @@ def extract_actor_from_unifrance(name="céline sciamma"):
 
 
 
-def extract_profil_from_imdb(lastname:str, firstname:str):
+def extract_profil_from_imdb(lastname:str, firstname:str,refresh_delay=31):
     peoples=ia.search_person(firstname+" "+lastname)
     infos=dict()
     for p in peoples:
@@ -179,7 +179,7 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
             if not "url" in infos:
                 infos["url"]="https://imdb.com/name/nm"+p.personID+"/"
                 log("Ouverture de " + infos["url"])
-                page=load_page(infos["url"])
+                page=load_page(infos["url"],refresh_delay=refresh_delay)
                 film_zone=page.find("div",{"id":"filmography"})
                 if film_zone is None:film_zone=page
 
@@ -215,30 +215,32 @@ def extract_profil_from_imdb(lastname:str, firstname:str):
 
     return infos
 
-def extract_film_from_senscritique(title:str):
+def extract_film_from_senscritique(title:str,refresh_delay=31):
     url="https://www.senscritique.com/search?q="+urlencode(title.lower())
     log("Recherche sur sens-critique : "+url)
-    pages=wikipedia.BeautifulSoup(wikipedia.requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text, "html5lib").find_all("div",{"data-qa":"hits"})
-    links=pages[0].find_all("a")
-    url=""
-    for l in links:
-        if "href" in l.attrs and l.attrs["href"].startswith("https://www.senscritique.com/film/"):
-            if l.getText().lower()==title.lower():
-                url=l["href"]
-                log("Extraction de " + url)
-                page = load_page(url)
-                return url
+    pages=load_page(url,save=False)
+    pages=pages.find_all("div",{"data-qa":"hits"})
+    if len(pages)>0:
+        links=pages[0].find_all("a")
+        url=""
+        for l in links:
+            if "href" in l.attrs and l.attrs["href"].startswith("https://www.senscritique.com/film/"):
+                if l.getText().lower()==title.lower():
+                    url=l["href"]
+                    log("Extraction de " + url)
+                    page = load_page(url,refresh_delay)
+                    return url
     return None
 
 
 
 #http://localhost:8000/api/batch
-def extract_film_from_imdb(url:str,title:str,name="",job="",all_casting=False):
+def extract_film_from_imdb(url:str,title:str,name="",job="",all_casting=False,refresh_delay=31):
     """
 
     :return:
     """
-    page=load_page(url)
+    page=load_page(url,refresh_delay)
 
     rc = dict({"title": title,"nature":translate("film"),"casting":list()})
 
@@ -284,7 +286,7 @@ def extract_film_from_imdb(url:str,title:str,name="",job="",all_casting=False):
 
     log("Recherche du role sur le film")
 
-    credits=load_page(url+"fullcredits")
+    credits=load_page(url+"fullcredits",refresh_delay)
     if not credits is None:
         credits=credits.find("div",{"id":"fullcredits_content"})
         if not credits is None:
@@ -365,7 +367,7 @@ def extract_actor_from_wikipedia(lastname,firstname):
 
 
 
-def add_pows_to_profil(profil,links,all_links,job_for):
+def add_pows_to_profil(profil,links,all_links,job_for,refresh_delay):
     """
     Ajoute des oeuvres au profil
     :param profil:
@@ -383,79 +385,85 @@ def add_pows_to_profil(profil,links,all_links,job_for):
                     break
 
         if not pow:
-
+            film=None
             if "unifrance" in l["url"]:
-                film = extract_film_from_unifrance(l["url"], job_for=job_for)
                 source = "auto:unifrance"
+                film = extract_film_from_unifrance(l["url"], job_for=job_for,refresh_delay=refresh_delay)
 
             if "imdb" in l["url"]:
-                film = extract_film_from_imdb(l["url"], l["text"], name=profil.firstname + " " + profil.lastname,job=l["job"])
-                if film is None:break
-                if not "nature" in film: film["nature"] = l["nature"]
                 source = "auto:IMDB"
+                film = extract_film_from_imdb(l["url"], l["text"], name=profil.firstname + " " + profil.lastname,job=l["job"],refresh_delay=refresh_delay)
 
+            if not film is None and "title" in film:
+                if not "nature" in film: film["nature"] = l["nature"]
+                if "title" in film: log("Traitement de " + film["title"] + " à l'adresse " + l["url"])
 
-
-            log("Traitement de " + film["title"] + " à l'adresse " + l["url"])
-
-            pow = PieceOfWork(title=film["title"])
-            pow.add_link(url=l["url"], title=source)
-            pow.add_link(extract_film_from_senscritique(film["title"]),title="Sens-critique")
-            if "nature" in film:
-                pow.nature=translate(film["nature"])
-            else:
-                pow.nature="Film"
-
-            if "synopsis" in film: pow.description = film["synopsis"]
-            if "visual" in film: pow.visual = film["visual"]
-            if "category" in film: pow.category = translate(film["category"])
-            if "year" in film: pow.year = film["year"]
-
-            try:
-                result=PieceOfWork.objects.filter(title__iexact=pow.title)
-                if len(result)>0:
-                    log("Le film existe déjà dans la base, on le récupére")
-                    pow=result.first()
-                    pow.add_link(l["url"],source)
-                pow.save()
-
-                # TODO: a réétudier car des mises a jour de fiche pourrait nous faire rater des films
-                # il faudrait désindenter le code ci-dessous mais du coup il faudrait retrouver le pow
-                job = profil.job
-                if "job" in film: job = film["job"]
-
-            except Exception as inst:
-                log("Impossible d'enregistrer le film: "+str(inst.args))
-        else:
-            job=l["job"]
-            film=dict()
-
-        t_job = translate(job)
-        if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id,job=t_job).exists():
-            log("Ajout de l'experience " + job + " traduit en "+t_job+" sur " + pow.title + " à " + profil.lastname)
-            work = Work(pow=pow, profil=profil, job=t_job, source=source)
-            work.save()
-
-        #Enregistrement du casting
-        if "casting" in film:
-            for p in film["casting"]:
-                _ps=list(Profil.objects.filter(lastname=p["lastname"],firstname=p["firstname"]))
-                if len(_ps)==0:
-                    log("Ajout de "+p["lastname"]+" comme externe en tant que "+p["job"])
-                    _p=Profil(firstname=p["firstname"],
-                              lastname=p["lastname"],
-                              department="Ext",
-                              cursus="E",
-                              school="",
-                              email=p["firstname"]+"."+p["lastname"]+"@fictif")
-                    _p.add_link(url=p["url"],title=p["source"])
-                    _p.save()
+                pow = PieceOfWork(title=film["title"])
+                pow.add_link(url=l["url"], title=source)
+                pow.add_link(extract_film_from_senscritique(film["title"]),title="Sens-critique")
+                if "nature" in film:
+                    pow.nature=translate(film["nature"])
                 else:
-                    _p=_ps[0]
+                    pow.nature="Film"
 
-                if not Work.objects.filter(pow_id=pow.id, profil_id=_p.id, job=p["job"]).exists():
-                    work = Work(pow=pow, profil=_p, job=p["job"], source=source)
-                    work.save()
+                if "synopsis" in film: pow.description = film["synopsis"]
+                if "visual" in film: pow.visual = film["visual"]
+                if "category" in film: pow.category = translate(film["category"])
+                if "year" in film: pow.year = film["year"]
+
+                try:
+                    result=PieceOfWork.objects.filter(title__iexact=pow.title)
+                    if len(result)>0:
+                        log("Le film existe déjà dans la base, on le récupére")
+                        pow=result.first()
+                        pow.add_link(l["url"],source)
+                    pow.save()
+
+                    # TODO: a réétudier car des mises a jour de fiche pourrait nous faire rater des films
+                    # il faudrait désindenter le code ci-dessous mais du coup il faudrait retrouver le pow
+                    job = profil.job
+                    if "job" in film: job = film["job"]
+
+                except Exception as inst:
+                    log("Impossible d'enregistrer le film: "+str(inst.args))
+            else:
+                job = l["job"]
+                film = dict()
+
+            if not pow is None:
+                t_job = translate(job)
+                if not Work.objects.filter(pow_id=pow.id, profil_id=profil.id, job=t_job).exists():
+                    if job is not None and t_job is not None:
+                        log("Ajout de l'experience " + job + " traduit en " + t_job + " sur " + pow.title + " à " + profil.lastname)
+                        work = Work(pow=pow, profil=profil, job=t_job, source=source)
+                        work.save()
+                    else:
+                        log("Pas d'enregistrement de la contribution")
+
+                # Enregistrement du casting
+                if "casting" in film:
+                    for p in film["casting"]:
+                        _ps = list(Profil.objects.filter(lastname=p["lastname"], firstname=p["firstname"]))
+                        if len(_ps) == 0:
+                            log("Ajout de " + p["lastname"] + " comme externe en tant que " + p["job"])
+                            _p = Profil(firstname=p["firstname"],
+                                        lastname=p["lastname"],
+                                        department="Ext",
+                                        cursus="E",
+                                        school="",
+                                        email=p["firstname"] + "." + p["lastname"] + "@fictif")
+                            _p.add_link(url=p["url"], title=p["source"])
+                            _p.save()
+                        else:
+                            _p = _ps[0]
+
+                        if not Work.objects.filter(pow_id=pow.id, profil_id=_p.id, job=p["job"]).exists():
+                            work = Work(pow=pow, profil=_p, job=p["job"], source=source)
+                            work.save()
+
+
+
+
 
 
 
@@ -463,7 +471,7 @@ def add_pows_to_profil(profil,links,all_links,job_for):
 #http://localhost:8000/api/batch
 
 
-def exec_batch(profils):
+def exec_batch(profils,refresh_delay=31):
 
     all_links=list()
     for pow in PieceOfWork.objects.all():
@@ -471,61 +479,61 @@ def exec_batch(profils):
             all_links.append(l["url"])
 
     for profil in profils:
-        try:
-            links=[]
-            job_for=None
+        links=[]
+        job_for=None
 
-            log("Traitement de " + profil.firstname+" "+profil.lastname)
-            transact = Profil.objects.filter(id=profil.id)
-            if profil.delay_lastsearch() > DELAY_TO_AUTOSEARCH or len(profils)==1:
-                log("mise a jour de "+profil.lastname)
-                profil.dtLastSearch=datetime.now()
+        log("Traitement de " + profil.firstname+" "+profil.lastname+". Dernière recherche "+profil.dtLastSearch.isoformat(" "))
+        transact = Profil.objects.filter(id=profil.id)
+        if profil.delay_lastsearch()/24 > DELAY_TO_AUTOSEARCH or len(profils)==1:
+            log("mise a jour de "+profil.lastname+" dont la dernière recherche est "+str(profil.delay_lastsearch()/24)+" jours")
+            profil.dtLastSearch=datetime.now()
 
-                #infos = extract_profil_from_bellefaye(firstname=profil.firstname, lastname=profil.lastname)
-                #log("Extraction bellefaye " + str(infos))
+            #infos = extract_profil_from_bellefaye(firstname=profil.firstname, lastname=profil.lastname)
+            #log("Extraction bellefaye " + str(infos))
 
-                infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname)
+            try:
+                infos = extract_profil_from_imdb(firstname=profil.firstname, lastname=profil.lastname,refresh_delay=refresh_delay)
                 log("Extraction d'imdb " + str(infos))
                 if "url" in infos:profil.add_link(infos["url"], "IMDB")
                 if "photo" in infos and len(profil.photo)==0:profil.photo=infos["photo"]
                 if "links" in infos: links=links+infos["links"]
+            except:
+                log("Probleme d'extration du profil pour "+profil.lastname+" sur imdb")
 
-                infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname)
-                log("Extraction d'un profil d'unifrance "+str(infos))
-                if infos is None:
-                    advices = dict({"ref": "Vous devriez créer votre profil sur UniFrance"})
-                    transact.update(advices=advices)
-                else:
-                    if len(infos["photo"]) > 0 and not profil.photo.startswith("http"): transact.update(photo=infos["photo"])
-                    transact.update(links=profil.add_link(infos["url"], "UniFrance"))
-                    if "links" in infos:
-                        links=links+infos["links"]
-                    job_for=infos["url"]
-
-
-                add_pows_to_profil(profil,links,all_links,job_for=job_for)
-
-
-
-                # log("Extraction de wikipedia")
-                # try:
-                #     infos = extract_actor_from_wikipedia(firstname=profil.firstname,lastname=profil.lastname)
-                #     sleep(random() * 5)
-                #     if not infos is None:
-                #         if "photo" in infos and profil.photo is None: transact.update(photo=infos["photo"])
-                #         if "summary" in infos and profil.biography is None: transact.update(biography=infos["summary"])
-                #         if "links" in infos and len(infos["links"])>0:
-                #             links=profil.add_link(url=infos["links"][0]["url"], title=infos["links"][0]["title"],description="")
-                #             transact.update(links=links)
-                # except:
-                #     pass
-
-                transact.update(dtLastSearch=profil.dtLastSearch)
+            infos = extract_actor_from_unifrance(profil.firstname + " " + profil.lastname,refresh_delay=refresh_delay)
+            log("Extraction d'un profil d'unifrance "+str(infos))
+            if infos is None:
+                advices = dict({"ref": "Vous devriez créer votre profil sur UniFrance"})
+                transact.update(advices=advices)
             else:
-                log(profil.lastname+" est déjà à jour")
-        except:
-            log("Problème de mise a jour de "+profil.lastname)
-            sleep(10)
+                if len(infos["photo"]) > 0 and not profil.photo.startswith("http"): transact.update(photo=infos["photo"])
+                transact.update(links=profil.add_link(infos["url"], "UniFrance"))
+                if "links" in infos:
+                    links=links+infos["links"]
+                job_for=infos["url"]
+
+
+            add_pows_to_profil(profil,links,all_links,job_for=job_for,refresh_delay=refresh_delay)
+
+
+
+            # log("Extraction de wikipedia")
+            # try:
+            #     infos = extract_actor_from_wikipedia(firstname=profil.firstname,lastname=profil.lastname)
+            #     sleep(random() * 5)
+            #     if not infos is None:
+            #         if "photo" in infos and profil.photo is None: transact.update(photo=infos["photo"])
+            #         if "summary" in infos and profil.biography is None: transact.update(biography=infos["summary"])
+            #         if "links" in infos and len(infos["links"])>0:
+            #             links=profil.add_link(url=infos["links"][0]["url"], title=infos["links"][0]["title"],description="")
+            #             transact.update(links=links)
+            # except:
+            #     pass
+
+            transact.update(dtLastSearch=profil.dtLastSearch)
+        else:
+            log(profil.lastname+" est déjà à jour")
+
 
     #clear_directory("./Temp","html")
 

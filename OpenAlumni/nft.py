@@ -5,7 +5,7 @@ from erdpy.proxy import ElrondProxy
 from erdpy.transactions import Transaction
 
 from OpenAlumni.Tools import log
-from OpenAlumni.settings import NFT_CONTRACT, TOKEN_ID, BC_PROXY, ADMIN_PEMFILE, BC_EXPLORER
+from OpenAlumni.settings import NFT_CONTRACT, TOKEN_ID, BC_PROXY, ADMIN_PEMFILE, BC_EXPLORER, NFT_CREATE_COST
 
 
 def toHex(letters,zerox=False):
@@ -44,6 +44,7 @@ class NFTservice:
         log("Initialisation de l'admin avec "+pem_file)
         self._sender=Account(pem_file=pem_file)
 
+
     def execute(self,data,_sender=None,value="0",receiver=NFT_CONTRACT,gasLimit=60000000):
         if _sender is None:_sender=self._sender
         _sender.sync_nonce(self._proxy)
@@ -74,7 +75,7 @@ class NFTservice:
 
 
     def init_token(self):
-        rc = self.execute("issueNonFungible@" + toHex("FEMISToken", False) + "@" + toHex("FEMIS", False),self._sender, "5000000000000000000")
+        rc = self.execute("issueNonFungible@" + toHex("FEMISToken", False) + "@" + toHex("FEMIS", False),self._sender, NFT_CREATE_COST)
         if len(rc)>0 and len(rc[0]["result"])>1:
             token_id=rc[0]["result"][1]
             log("Création de "+token_id)
@@ -88,6 +89,6 @@ class NFTservice:
         #rc=self.execute("setSpecialRole@"+toHex(token_id)+"@"+self._sender.address.hex()+"@"+toHex("ESDTRoleNFTCreate"))
         hash=0
         data="ESDTNFTCreate@"+toHex(TOKEN_ID)+"@"+toHex(occ)+"@"+toHex(title)+"@"+toHex(0)+"@"+toHex(hash)+"@"+toHex(content)+"@"+toHex("https://dcp.f80.fr")
-        rc=self.execute(data,receiver=self._sender.address.bech32(),gasLimit=60000000+len(content+title)*1200)
+        rc=self.execute(data,receiver=self._sender.address.bech32(),gasLimit=60000000+len(content+title)*1500)
 
         return rc

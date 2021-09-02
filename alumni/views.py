@@ -202,6 +202,13 @@ def getyaml(request):
 
 
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def infos_server(request):
+    rc=dict()
+    rc["films"]["nombre"]=PieceOfWork.objects.count()
+    rc["profils"]["nombre"]=Profil.objects.count()
+    return JsonResponse(rc)
 
 
 @api_view(["GET"])
@@ -238,6 +245,16 @@ def resend(request):
         users[0].set_password(reset_password(users[0].email,users[0].username))
         users[0].save()
     return Response({"message":"Check your email"})
+
+
+
+#http://localhost:8000/api/init_nft
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def init_nft(request):
+    nft=NFTservice()
+    rc=nft.init_token()
+    return JsonResponse({"result":rc})
 
 
 #http://localhost:8000/api/test
@@ -337,8 +354,9 @@ def update_dictionnary(request):
         job=translate(w.job)
         if job!=w.job:
             log("Traitement de "+str(w.job))
-            w.job=job
-            w.save()
+            if not job is None:
+                w.job=job
+                w.save()
 
     log("Application du dictionnaire sur les oeuvres")
     for p in PieceOfWork.objects.all():
@@ -390,10 +408,13 @@ def rebuild_index(request):
 def batch(request):
     filter= request.GET.get("filter", "*")
     profils=Profil.objects.order_by("dtLastSearch").all()
+    refresh_delay=31
     if filter!="*":
         profils=Profil.objects.filter(id=filter,school="FEMIS")
         profils.update(auto_updates="0,0,0,0,0,0")
-    exec_batch(profils)
+        refresh_delay=0
+
+    exec_batch(profils.order_by("dtLastSearch"),refresh_delay)
     return Response({"message":"ok"})
 
 

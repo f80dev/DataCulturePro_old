@@ -82,4 +82,11 @@ export class AdminComponent implements OnInit {
       this.message="";
     })
   }
+
+  init_nft() {
+    this.message="Initialisation des NFTs";
+    this.api._get("init_nft").subscribe(()=>{
+      this.message="";
+    })
+  }
 }

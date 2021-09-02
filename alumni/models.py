@@ -59,7 +59,7 @@ class Profil(models.Model):
 
     website=models.URLField(null=True)
     dtLastUpdate=models.DateTimeField(null=False,auto_now=True,help_text="Date de la dernière modification du profil")
-    dtLastSearch=models.DateTimeField(null=False,auto_now=True,help_text="Date de la dernière recherche d'expérience pour le profil")
+    dtLastSearch=models.DateTimeField(null=False,default=0,help_text="Date de la dernière recherche d'expérience pour le profil")
     dtLastNotif=models.DateTimeField(null=False,auto_now=True,help_text="Date de la dernière notification envoyé")
     obsolescenceScore=models.IntegerField(default=0,help_text="Indique le degré d'obsolescence probable")
     biography=models.TextField(null=True,max_length=2000,help_text="Biographie du profil")

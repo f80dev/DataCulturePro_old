@@ -401,7 +401,10 @@ def translate(wrd:str,dictionnary=None):
     if wrd is None:
         return None
 
-    key=wrd.lower().replace(",","").replace("(","").replace(")","")
+    key=wrd.lower().replace(",","").replace("(","").replace(")","").replace(":","")
+    for i in range(10):
+        key=key.replace("   "," ").replace("  "," ")
+
     rc = key
     for section in ["jobs","categories"]:
         if key in MYDICT[section].keys():
@@ -426,21 +429,31 @@ def getConfig(varname=""):
     return rc
 
 
-def load_page(url:str):
+def load_page(url:str,refresh_delay=31,save=True):
     filename=hashlib.sha224(bytes(url,"utf8")).hexdigest()+".html"
 
-    if not exists("./Temp/" + filename):
+    if not exists("./Temp/" + filename) :
         if exists("./Temp/html.7z"):
             with py7zr.SevenZipFile("./Temp/html.7z", 'r') as archive:
                 archive.extract(path="./Temp",targets=filename)
 
-    if exists("./Temp/"+filename) and datetime.datetime.now().timestamp()-stat("./Temp/"+filename).st_mtime<3600*24*31:
-        log("Utilisation du cache pour "+url)
-        with open("./Temp/"+filename, 'r', encoding='utf8') as f:
-            html=f.read()
-            f.close()
+    if exists("./Temp/"+filename) and datetime.datetime.now().timestamp()-stat("./Temp/"+filename).st_mtime<3600*24*refresh_delay:
+        log("Utilisation du fichier cache "+filename+" pour "+url)
+        try:
+            with open("./Temp/"+filename, 'r', encoding='utf8') as f:
+                html=f.read()
+                f.close()
+        except:
+            os.remove("./Temp/"+filename)
+            return load_page(url)
 
-        return wikipedia.BeautifulSoup(html)
+        page=wikipedia.BeautifulSoup(html)
+        if len(page.contents)==0:
+            log("Le fichier ./Temp/"+filename+" est corrompu")
+            os.remove("./Temp/"+filename)
+            return load_page(url)
+
+        return page
     else:
         log("Chargement de la page "+url)
         for itry in range(5):
@@ -451,7 +464,7 @@ def load_page(url:str):
             except:
                 pass
 
-        if not rc is None:
+        if not rc is None and save:
             with open("./Temp/"+filename, 'w', encoding='utf8') as f:
                 f.write(str(rc))
                 f.close()

@@ -1,6 +1,7 @@
 <div style="margin:1%;text-align: center;min-width: 300px;">
 
   <app-tuto icon_button="login"
+            [if]="!config.user.email"
             (click)="router.navigate(['login'])"
             label="Connectez vous pour avoir accès à plus d'information sur les profils">
   </app-tuto>

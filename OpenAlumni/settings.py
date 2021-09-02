@@ -284,12 +284,13 @@ MOVIE_CATEGORIES=[
 MOVIE_NATURE=["Serie","TV","Short","Long","Documentary"]
 MYDICT=None
 
-DELAY_TO_AUTOSEARCH=0*0.2   #10 jours
+DELAY_TO_AUTOSEARCH=15   #10 jours
 
 
 #NFTS
 TOKEN_ID='FEMIS-3ae1d3'
-ADMIN_PEMFILE="./femis.pem"
+NFT_CREATE_COST=50000000000000000
+ADMIN_PEMFILE="./femis.pem" #voir le wallet : https://devnet-wallet.elrond.com/unlock/pem
 NFT_CONTRACT="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
 BC_PROXY="https://devnet-gateway.elrond.com"
 BC_EXPLORER="https://devnet-explorer.elrond.com"

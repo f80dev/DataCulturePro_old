@@ -35,7 +35,8 @@ jobs:
   Assistant_director: Assistant réalisateur
   Script_department: Scénariste
   Soundtrack: Compositeur
-  Sound department: son
+  Sound department: Montage son
+  Scénario: Scénariste
   Second unit director or assistant director: Assistant réalisateur
   Editor: Montage
   Monteur: Montage
@@ -75,10 +76,10 @@ jobs:
   Directrice de la photo: Direction Photo
   Directeurs de la photo: Direction Photo
   Cinematographer: Direction Photo
-  Ingénieur du son  monteur son  sound designer  mixeur: son
-  Ingénieur du son monteur son mixeur: son
-  Ingénieurs du son: son
-  Monteur son: son
+  Ingénieur du son  monteur son  sound designer  mixeur: Montage son
+  Ingénieur du son monteur son mixeur: Montage son
+  Ingénieurs du son: Montage son
+  Monteur son: Montage son
   Art department: Département artistique
   Décorateur: Décorateur/trice
   Décoratrice: Décorateur/trice
@@ -88,7 +89,7 @@ jobs:
   Mixeur monteur son: Mixeur
   Attachées de presse (film): Relations presse
   Attachés de presse (film): Relations presse
-  Chef opérateur du son et monteur son: Son
+  Chef opérateur du son et monteur son: Montage son
   Directrice de production: Direction de production
   Production designer: Production
   Responsable de la post-production: Post-production
@@ -124,7 +125,7 @@ jobs:
   Monteuse son et assistante mixage: Montage
   Chef opératrice: Chef(fe) op
   Cadre: cadrage
-  Self: lui-même
+  Self: Acteur(trice)
   Assistants son: Assistant son
   Second sound assistant: Assistant son
   Assistant monteur: Assistant montage
@@ -137,13 +138,13 @@ jobs:
   Productrices: Production
   Département animation: Animation
   Directrice artistique: Direction artistique
-  Opératrice du son: son
+  Opératrice du son: Montage son
   Photographes de plateau: Photo
   Effets visuels: Effets spéciaux
   Assistant de production: Production
   Producteurs étrangers: Production
   Pre-production sound: pré-prod Son
-  Sound_department: Son
+  Sound_department: Montage son
   Auteur de l'œuvre originale: Auteur
   Scénariste et réalisatrice: Auteur/Réalisateur
   Assistante opératrice:
@@ -168,7 +169,7 @@ jobs:
   Cast: Casting
   Directed: Réalisation
   Series directed: Réalisation
-  Music: Son
+  Music: Montage son
   Casting by: Casting
   Production management: Production
   Writing credits: Scénariste
@@ -182,7 +183,7 @@ jobs:
   Production design: Production
   Assistants de production: Production
   Series production desig: Production
-  Series sound department: Son
+  Series sound department: Montage son
   Series editorial department: Scénariste
   Costume design: Costumes
   Attachée de presse film: Relations presse
@@ -213,7 +214,7 @@ jobs:
   Series       cast: Casting
   Series production design: Production
   Autre: Autres
-  Prise de son: Son
+  Prise de son: Montage son
   Assistanat réalisation: Assistant réalisation
   Postprod: Post-production
   Art direction: Direction artistique
@@ -233,16 +234,30 @@ jobs:
   Series film editing:
   Series thanks: Autres
   Translation assistant: Scripte
-  Ingénieures du son: Son
+  Ingénieures du son: Ingé son
   Assistant to producer: Assistant de production
   Thanks: Autres
   Casting department: Casting
   Editorial_department: Scénariste
   Caméra: Caméra
-  Assistant son: Son
+  Assistant son: Montage son
   Location_management: Décors
-  Writing credits        in alphabetical order: Autres
+  Writing credits in alphabetical order: Autres
   Assitant(e) montage: Assistant montage
   Photographie: Photo
   Décors: Décorateur/trice
+  Direction artistique: Directeur artistique
+  Assistante montage: Assistant montage
+  Assistantes à la réalisation: Assistant réalisation
+  Réalisatrice et cadreuse: Réalisation
+  Assistantse monteuses: Assistant montage
+  Auteure/réalisatrice/ scripte: Réalisation
+  Productrices exécutives: Production
+  Assistants monteurs: Assistant montage
+  Auteur/réalisateur: Réalisation
+  Producteurs associés: Producteur associé
+  Secrétaire de production: Production
+  Series cast: Casting
+  Ingénieure du son: Ingé son
+  Ingénieur du son: Ingé son
 
